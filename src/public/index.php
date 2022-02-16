@@ -1,4 +1,8 @@
 <?php
+//TODO: Remove these lines for production.
+//Activate Error Reporting.
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
