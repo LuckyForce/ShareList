@@ -1,5 +1,5 @@
 # PRE-Semester-2
-# T3-Preology
+# T3-ShareList
 
 ## Members
 1. Adrian Schauer
