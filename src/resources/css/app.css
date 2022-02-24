@@ -5,3 +5,13 @@
 .bg-1{
     @apply bg-red-600;
 }
+
+.content {
+    flex: 1;
+}
+
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}

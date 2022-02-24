@@ -695,6 +695,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 
+.content {
+    flex: 1;
+}
+
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 @media (prefers-color-scheme: dark) {
 
   .dark\:border-gray-700 {

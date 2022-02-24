@@ -1,3 +1,4 @@
+</div>
 <script>
     const footerInfo = {
         name: 'Bingomaker',
