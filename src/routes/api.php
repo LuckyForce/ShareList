@@ -31,19 +31,19 @@ Route::post('/register', function (Request $request) {
     }
 
     //Check if user already exists
-    $user = DB::select('SELECT * FROM sl_u_users WHERE u_email = ? AND u_emailverified = 1', [$request->email]);
+    $user = DB::select('SELECT * FROM sl_u_user WHERE u_email = ? AND u_emailverified = 1', [$request->email]);
     if (count($user) > 0) {
         return response()->json(['message' => 'User already exists'], 400);
     }
 
     //Check if user already exists but not already verified
-    $user = DB::select('SELECT * FROM sl_u_users WHERE u_email = ? AND u_emailverified = 0', [$request->email]);
+    $user = DB::select('SELECT * FROM sl_u_user WHERE u_email = ? AND u_emailverified = 0', [$request->email]);
     if (count($user) > 0) {
         //User already exists. Overwrite Password.
-        DB::update('UPDATE sl_u_users SET u_password = ? WHERE u_email = ?', [password_hash($request->password, PASSWORD_DEFAULT), $request->email]);
+        DB::update('UPDATE sl_u_user SET u_password = ? WHERE u_email = ?', [password_hash($request->password, PASSWORD_DEFAULT), $request->email]);
     }else{
         //Create new user
-        DB::insert('INSERT INTO sl_u_users (u_email, u_password) VALUES (?, ?)', [$request->email, password_hash($request->password, PASSWORD_DEFAULT)]);
+        DB::insert('INSERT INTO sl_u_user (u_email, u_password) VALUES (?, ?)', [$request->email, password_hash($request->password, PASSWORD_DEFAULT)]);
     }
 
     //TODO: Send verification email
@@ -61,7 +61,7 @@ Route::post('/login', function (Request $request) {
     }
 
     //Get the user from the database
-    $user = DB::select('SELECT * FROM sl_u_users WHERE u_email = ?', [$request->email])[0];
+    $user = DB::select('SELECT * FROM sl_u_user WHERE u_email = ?', [$request->email])[0];
 
     //Check if the user exists
     if (!$user) { 
@@ -96,7 +96,7 @@ Route::post('/verify', function (Request $request) {
     }
 
     //Get the user from the database
-    $user = DB::select('SELECT * FROM sl_u_users WHERE u_email = ?', [$request->code, $request->email])[0];
+    $user = DB::select('SELECT * FROM sl_u_user WHERE u_email = ?', [$request->code, $request->email])[0];
 
     //Check if the user exists. By checking that you also check if the code is valid
     if (!$user) { 
@@ -106,11 +106,49 @@ Route::post('/verify', function (Request $request) {
     }
 
     //Update the user
-    DB::update('UPDATE sl_u_users SET u_emailverified = 1 WHERE u_id = ?', [$user->u_id]);
+    DB::update('UPDATE sl_u_user SET u_emailverified = 1 WHERE u_id = ?', [$user->u_id]);
     
     //Delete the code
-    DB::update('UPDATE sl_u_users SET u_emailcode = null WHERE u_id = ?', [$user->u_id]);
+    DB::update('UPDATE sl_u_user SET u_emailcode = null WHERE u_id = ?', [$user->u_id]);
 
     //Return success
     return response()->json(['message' => 'User verified'], 200);
+});
+
+//TODO: Reset Password
+Route::post('/resetpwd', function (Request $request) {
+    //Validate data
+    
+});
+
+//Change Password
+Route::post('/changepwd', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->password)){
+        return response()->json(['message' => 'Token or password is missing'], 400);
+    }
+
+    //Get the user from the database
+    $user = DB::select('SELECT * FROM sl_u_user INNER JOIN sl_u_token ON t_u_id = u_id WHERE t_token = ? AND t_expiration > NOW()', [$request->token])[0];
+
+    //Check if the user exists. By checking that you also check if the token is valid
+    if (!$user) { 
+        return response()->json([
+            'error' => 'User not found',
+        ], 404);
+    }
+
+    //Check if the mew Password is a valid password.
+    //It has to be at least 6 characters and be a string.
+    if ($request->password == null || strlen($request->password) < 6 || !is_string($request->password)) {
+        return response()->json([
+            'error' => 'Password is invalid',
+        ], 400);
+    }
+
+    //Update the password
+    DB::update('UPDATE sl_u_user SET u_password = ? WHERE u_id = ?', [password_hash($request->password, PASSWORD_DEFAULT), $user->u_id]);
+
+    //Return success
+    return response()->json(['message' => 'Password changed'], 200);
 });

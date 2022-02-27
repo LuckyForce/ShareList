@@ -56,8 +56,8 @@ create table sl_u_user(
      u_password varchar(255) not null,
      u_emailverified tinyint default 0,
      u_emailcode varchar(100),
-     u_renewpwd varchar(100),
-     u_renewpwdexpirationdate datetimel,
+     u_resetpwd varchar(100),
+     u_resetpwdexpirationdate datetime,
 );
 
 
