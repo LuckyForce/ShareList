@@ -1,0 +1,21 @@
+﻿Name,Attendance,Date,Duration,End,Start,Type
+"Besprechung ""Zeiterfassung""",,"September 30, 2021",35,,,Lesson
+300-Ü1,,"September 15, 2021",20,,,Submission
+300-Ü4,,"September 30, 2021",15,,,Submission
+300-Ü2,,"September 23, 2021",30,,,Submission
+Teamplanungen,,"September 20, 2021",60,,,Project
+300-Ü3,,"September 27, 2021",30,,,Submission
+Besprechung der PDF,,"September 15, 2021",30,,,Lesson
+Vorstellung,,"September 8, 2021",50,,,Lesson
+Weitere Besprechung der PDF,,"September 23, 2021",20,,,Lesson
+Besprechung der Übung,,"September 27, 2021",20,,,Lesson
+Weitere Besprechung der PDF,,"September 27, 2021",50,,,Lesson
+Einführung PRE,,"September 13, 2021",,,,Lesson
+Zusammenstellung der Teams,,"September 20, 2021",40,,,Project
+Initialized Project,Adrian Schauer,"February 15, 2022",20,,,Project
+Präsentation Vorstellung PowerPoint Erstellung,"Adrian Schauer, Fabian Lasser, Luka Grgic, Mirac Fidanci, Raymond Ermler","February 22, 2022",100,,,Project
+Logo Erstellung,Luka Grgic,"February 26, 2022",30,,,Project
+Fertigstellung der Vorstellungs-Präsentation,"Adrian Schauer, Fabian Lasser, Mirac Fidanci, Raymond Ermler","February 26, 2022",100,17:40,16:00,Project
+Database Creation,"Adrian Schauer, Raymond Ermler","February 26, 2022",50,18:30,17:40,Project
+Anfänge API,Adrian Schauer,"February 26, 2022",30,22:30,22:00,Project
+Added first list api requests,Adrian Schauer,"February 28, 2022",30,11:00,10:00,Project
