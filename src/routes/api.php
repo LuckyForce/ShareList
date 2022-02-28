@@ -27,7 +27,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //Register
 Route::post('/register', function (Request $request) {
     //Validate data
-    //TODO: Validate data
     if (!isset($request->email) || !isset($request->password)) {
         return response()->json(['message' => 'Please provide email and password'], 400);
     }
@@ -44,6 +43,9 @@ Route::post('/register', function (Request $request) {
             'error' => 'Password is invalid',
         ], 400);
     }
+
+    //Check if email is valid
+
 
     //Generate 6 Character long Code containing only numbers.
     $numbers = "0123456789";
@@ -206,6 +208,10 @@ Route::post('createlist', function (Request $request) {
     return response()->json(['message' => 'List created'], 200);
 });
 
+//TODO: Get List
+
+//TODO: Delete List
+
 //Change List Name
 Route::post('changelistname', function (Request $request) {
     //Validate data
@@ -306,3 +312,14 @@ Route::post('invitetolist', function (Request $request) {
     return response()->json(['message' => 'User invited to list'], 200);
 });
 
+//Remove User from list
+
+//Change rights for user on list
+
+//Remove Item
+
+//Edit Item
+
+//Add Item
+
+//Delete Invite
