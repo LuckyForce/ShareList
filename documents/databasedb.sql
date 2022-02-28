@@ -13,7 +13,6 @@ create table sl_a_access(
      a_l_id varchar(100) not null,
      a_u_id varchar(100) not null,
      a_p_id int AUTO_INCREMENT,
-     a_priviledge int not null,
      primary key(a_l_id,a_u_id,a_p_id)
 );
 
@@ -27,11 +26,12 @@ create table sl_l_list(
 );
 
 -- table l_listitem
-create table sl_li_listitem(
+create table sl_li_item(
      li_id int AUTO_INCREMENT,
      li_l_id varchar(100) not null,
      li_lastupdated datetime not null,
      li_content varchar(255) not null,
+     li_checked tinyint default false,
      primary key(li_id,li_l_id)
 );
 
@@ -77,7 +77,7 @@ create table sl_i_invites(
 );
 
 -- foreign keys-#################################################
-alter table sl_a_hasaccess
+alter table sl_a_access
 add foreign key (a_p_id) references sl_p_priviledge(p_id) on delete restrict on update restrict,
 add foreign key (a_l_id) references sl_l_list(l_id) on delete restrict on update restrict,
 add foreign key (a_u_id) references sl_u_user(u_id) on delete restrict on update restrict;

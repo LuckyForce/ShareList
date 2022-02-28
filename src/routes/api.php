@@ -71,6 +71,8 @@ Route::post('/register', function (Request $request) {
     return response()->json(['message' => 'User created'], 200);
 });
 
+//TODO: Delete user
+
 //Login
 Route::post('/login', function (Request $request) {
     //Validate data
@@ -201,16 +203,20 @@ Route::post('createlist', function (Request $request) {
 
     //Create UUID
     $uuid = Str::orderedUuid();
+
     //Create List
     DB::table('sl_l_list')->insert(['l_uuid' => $uuid, 'l_u_id' => $user->u_id, 'l_name' => 'Untitled', 'l_created' => now()->toDateTimeString()]);
+
+    //Add user to list
+    DB::table('sl_a_access')->insert(['a_l_id' => $uuid, 'a_u_id' => $user->u_id, 'a_p_id' => 1]);
 
     //Return success
     return response()->json(['message' => 'List created'], 200);
 });
 
-//TODO: Get List
+//TODO: Get List. Needs to have access to the list
 
-//TODO: Delete List
+//TODO: Delete List. Needs to be owner of the list
 
 //Change List Name
 Route::post('changelistname', function (Request $request) {
@@ -261,7 +267,7 @@ Route::post('invitetolist', function (Request $request) {
     }
 
     //Get the user from the database
-    $user = DB::table('sl_u_user')->join('sl_t_token', 't_u_id', '=', 'u_id')->where('t_token', $request->token)->where('t_expiration', '>', now()->toDateTimeString())->first();
+    $user = getUser($request->token);
 
     //Check if the user exists. By checking that you also check if the token is valid
     if (!$user) { 
@@ -312,14 +318,151 @@ Route::post('invitetolist', function (Request $request) {
     return response()->json(['message' => 'User invited to list'], 200);
 });
 
-//Remove User from list
+//TODO: Delete Invite. Needs to be owner of the list
 
-//Change rights for user on list
+//TODO: Accept Invite. Needs to be owner of the list
 
-//Remove Item
+//TODO: Remove User from list. Has to be owner of the list
 
-//Edit Item
+//TODO: Change rights for user on list. Has to be owner of the list
 
-//Add Item
+//TODO: Transfer rights for list to another list. Has to be owner of the list
 
-//Delete Invite
+//TODO: Remove Item. Needs to have access to the list
+Route::post('removeitem', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->uuid) || !isset($request->item)){
+        return response()->json(['message' => 'Token, list or item is missing'], 400);
+    }
+
+    //Get the user from the database
+    $user = getUser($request->token);
+
+    //Check if the user exists. By checking that you also check if the token is valid
+    if (!$user) { 
+        return response()->json([
+            'error' => 'User not found',
+        ], 404);
+    }
+
+    //Get the list from the database
+    $list = DB::table('sl_l_list')->where('l_id', $request->uuid)->where('l_u_id', $user->u_id)->first();
+
+    //Check if the list exists. By checking that you also check if the user is the owner of the list
+    if (!$list) { 
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Get the item from the database
+    $item = DB::table('sl_i_item')->where('i_id', $request->item)->where('i_l_id', $list->l_id)->first();
+
+    //Check if the item exists. By checking that you also check if the user is the owner of the list
+    if (!$item) { 
+        return response()->json([
+            'error' => 'Item not found',
+        ], 404);
+    }
+
+    //Delete the item
+    DB::table('sl_i_item')->where('i_id', $request->item)->where('i_l_id', $list->l_id)->delete();
+
+    //Return success
+    return response()->json(['message' => 'Item removed'], 200);
+});
+
+//TODO: Edit Item. Needs to have access to the list
+
+//Add Item. Needs to have access to the list
+Route::post('additem', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->uuid) || !isset($request->content)){
+        return response()->json(['message' => 'Token, list or item is missing'], 400);
+    }
+
+    //Get the user from the database
+    $user = getUser($request->token);
+
+    //Check if the user exists. By checking that you also check if the token is valid
+    if (!$user) { 
+        return response()->json([
+            'error' => 'User not found',
+        ], 404);
+    }
+
+    //Get the list from the database
+    $list = DB::table('sl_l_list')->where('l_uuid', $request->uuid)->where('l_u_id', $user->u_id)->first();
+
+    //Check if the list exists. By checking that you also check if the user is the owner of the list
+    if (!$list) {
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Check if content is string and at least one character
+    if ($request->content == null || strlen($request->content) < 1 || !is_string($request->content)) {
+        return response()->json([
+            'error' => 'Name is invalid',
+        ], 400);
+    }
+
+    //Create UUID
+    $uuid = Str::orderedUuid();
+
+    //Create Item
+    DB::table('sl_i_item')->insert(['i_id' => $uuid, 'i_l_id' => $list->l_id, 'i_content' => $request->content, 'i_lastupdated' => now()->toDateTimeString()]);
+
+    //Return success
+    return response()->json(['message' => 'Item added'], 200);
+});
+
+//Check/Uncheck Item. Needs to have access to the list
+Route::post('checkitem', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->uuid) || !isset($request->item)){
+        return response()->json(['message' => 'Token, list or item is missing'], 400);
+    }
+
+    //Get the user from the database
+    $user = getUser($request->token);
+
+    //Check if the user exists. By checking that you also check if the token is valid
+    if (!$user) { 
+        return response()->json([
+            'error' => 'User not found',
+        ], 404);
+    }
+
+    //Get the list from the database
+    $list = DB::table('sl_l_list')->where('l_id', $request->uuid)->where('l_u_id', $user->u_id)->first();
+
+    //Check if the list exists. By checking that you also check if the user is the owner of the list
+    if (!$list) {
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Get the item from the database
+    $item = DB::table('sl_i_item')->where('i_id', $request->item)->where('i_l_id', $list->l_id)->first();
+
+    //Check if the item exists. By checking that you also check if the user is the owner of the list
+    if (!$item) {
+        return response()->json([
+            'error' => 'Item not found',
+        ], 404);
+    }
+
+    //Update the item
+    DB::table('sl_i_item')->where('i_uuid', $request->item)->where('i_l_id', $list->l_id)->update(['i_checked' => !$item->i_checked]);
+
+    //Return success
+    return response()->json(['message' => 'Item checked'], 200);
+});
+
+function getUser($token) {
+    $user = DB::table('sl_u_user')->join('sl_t_token', 't_u_id', '=', 'u_id')->where('t_token', $token)->where('t_expiration', '>', now()->toDateTimeString())->first();
+    return $user;
+}
