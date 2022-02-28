@@ -20,7 +20,7 @@ create table sl_h_hasaccess(
 -- table l_list
 create table sl_l_list(
      l_id varchar(100) not null,
-     l_createdat varchar(100) not null,
+     l_createdate datetime not null,
      l_title varchar(100) not null,
      primary key(l_id)
 );
@@ -29,8 +29,8 @@ create table sl_l_list(
 create table sl_li_listitem(
      li_id int AUTO_INCREMENT,
      li_l_id varchar(100) not null,
-     li_lastupdated varchar(100) not null,
-     li_content varchar(100) not null,
+     li_lastupdated datetime not null,
+     li_content varchar(255) not null,
      primary key(li_id,li_l_id)
 );
 
@@ -46,7 +46,7 @@ create table sl_t_token(
      t_id int primary key AUTO_INCREMENT,
      t_u_id varchar(100) not null,
      t_token varchar(100) not null,
-     t_expiration datetime not null,
+     t_expiration datetime not null
 );
 
 -- table u_user
@@ -54,10 +54,11 @@ create table sl_u_user(
      u_id int primary key AUTO_INCREMENT,
      u_email varchar(100) not null,
      u_password varchar(255) not null,
+     u_lastlogin datetime,
      u_emailverified tinyint default 0,
      u_emailcode varchar(100),
      u_resetpwd varchar(100),
-     u_resetpwdexpirationdate datetime,
+     u_resetpwdexpirationdate datetime
 );
 
 
