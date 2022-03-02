@@ -141,6 +141,42 @@ Route::post('/resetpwd', function (Request $request) {
     
 });
 
+//Forgot Password
+/*
+This Function generates a code and sends it to the user per mail.
+@param email
+@return success
+*/
+Route::post('/forgotpwd', function (Request $request) {
+    //Validate data
+    if (!isset($request->email)){
+        return response()->json(['message' => 'Email is missing'], 400);
+    }
+
+    //Get the user from the database
+    $user = DB::table('sl_u_user')->where('u_email', $request->email)->first();
+
+    //Check if the user exists
+    if (!$user) { 
+        return response()->json([
+            'error' => 'User not found',
+        ], 404);
+    }
+
+    //Generate 6 Character long Code containing only numbers.
+    $numbers = "0123456789";
+    $code = "";
+    for ($i = 0; $i < 6; $i++) {
+        $code .= $numbers[rand(0, strlen($numbers) - 1)];
+    }
+
+    //Update the user
+    DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_resetpwd' => $code, 'u_resetpwdexpirationdate' => now()->addMinutes(60*24)->toDateTimeString()]);
+
+    //Return success
+    return response()->json(['message' => 'Code sent'], 200);
+});
+
 //Change Password
 Route::post('/changepwd', function (Request $request) {
     //Validate data
