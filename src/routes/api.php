@@ -469,7 +469,7 @@ Route::post('invitetolist', function (Request $request) {
 
 //TODO: Transfer rights for list to another list. Has to be owner of the list
 
-//TODO: Remove Item. Needs to have access to the list
+//Remove Item. Needs to have access to the list
 Route::post('removeitem', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->item)){
@@ -479,8 +479,8 @@ Route::post('removeitem', function (Request $request) {
     //Get the user from the database
     $user = getUser($request->token);
 
-    //Get the list from the database
-    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
+    //Get the list from the database and check if the user has access to the list
+    $list = DB::table('sl_l_list')->join('sl_a_access', 'a_l_id', '=', 'l_id')->where('l_id', $request->list)->where('a_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
     if (!$list) { 
@@ -506,7 +506,42 @@ Route::post('removeitem', function (Request $request) {
     return response()->json(['message' => 'Item removed'], 200);
 });
 
-//TODO: Edit Item. Needs to have access to the list
+//Edit Item. Needs to have access to the list
+Route::post('edititem', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->list) || !isset($request->item) || !isset($request->content)){
+        return response()->json(['message' => 'Token, list, item or name is missing'], 400);
+    }
+
+    //Get the user from the database
+    $user = getUser($request->token);
+
+    //Get the list from the database and check if the user has access to the list
+    $list = DB::table('sl_l_list')->join('sl_a_access', 'a_l_id', '=', 'l_id')->where('l_id', $request->list)->where('a_u_id', $user->u_id)->first();
+
+    //Check if the list exists. By checking that you also check if the user is the owner of the list
+    if (!$list) { 
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Get the item from the database
+    $item = DB::table('sl_i_item')->where('i_id', $request->item)->where('i_l_id', $list->l_id)->first();
+
+    //Check if the item exists.
+    if (!$item) { 
+        return response()->json([
+            'error' => 'Item not found',
+        ], 404);
+    }
+
+    //Update the item
+    DB::table('sl_i_item')->where('i_id', $request->item)->where('i_l_id', $list->l_id)->update(['i_content' => $request->content]);
+
+    //Return success
+    return response()->json(['message' => 'Item updated'], 200);
+});
 
 //Add Item. Needs to have access to the list
 Route::post('additem', function (Request $request) {
@@ -518,8 +553,8 @@ Route::post('additem', function (Request $request) {
     //Get the user from the database
     $user = getUser($request->token);
 
-    //Get the list from the database
-    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
+    //Get the list from the database and check if the user has access to the list
+    $list = DB::table('sl_l_list')->join('sl_a_access', 'a_l_id', '=', 'l_id')->where('l_id', $request->list)->where('a_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
     if (!$list) {
@@ -555,8 +590,8 @@ Route::post('checkitem', function (Request $request) {
     //Get the user
     $user = getUser($request->token);
 
-    //Get the list from the database
-    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
+    //Get the list from the database and check if the user has access to the list
+    $list = DB::table('sl_l_list')->join('sl_a_access', 'a_l_id', '=', 'l_id')->where('l_id', $request->list)->where('a_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
     if (!$list) {
