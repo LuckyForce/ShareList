@@ -154,7 +154,7 @@ Route::post('/forgotpwd', function (Request $request) {
     }
 
     //Get the user from the database
-    $user = DB::table('sl_u_user')->where('u_email', $request->email)->first();
+    $user = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
 
     //Check if the user exists
     if (!$user) { 
@@ -172,6 +172,9 @@ Route::post('/forgotpwd', function (Request $request) {
 
     //Update the user
     DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_resetpwd' => $code, 'u_resetpwdexpirationdate' => now()->addMinutes(60*24)->toDateTimeString()]);
+
+    //TODO: Send mail to user
+
 
     //Return success
     return response()->json(['message' => 'Code sent'], 200);
@@ -257,7 +260,7 @@ Route::post('createlist', function (Request $request) {
 //Change List Name
 Route::post('renamelist', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->uuid) || !isset($request->name)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->name)){
         return response()->json(['message' => 'Token, list or name is missing'], 400);
     }
 
@@ -272,7 +275,7 @@ Route::post('renamelist', function (Request $request) {
     }
 
     //Get the list from the database
-    $list = DB::table('sl_l_list')->where('l_id', $request->uuid)->where('l_u_id', $user->u_id)->first();
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
     if (!$list) { 
@@ -289,7 +292,7 @@ Route::post('renamelist', function (Request $request) {
     }
 
     //Update the list
-    DB::table('sl_l_list')->where('l_id', $request->uuid)->where('l_u_id', $user->u_id)->update(['l_name' => $request->name]);
+    DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->update(['l_name' => $request->name]);
 
     //Return success
     return response()->json(['message' => 'List name changed'], 200);
@@ -298,7 +301,7 @@ Route::post('renamelist', function (Request $request) {
 //Add User to List
 Route::post('invitetolist', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->uuid) || !isset($request->email)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->email)){
         return response()->json(['message' => 'Token, list or user is missing'], 400);
     }
 
@@ -323,7 +326,7 @@ Route::post('invitetolist', function (Request $request) {
     }
 
     //Get the list from the database
-    $list = DB::table('sl_l_list')->where('l_id', $request->uuid)->where('l_u_id', $user->u_id)->first();
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
     if (!$list) {
@@ -333,7 +336,7 @@ Route::post('invitetolist', function (Request $request) {
     }
 
     //Check if the user is already in the list
-    $userInList = DB::table('sl_l_list')->join('sl_a_access', 'a_l_id', '=', 'l_id')->where('l_id', $request->uuid)->where('a_u_id', $invitedUser->u_id)->first();
+    $userInList = DB::table('sl_l_list')->join('sl_a_access', 'a_l_id', '=', 'l_id')->where('l_id', $request->list)->where('a_u_id', $invitedUser->u_id)->first();
 
     if ($userInList) {
         return response()->json([
@@ -367,7 +370,7 @@ Route::post('invitetolist', function (Request $request) {
 //TODO: Remove Item. Needs to have access to the list
 Route::post('removeitem', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->uuid) || !isset($request->item)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->item)){
         return response()->json(['message' => 'Token, list or item is missing'], 400);
     }
 
@@ -382,7 +385,7 @@ Route::post('removeitem', function (Request $request) {
     }
 
     //Get the list from the database
-    $list = DB::table('sl_l_list')->where('l_id', $request->uuid)->where('l_u_id', $user->u_id)->first();
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
     if (!$list) { 
@@ -413,7 +416,7 @@ Route::post('removeitem', function (Request $request) {
 //Add Item. Needs to have access to the list
 Route::post('additem', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->uuid) || !isset($request->content)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->content)){
         return response()->json(['message' => 'Token, list or item is missing'], 400);
     }
 
@@ -428,7 +431,7 @@ Route::post('additem', function (Request $request) {
     }
 
     //Get the list from the database
-    $list = DB::table('sl_l_list')->where('l_id', $request->uuid)->where('l_u_id', $user->u_id)->first();
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
     if (!$list) {
@@ -457,7 +460,7 @@ Route::post('additem', function (Request $request) {
 //Check/Uncheck Item. Needs to have access to the list
 Route::post('checkitem', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->uuid) || !isset($request->item)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->item)){
         return response()->json(['message' => 'Token, list or item is missing'], 400);
     }
 
@@ -472,7 +475,7 @@ Route::post('checkitem', function (Request $request) {
     }
 
     //Get the list from the database
-    $list = DB::table('sl_l_list')->where('l_id', $request->uuid)->where('l_u_id', $user->u_id)->first();
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
     if (!$list) {
