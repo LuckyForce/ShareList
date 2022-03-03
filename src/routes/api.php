@@ -187,8 +187,8 @@ Route::post('/changepwd', function (Request $request) {
         return response()->json(['message' => 'Token or password is missing'], 400);
     }
 
-    //Get the user from the database
-    $user = DB::table('sl_u_user')->join('sl_t_token', 't_u_id', '=', 'u_id')->where('t_token', $request->token)->where('t_expiration', '>', now()->toDateTimeString())->first();
+    //Get the user
+    $user = getUser($request->token);
 
     //Check if the user exists. By checking that you also check if the token is valid
     if (!$user) { 
@@ -230,8 +230,8 @@ Route::post('createlist', function (Request $request) {
         return response()->json(['message' => 'Token is missing'], 400);
     }
 
-    //Get the user from the database
-    $user = DB::table('sl_u_user')->join('sl_t_token', 't_u_id', '=', 'u_id')->where('t_token', $request->token)->where('t_expiration', '>', now()->toDateTimeString())->first();
+    //Get the user
+    $user = getUser($request->token);
 
     //Check if the user exists. By checking that you also check if the token is valid
     if (!$user) { 
@@ -264,8 +264,8 @@ Route::post('renamelist', function (Request $request) {
         return response()->json(['message' => 'Token, list or name is missing'], 400);
     }
 
-    //Get the user from the database
-    $user = DB::table('sl_u_user')->join('sl_t_token', 't_u_id', '=', 'u_id')->where('t_token', $request->token)->where('t_expiration', '>', now()->toDateTimeString())->first();
+    //Get the user
+    $user = getUser($request->token);
 
     //Check if the user exists. By checking that you also check if the token is valid
     if (!$user) { 
@@ -464,7 +464,7 @@ Route::post('checkitem', function (Request $request) {
         return response()->json(['message' => 'Token, list or item is missing'], 400);
     }
 
-    //Get the user from the database
+    //Get the user
     $user = getUser($request->token);
 
     //Check if the user exists. By checking that you also check if the token is valid
@@ -502,6 +502,7 @@ Route::post('checkitem', function (Request $request) {
 });
 
 function getUser($token) {
+    //Get user from database
     $user = DB::table('sl_u_user')->join('sl_t_token', 't_u_id', '=', 'u_id')->where('t_token', $token)->where('t_expiration', '>', now()->toDateTimeString())->first();
     return $user;
 }
