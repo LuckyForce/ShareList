@@ -341,7 +341,7 @@ Route::post('getlist', function (Request $request) {
 });
 
 
-//TODO: Delete List. Needs to be owner of the list
+//Delete List. Needs to be owner of the list
 /*
 @param string token
 @param string list
