@@ -292,7 +292,53 @@ Route::post('createlist', function (Request $request) {
     return response()->json(['message' => 'List created'], 200);
 });
 
-//TODO: Get List. Needs to have access to the list
+//Get List. Needs to have access to the list
+/*
+@param string token
+@param string list
+@return json list
+@return json items
+*/
+Route::post('getlist', function (Request $request) {
+    //Validate data
+    if (!isset($request->token ) || !isset($request->list)){
+        return response()->json(['message' => 'Token or list is missing'], 400);
+    }
+
+    //Get the user
+    $user = getUser($request->token);
+
+    //Check if the user exists. By checking that you also check if the token is valid
+    if (!$user) { 
+        return response()->json([
+            'error' => 'User not found',
+        ], 404);
+    }
+
+    //Get the list
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->first();
+
+    //Check if the list exists
+    if (!$list) { 
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Check if the user has access to the list
+    if (!DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->first()) {
+        return response()->json([
+            'error' => 'User has no access to this list',
+        ], 401);
+    }
+
+    //Get items
+    $items = DB::table('sl_i_item')->where('i_l_id', $list->l_id)->get();
+
+    //Return list
+    return response()->json(['list' => $list, 'items' => $items], 200);
+});
+
 
 //TODO: Delete List. Needs to be owner of the list
 
