@@ -292,6 +292,35 @@ Route::post('createlist', function (Request $request) {
     return response()->json(['message' => 'List created'], 200);
 });
 
+//Get Lists
+/*
+This Function returns all lists the user has access to.
+@param token
+@return lists
+*/
+Route::post('/getlists', function (Request $request) {
+    //Validate data
+    if (!isset($request->token)){
+        return response()->json(['message' => 'Token is missing'], 400);
+    }
+
+    //Get the user
+    $user = getUser($request->token);
+
+    //Check if the user exists. By checking that you also check if the token is valid
+    if (!$user) { 
+        return response()->json([
+            'error' => 'User not found',
+        ], 404);
+    }
+
+    //Get all lists the user has access to
+    $lists = DB::table('sl_l_list')->join('sl_a_access', 'sl_l_list.l_id', '=', 'sl_a_access.a_l_id')->where('sl_a_access.a_u_id', $user->u_id)->get();
+
+    //Return success
+    return response()->json(['lists' => $lists], 200);
+});
+
 //Get List. Needs to have access to the list
 /*
 @param string token
