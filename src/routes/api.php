@@ -356,6 +356,21 @@ Route::post('/deletelist', function (Request $request) {
     //Get the user
     $user = getUser($request->token);
 
+    //Get the list
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
+
+    //Check if the list exists
+    if (!$list) { 
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Delete list
+    DB::table('sl_l_list')->where('l_id', $list->l_id)->delete();
+
+    //Return success
+    return response()->json(['message' => 'List deleted'], 200);
 });
 
 //Change List Name
