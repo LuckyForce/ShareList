@@ -71,7 +71,46 @@ Route::post('/register', function (Request $request) {
     return response()->json(['message' => 'User created'], 200);
 });
 
-//TODO: Delete user
+//Delete user
+Route::post('/deleteuser', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->password)) {
+        return response()->json(['message' => 'Token or password is missing'], 400);
+    }
+
+    //Get user
+    $user = getUser($request->token);
+
+    //Check if user exists
+    if (!$user) {
+        return response()->json(['message' => 'User does not exist'], 400);
+    }
+
+    //Check if password is correct
+    if (!password_verify($request->password, $user->u_password)) {
+        return response()->json(['message' => 'Password is incorrect'], 400);
+    }
+
+    //Transfer Ownership of the lists to another user
+    $lists = DB::table('sl_l_list')->where('l_u_user', $user->u_id)->get();
+    //Get from each list the next user who has access to the list
+    foreach ($lists as $list) {
+        $nextUser = DB::table('sl_l_list')->join('sl_a_access', 'l_id', '=', 'a_l_id')->where('l_id', $list->l_id)->where('a_u_id', "!=", $user->u_id)->orderBy('a_p_id', 'asc')->first();
+        if ($nextUser) {
+            //Update the list
+            DB::table('sl_l_list')->where('l_id', $list->l_id)->update(['l_u_id' => $nextUser->a_u_id]);
+        }else{
+            //Delete the list
+            DB::table('sl_l_list')->where('l_id', $list->l_id)->delete();
+        }
+    }
+
+    //Delete user
+    DB::table('sl_u_user')->where('u_id', $user->u_id)->delete();
+
+    //Return success
+    return response()->json(['message' => 'User deleted'], 200);
+});
 
 //Login
 Route::post('/login', function (Request $request) {
