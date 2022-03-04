@@ -29,8 +29,12 @@ Route::get('/list/{id}', function ($id) {
     return view('list', ['id' => $id]);
 });
 
-Route::get('/list/{id}/', function ($id) {
-    return view('access', ['id' => $id]);
+Route::get('/list/{id}/invites', function ($id) {
+    return view('invite', ['id' => $id]);
+});
+
+Route::get('/list/{id}/member', function ($id) {
+    return view('member', ['id' => $id]);
 });
 
 Route::get('/register', function () {
