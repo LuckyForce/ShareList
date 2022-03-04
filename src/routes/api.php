@@ -460,8 +460,17 @@ Route::post('invitetolist', function (Request $request) {
 });
 
 //TODO: Delete Invite. Needs to be owner of the list
+/*
+@param string token
+@param string list
+@param string invite
+@param string user
+@return json success
+*/
+Route::post('/deleteinvite', function (Request $request) {
+});
 
-//TODO: Accept Invite. Needs to be owner of the list
+//TODO: Accept Invite. Needs to be owner of the list. This is going to be in Frontend!!!
 
 //TODO: Remove User from list. Has to be owner of the list
 

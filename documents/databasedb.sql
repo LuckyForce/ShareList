@@ -10,9 +10,9 @@
 -- tables-#################################################
 -- table h_hasaccess
 create table sl_a_access(
-     a_l_id varchar(100) not null,
-     a_u_id varchar(100) not null,
-     a_p_id varchar(100) not null,
+     a_l_id varchar(255) not null,
+     a_u_id int not null,
+     a_p_id int not null,
      primary key(a_l_id,a_u_id,a_p_id)
 );
 
@@ -28,7 +28,7 @@ create table sl_l_list(
 -- table l_listitem
 create table sl_i_item(
      i_id varchar(255) not null,
-     i_l_id varchar(100) not null,
+     i_l_id varchar(255) not null,
      i_lastupdated datetime not null,
      i_content varchar(255) not null,
      i_checked tinyint default false,
@@ -45,7 +45,7 @@ create table sl_p_priviledge(
 -- table t_token
 create table sl_t_token(
      t_id int AUTO_INCREMENT,
-     t_u_id varchar(100) not null,
+     t_u_id int not null,
      t_token varchar(255) not null,
      t_expiration datetime not null,
      primary key (t_id)
@@ -66,14 +66,14 @@ create table sl_u_user(
 -- table i_invites
 create table sl_i_invites(
      i_id varchar(255) not null,
-     i_l_id varchar(100) not null,
-     i_u_id varchar(100) not null,
-     i_invitedby varchar(100) not null,
+     i_l_id varchar(255) not null,
+     i_u_id int not null,
+     i_invitedby varchar(255) not null,
      i_created datetime not null,
      i_accepted tinyint default 0,
      i_accepteddate datetime,
      i_p_id int not null,
-     primary key(i_id)
+     primary key(i_id, i_l_id, i_u_id)
 );
 
 -- foreign keys-#################################################
@@ -96,4 +96,4 @@ add foreign key (i_p_id) references sl_p_priviledge(p_id) on delete restrict on 
 -- commit all changes
 -- commit;
 -- add priveledges write and read
-insert into sl_p_priviledge (p_id,p_description) values (1,'write'),(2,'read');
+insert into sl_p_priviledge (p_id,p_description) values (1,'read/write'),(2,'read');
