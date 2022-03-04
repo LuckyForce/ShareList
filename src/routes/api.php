@@ -446,17 +446,58 @@ Route::post('invitetolist', function (Request $request) {
         ], 400);
     }
 
+    //Check if the user is already invited
+    $userInvited = DB::table('sl_in_invite')->where('i_l_id', $request->list)->where('i_u_id', $invitedUser->u_id)->where('i_accepted', 0)->where('i_deleted', 0)->first();
+
+    if ($userInvited) {
+        return response()->json([
+            'error' => 'User is already invited',
+        ], 400);
+    }
+
     //Create UUID
     $uuid = Str::orderedUuid();
 
     //Create Invite to add user to list
-    DB::table('sl_i_invite')->insert(['i_id' => $uuid, 'i_l_id' => $list->l_id, 'i_u_id' => $invitedUser->u_id, 'i_created' => now()->toDateTimeString(), 'i_p_id' => 2]);
+    DB::table('sl_in_invite')->insert(['in_id' => $uuid, 'in_l_id' => $list->l_id, 'in_u_id' => $invitedUser->u_id, 'in_created' => now()->toDateTimeString(), 'in_p_id' => 2]);
 
     //TODO: Send Invite Email
     
 
     //Return success
     return response()->json(['message' => 'User invited to list'], 200);
+});
+
+//TODO: Get unnaccepted invites. Needs to be owner of the list
+/*
+@param string token
+@param string list
+@return json invites
+*/
+Route::post('getinvites', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->list)){
+        return response()->json(['message' => 'Token or list is missing'], 400);
+    }
+
+    //Get the user
+    $user = getUser($request->token);
+
+    //Get the list
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
+
+    //Check if the list exists. By checking that you also check if the user is the owner of the list
+    if (!$list) { 
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Get the invites
+    $invites = DB::table('sl_in_invite')->where('in_l_id', $list->l_id)->where('in_accepted', 0)->where('in_deleted', 0)->get();
+
+    //Return success
+    return response()->json(['invites' => $invites], 200);
 });
 
 //TODO: Delete Invite. Needs to be owner of the list
