@@ -1,44 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>
+        <?php echo $title; ?>
+    </title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-<script>
-    let activeClassName = 'underline'
+    <script>
+        let activeClassName = 'underline'
 
-    //Constant to see if the navbar is extended, in case the screen is too small
-    let expanded = false
+        //Constant to see if the navbar is extended, in case the screen is too small
+        let expanded = false
 
-    //Function to expand contract Navbar
-    const expandHeader = () => {
-        expanded = !expanded
-        if (expanded) {
-            document.getElementById('expandDiv')?.classList.add('block')
-            document.getElementById('expandDiv')?.classList.remove('hidden')
-        } else {
-            document.getElementById('expandDiv')?.classList.add('hidden')
-            document.getElementById('expandDiv')?.classList.remove('block')
+        //Function to expand contract Navbar
+        const expandHeader = () => {
+            expanded = !expanded
+            if (expanded) {
+                document.getElementById('expandDiv')?.classList.add('block')
+                document.getElementById('expandDiv')?.classList.remove('hidden')
+            } else {
+                document.getElementById('expandDiv')?.classList.add('hidden')
+                document.getElementById('expandDiv')?.classList.remove('block')
+            }
+            console.log(expanded)
         }
-        console.log(expanded)
-    }
-</script>
-<!--
-<nav className='bg-1 text-1 py-4 flex-row px-4 border-b-2'>
-    <ul className='lg:flex lg:flex-row lg:space-x-5 grid grid-cols-2'>
-        <li className='ml-2 my-auto'>
-            <NavLink to='/'>
-                {({ isActive }) => (
-                <span className={ (isActive ? activeClassName : '' ) + ' navlink-1 flex flex-row items-center md:text-3xl sm:text-2xl text-xl' }>
+    </script>
+<?php
+    $activeClassName = 'underline';
+?>
+<nav class='bg-1 text-1 py-4 flex-row px-4 border-b-2'>
+    <ul class='lg:flex lg:flex-row lg:space-x-5 grid grid-cols-2'>
+        <li class='ml-2 my-auto'>
+            <a href='<?php echo url('/'); ?>'>
+                <span class='<?php if($url=="home") echo $activeClassName ?> navlink-1 flex flex-row items-center md:text-3xl sm:text-2xl text-xl'>
                     <img className='h-10 w-10 mx-2' src='https://cdn.discordapp.com/attachments/669591310004649987/930035678782292029/bingomaker_v8.png'></img>
                 </span>
-                )}
-            </NavLink>
+            </a>
         </li>
+        <!--
         <li className='lg:flex hidden text-4xl navbar-div-color-1'>|</li>
         <li className='lg:hidden text-right mr-2 my-auto'>
             <button onClick={expandHeader}>Expand/Contract</button>
@@ -119,7 +123,7 @@
                 </div>
             </div>
         </div>
+        -->
     </ul>
 </nav>
--->
 <div class="content">
