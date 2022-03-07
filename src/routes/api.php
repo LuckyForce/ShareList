@@ -246,7 +246,7 @@ Route::post('/user/changepwd', function (Request $request) {
 
     //Update the password
     DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_password' => password_hash($request->newpassword, PASSWORD_DEFAULT)]);
-
+    
     //Return success
     return response()->json(['message' => 'Password changed'], 200);
 });
@@ -264,7 +264,7 @@ Route::post('/list/create', function (Request $request) {
 
     //Get the user
     $user = getUser($request->token);
-
+    
     //Create UUID
     $uuid = Str::orderedUuid();
 
@@ -325,7 +325,7 @@ Route::post('/list', function (Request $request) {
             'error' => 'List not found',
         ], 404);
     }
-
+    
     //Check if the user has access to the list
     if (!DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->first()) {
         return response()->json([
@@ -335,7 +335,7 @@ Route::post('/list', function (Request $request) {
 
     //Get items
     $items = DB::table('sl_i_item')->where('i_l_id', $list->l_id)->get();
-
+    
     //Return list
     return response()->json(['list' => $list, 'items' => $items], 200);
 });
@@ -355,10 +355,10 @@ Route::post('/list/delete', function (Request $request) {
 
     //Get the user
     $user = getUser($request->token);
-
+    
     //Get the list
     $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
-
+    
     //Check if the list exists
     if (!$list) { 
         return response()->json([
@@ -402,9 +402,20 @@ Route::post('/list/rename', function (Request $request) {
 
     //Update the list
     DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->update(['l_name' => $request->name]);
-
+    
     //Return success
     return response()->json(['message' => 'List name changed'], 200);
+});
+
+//TODO: Transfer rights for list to another user. Has to be owner of the list
+/*
+@param string token
+@param string list
+@param string user
+@return json success
+*/
+Route::post('/list/transfer', function (Request $request) {
+
 });
 
 //Add User to List
@@ -511,13 +522,48 @@ Route::post('/list/invites', function (Request $request) {
 Route::post('/list/invite/delete', function (Request $request) {
 });
 
-//TODO: Accept Invite. Needs to be owner of the list. This is going to be in Frontend!!!
+//TODO: Accept Invite. Needs to be owner of the list.
+/*
+@param string token
+@param string invite
+@return json success
+*/
+Route::post('/list/invite/accept', function (Request $request) {
+
+});
+
+//TODO: Get Members of list.
+/*
+@param string token
+@param string list
+@return json members
+*/
+Route::post('/list/members', function (Request $request) {
+
+});
 
 //TODO: Remove User from list. Has to be owner of the list
+/*
+@param string token
+@param string list
+@param string user
+@return json success
+*/
+Route::post('/list/member/remove', function (Request $request) {
+
+});
 
 //TODO: Change rights for user on list. Has to be owner of the list
+/*
+@param string token
+@param string list
+@param string user
+@param string rights
+@return json success
+*/
+Route::post('/list/member/rights', function (Request $request) {
 
-//TODO: Transfer rights for list to another list. Has to be owner of the list
+});
 
 //Remove Item. Needs to have access to the list
 Route::post('/list/item/remove', function (Request $request) {
