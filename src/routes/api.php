@@ -306,6 +306,7 @@ Route::post('/lists', function (Request $request) {
 @param string list
 @return json list
 @return json items
+@return json admin
 */
 Route::post('/list', function (Request $request) {
     //Validate data
@@ -335,9 +336,13 @@ Route::post('/list', function (Request $request) {
 
     //Get items
     $items = DB::table('sl_i_item')->where('i_l_id', $list->l_id)->get();
+
+    //Check if the user is owner of the list.
+    $admin = DB::table('sl_l_list')->where('l_id', $list->l_id)->where('l_u_id', $user->u_id)->first();
+    if($admin) $admin = true; else $admin = false;
     
     //Return list
-    return response()->json(['list' => $list, 'items' => $items], 200);
+    return response()->json(['list' => $list, 'items' => $items, 'admin' => $admin], 200);
 });
 
 
