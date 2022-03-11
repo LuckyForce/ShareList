@@ -424,7 +424,57 @@ Route::post('/list/rename', function (Request $request) {
 @return json success
 */
 Route::post('/list/transfer', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->list) || !isset($request->user) || !isset($request->password)){
+        return response()->json(['message' => 'Token, list, user or password is missing'], 400);
+    }
 
+    //Get the user
+    $user = getUser($request->token);
+
+    //Check if password is valid
+    if (!password_verify($request->password, $user->u_password)) {
+        return response()->json([
+            'error' => 'Password is invalid',
+        ], 401);
+    }
+
+    //Get the list from the database
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
+
+    //Check if the list exists. By checking that you also check if the user is the owner of the list
+    if (!$list) { 
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Get the user to transfer to
+    $userToTransfer = DB::table('sl_u_user')->where('u_id', $request->user)->first();
+
+    //Check if the user exists
+    if (!$userToTransfer) { 
+        return response()->json([
+            'error' => 'User not found',
+        ], 404);
+    }
+
+    //Check if the user has access to the list
+    if (!DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $userToTransfer->u_id)->first()) {
+        return response()->json([
+            'error' => 'User has no access to this list',
+        ], 401);
+    }
+
+    //Transfer the list
+    DB::table('sl_l_list')->where('l_id', $list->l_id)->update(['l_u_id' => $userToTransfer->u_id]);
+
+    //Remove Access From new Owner and add Access to old Owner
+    DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $userToTransfer->u_id)->delete();
+    DB::table('sl_a_access')->insert(['a_l_id' => $list->l_id, 'a_u_id' => $user->u_id, 'a_p_id' => 1]);
+
+    //Return success
+    return response()->json(['message' => 'List transferred'], 200);
 });
 
 //Add User to List
