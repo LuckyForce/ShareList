@@ -539,7 +539,29 @@ Route::post('/list/invite/accept', function (Request $request) {
 @return json members
 */
 Route::post('/list/members', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->list)){
+        return response()->json(['message' => 'Token or list is missing'], 400);
+    }
 
+    //Get the user
+    $user = getUser($request->token);
+
+    //Get the list
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
+
+    //Check if the list exists. By checking that you also check if the user is the owner of the list
+    if (!$list) { 
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Get the members
+    $members = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->get();
+
+    //Return success
+    return response()->json(['members' => $members], 200);
 });
 
 //TODO: Remove User from list. Has to be owner of the list
