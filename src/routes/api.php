@@ -415,7 +415,7 @@ Route::post('/list/rename', function (Request $request) {
     return response()->json(['message' => 'List name changed'], 200);
 });
 
-//TODO: Transfer rights for list to another user. Has to be owner of the list
+//Transfer rights for list to another user. Has to be owner of the list
 /*
 @param string token
 @param string list
@@ -537,7 +537,7 @@ Route::post('/list/invite', function (Request $request) {
     return response()->json(['message' => 'User invited to list'], 200);
 });
 
-//TODO: Get unnaccepted invites. Needs to be owner of the list
+//Get unnaccepted invites. Needs to be owner of the list
 /*
 @param string token
 @param string list
@@ -590,7 +590,7 @@ Route::post('/list/invite/accept', function (Request $request) {
 
 });
 
-//TODO: Get Members of list.
+//Get Members of list.
 /*
 @param string token
 @param string list
