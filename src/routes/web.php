@@ -12,8 +12,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
+//Route::get('/{any}', 'YourController@index')->where('any', '.*');
+Route::get('/{route?}', function() {
+    return view('page');
+});
+/*
+Route::get('/{any}', function () {
     return view('page');
 });
 
@@ -48,3 +52,4 @@ Route::get('/login', function () {
 Route::get('/user', function () {
     return view('user');
 });
+*/
