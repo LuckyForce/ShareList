@@ -2,34 +2,47 @@
 require("./bootstrap");
 
 import { createApp } from "vue";
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
+//Views
+import Home from "../views/Home.vue";
+import Login from "../views/Login.vue";
+import PageNotFound from "../views/PageNotFound.vue";
 //Components
-import Home from "../components/Home.vue";
-import Login from "../components/Login.vue";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 //Routes
 const routes = [
   {
     path: "/",
-    component: Home
+    component: Home,
+    name: "Home",
   },
   {
     path: "/login",
-    component: Login
+    component: Login,
+    name: "Login",
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    component: PageNotFound,
+    name: "PageNotFound",
   }
 ];
 
 //Create Router
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 
 const app = createApp({
   components: {
     Home,
-    Login
-  },
+    Login,
+    'header-component': Header,
+    'footer-component': Footer,
+  }
 });
 
 app.use(router);

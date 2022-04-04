@@ -8,8 +8,10 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app" class="flex items-center bg-gray-100 min-h-screen">
-        <home />
+    <div id="app" class="items-center bg-gray-100 min-h-screen">
+        <header-component></header-component>
+        <router-view></router-view>
+        <footer-component></footer-component>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
