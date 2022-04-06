@@ -4,9 +4,7 @@
 *.css diff=css
 *.html diff=html
 *.md diff=markdown
-*.php diff=laravel
+*.php diff=php
 
 /.github export-ignore
 CHANGELOG.md export-ignore
-
-public/* linguist-vendored=false
