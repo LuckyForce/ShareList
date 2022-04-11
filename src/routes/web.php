@@ -12,10 +12,21 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//Route::get('/{any}', 'YourController@index')->where('any', '.*');
-Route::get('/{route?}', function() {
+Route::get('', function () {
     return view('page');
 });
+/*
+if(request()->isMethod('get')){
+    $matched = false;
+    while(!$matched){
+        $path = '/{any?}';
+        Route::get($path, function() {
+            $matched = true;
+            return view('page');
+        });
+        $path .= '/{any?}';
+    }
+}
 /*
 Route::get('/{any}', function () {
     return view('page');

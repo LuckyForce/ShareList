@@ -6,6 +6,13 @@ import { createRouter, createWebHistory } from "vue-router";
 //Views
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
+import Register from "../views/Register.vue";
+import Profile from "../views/Profile.vue";
+import Lists from "../views/Lists.vue";
+import List from "../views/List.vue";
+import ListEdit from "../views/ListEdit.vue";
+import Invite from "../views/Invite.vue";
+import Verification from "../views/Verification.vue";
 import PageNotFound from "../views/PageNotFound.vue";
 //Components
 import Header from "../components/Header.vue";
@@ -24,10 +31,45 @@ const routes = [
     name: "Login",
   },
   {
+    path: "/register",
+    component: Register,
+    name: "Register",
+  },
+  {
+    path: "/profile",
+    component: Profile,
+    name: "Profile",
+  },
+  {
+    path: "/lists",
+    component: Lists,
+    name: "Lists",
+  },
+  {
+    path: "/list/:id",
+    component: List,
+    name: "List",
+  },
+  {
+    path: "/list/:id/edit",
+    component: ListEdit,
+    name: "ListEdit",
+  },
+  {
+    path: "/invite/:id",
+    component: Invite,
+    name: "Invite",
+  },
+  {
+    path: "/verification/:id",
+    component: Verification,
+    name: "Verification",
+  },
+  {
     path: "/:pathMatch(.*)*",
     component: PageNotFound,
     name: "PageNotFound",
-  }
+  },
 ];
 
 //Create Router
@@ -38,8 +80,6 @@ const router = createRouter({
 
 const app = createApp({
   components: {
-    Home,
-    Login,
     'header-component': Header,
     'footer-component': Footer,
   }

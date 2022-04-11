@@ -1,4 +1,4 @@
-// resources/js/components/Home.vue
+// resources/views/Home.vue
 <template>
     <div class="w-1/2 bg-white rounded-lg shadow-lg mx-auto p-4">
         <h1 class="text-2xl text-gray-700 text-center mb-4">
