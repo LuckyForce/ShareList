@@ -138,15 +138,15 @@ Route::post('/user/login', function (Request $request) {
 
     //Create Token
     $token = Str::orderedUuid();
-    $expiration = now()->addMinutes(60*24)->toDateTimeString();
-    DB::table('sl_t_token')->insert(['t_token' => $token, 't_u_id' => $user->u_id, 't_expiration' => $expiration]);
+    $expires = now()->addMinutes(60*24)->toDateTimeString();
+    DB::table('sl_t_token')->insert(['t_token' => $token, 't_u_id' => $user->u_id, 't_expiration' => $expires]);
 
     //Update last login
     DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_lastlogin' => now()->toDateTimeString()]);
 
     return response()->json([
         'token' => $token,
-        'expiration' => $expiration,
+        'expires' => $expires,
     ], 200);
 });
 

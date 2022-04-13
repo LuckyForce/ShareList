@@ -106,3 +106,17 @@ const app = createApp({
 app.use(router);
 
 app.mount("#app");
+
+//Create function login
+function login(email, password) {
+  return new Promise((resolve, reject) => {
+    axios.post("/api/login", {
+      email: email,
+      password: password
+    }).then(response => {
+      resolve(response.data);
+    }).catch(error => {
+      reject(error.response.data);
+    });
+  });
+}
