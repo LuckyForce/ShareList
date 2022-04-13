@@ -1,6 +1,6 @@
 // resources/components/Footer.vue
 <template>
-    <footer class="grid sm:grid-cols-2 grid-cols-1 bg-1 p-5 mt-auto mb-0">
+    <footer class="grid sm:grid-cols-2 grid-cols-1 color-2 p-5 mt-auto mb-0">
         <div class="flex justify-center align-center">
             <router-link to="/about" class="text-2xl text-white mx-auto">About Us</router-link>
         </div>

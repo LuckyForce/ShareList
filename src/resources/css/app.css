@@ -2,11 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-1{
-    @apply bg-red-600;
-}
-
-.content {
+#content {
     flex: 1;
 }
 
@@ -18,15 +14,24 @@ body{
 
 .color-1{
     @apply bg-blue-400;
-    @apply dark: bg-blue-400;
+    @apply dark:bg-blue-400;
 }
 
 .color-2{
     @apply bg-blue-600;
-    @apply dark: bg-blue-600;
+    @apply dark:bg-blue-600;
 }
 
 .color-3{
     @apply bg-purple-600;
-    @apply dark: bg-purple-600;
+    @apply dark:bg-purple-600;
+}
+
+.nav-link{
+    @apply text-white;
+    @apply dark:text-white;
+    @apply md:text-2xl;
+    @apply text-sm;
+    @apply mx-auto;
+    @apply mr-2;
 }

@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+//use File
+use Illuminate\Support\Facades\File;
+//use Response
+use Illuminate\Support\Facades\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +16,21 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/images/{filename}', function ($filename) {
+    $path = storage_path('../resources/images/' . $filename);
+
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+});
 Route::get('', function () {
     return view('page');
 });

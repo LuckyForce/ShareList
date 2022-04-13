@@ -11,5 +11,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+    login(){
+        console.log('Login');
+    }
+};
 </script>

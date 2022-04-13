@@ -6,11 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ShareList</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="icon" href="{{ url('images/logo.png') }}">
 </head>
 <body>
-    <div id="app" class="items-center bg-gray-100 min-h-screen">
+    <div id="app" class="h-screen flex flex-col">
         <header-component></header-component>
-        <div id="content">
+        <div class="color-1 flex-1">
             <router-view></router-view>
         </div>
         <footer-component></footer-component>
