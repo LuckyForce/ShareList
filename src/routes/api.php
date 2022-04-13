@@ -189,6 +189,32 @@ Route::post('/user/verify', function (Request $request) {
     return response()->json(['message' => 'User verified'], 200);
 });
 
+//Check if User is verified
+/*
+This function checks if the user is verified.
+@param $email: The email of the user.
+@return 200 if the user is verified.
+*/
+Route::post('/user/check', function (Request $request) {
+    //Validate data
+    if (!isset($request->email)) {
+        return response()->json(['message' => 'Email is missing'], 400);
+    }
+
+    //Get the user from the database
+    $user = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
+
+    //Check if the user exists
+    if (!$user) { 
+        return response()->json([
+            'error' => 'User not found',
+        ], 404);
+    }
+
+    //Return success
+    return response()->json(['message' => 'User verified'], 200);
+});
+
 //TODO: Reset Password
 Route::post('/user/resetpwd', function (Request $request) {
     //Validate data
