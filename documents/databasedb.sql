@@ -21,6 +21,7 @@ create table sl_l_list(
      l_id varchar(255) not null,
      l_created datetime not null,
      l_name varchar(100) not null,
+     l_description varchar(255) not null,
      l_u_id int not null,
      primary key(l_id)
 );
@@ -63,7 +64,7 @@ create table sl_u_user(
      u_resetpwdexpirationdate datetime
 );
 
--- table i_invites
+-- table in_invites
 create table sl_in_invites(
      i_id varchar(255) not null,
      i_l_id varchar(255) not null,
