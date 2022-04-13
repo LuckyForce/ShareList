@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 .bg-1{
-    @apply bg-red-600;
+    @apply bg-blue-500;
+    @apply dard:bg-grey-500;
 }
 
-.content {
+#content {
     flex: 1;
 }
 

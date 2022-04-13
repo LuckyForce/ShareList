@@ -10,7 +10,9 @@
 <body>
     <div id="app" class="items-center bg-gray-100 min-h-screen">
         <header-component></header-component>
-        <router-view></router-view>
+        <div id="content">
+            <router-view></router-view>
+        </div>
         <footer-component></footer-component>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
