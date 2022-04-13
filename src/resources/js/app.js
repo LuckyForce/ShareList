@@ -11,6 +11,8 @@ import Profile from "../views/Profile.vue";
 import Lists from "../views/Lists.vue";
 import List from "../views/List.vue";
 import ListEdit from "../views/ListEdit.vue";
+import ListInvites from "../views/ListInvites.vue";
+import ListMembers from "../views/ListMembers.vue";
 import Invite from "../views/Invite.vue";
 import Verification from "../views/Verification.vue";
 import PageNotFound from "../views/PageNotFound.vue";
@@ -54,6 +56,16 @@ const routes = [
     path: "/list/:id/edit",
     component: ListEdit,
     name: "ListEdit",
+  },
+  {
+    path: "/list/:id/invites",
+    component: ListInvites,
+    name: "ListInvites",
+  },
+  {
+    path: "/list/:id/members",
+    component: ListMembers,
+    name: "ListMembers",
   },
   {
     path: "/invite/:id",
