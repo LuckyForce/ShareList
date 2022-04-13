@@ -1,12 +1,12 @@
 // resources/views/PageNotFound.vue
 <template>
-    <div class="w-1/2 bg-white rounded-lg shadow-lg mx-auto p-4">
-        <h1 class="text-2xl text-gray-700 text-center mb-4">
-            404 View
+    <div class="flex flex-col justify-center align-middle h-full">
+        <h1 class="text-2xl sm:text-9xl text-gray-700 text-center mb-4">
+            404 Error
         </h1>
-        <p>
+        <h2 class="text-xl sm:text-5xl text-gray-700 text-center">
             Page: {{ $route.params.pathMatch[0] }} not found.
-        </p>
+        </h2>
     </div>
 </template>
 

@@ -6,7 +6,7 @@
                 to="/"
                 class="flex items-center nav-link"
             >
-                <img src="images/logo.png" alt="Logo" class="h-12" />
+                <img src="images/logo.png" alt="Logo" class="sm:h-12 h-8" />
                 Home
             </router-link>
             <router-link

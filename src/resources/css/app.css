@@ -6,32 +6,121 @@
     flex: 1;
 }
 
-body{
+body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.color-1{
+.color-1 {
     @apply bg-blue-400;
     @apply dark:bg-blue-400;
 }
 
-.color-2{
+.color-2 {
     @apply bg-blue-600;
     @apply dark:bg-blue-600;
 }
 
-.color-3{
+.color-3 {
     @apply bg-purple-600;
     @apply dark:bg-purple-600;
 }
 
-.nav-link{
+.nav-link {
     @apply text-white;
     @apply dark:text-white;
-    @apply md:text-2xl;
     @apply text-sm;
+    @apply sm:text-2xl;
     @apply mx-auto;
     @apply mr-2;
+}
+
+.router-link-active {
+    @apply font-bold;
+    @apply text-purple-400;
+    @apply dark:text-purple-400;
+}
+
+.login-form,
+.register-form {
+    @apply z-50;
+    @apply fixed;
+    @apply mx-auto;
+    @apply max-w-xs;
+    @apply p-4;
+    @apply rounded-lg;
+    @apply bg-white;
+    top: 20%;
+    right: 10%;
+    left: 10%;
+    @apply flex;
+    @apply flex-col;
+    @apply items-center;
+    @apply justify-start;
+}
+
+.cover {
+    @apply z-40;
+    @apply fixed;
+    @apply inset-0;
+    @apply bg-blue-400;
+    @apply opacity-75;
+    @apply p-4;
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+}
+
+.input {
+    @apply p-2;
+    @apply rounded-lg;
+    @apply border-2;
+    @apply border-gray-200;
+    @apply focus:border-blue-500;
+    @apply focus:outline-none;
+    @apply w-full;
+}
+.button {
+    @apply p-2;
+    @apply rounded-lg;
+    @apply border-2;
+    @apply border-gray-200;
+    @apply focus:border-blue-500;
+    @apply w-full;
+    @apply cursor-pointer;
+    @apply text-white;
+    @apply bg-blue-500;
+    @apply hover:bg-blue-600;
+}
+
+.btn-register,
+.btn-login {
+    @apply p-2;
+    @apply rounded-lg;
+    @apply border-2;
+    @apply border-gray-200;
+    @apply focus:border-blue-500;
+    @apply focus:outline-none;
+    @apply w-full;
+    @apply text-center;
+    @apply text-white;
+    @apply bg-blue-400;
+    @apply hover:bg-blue-500;
+    @apply transition;
+    @apply mt-2;
+    @apply disabled:opacity-50;
+}
+
+.status-message {
+    @apply mb-2;
+    @apply text-gray-600;
+    @apply text-sm;
+}
+
+.invalid-input {
+    @apply mb-2;
+    @apply border-red-500;
+    @apply text-red-500;
+    @apply text-sm;
 }
