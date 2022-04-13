@@ -3,11 +3,10 @@
 @tailwind utilities;
 
 .bg-1{
-    @apply bg-blue-500;
-    @apply dard:bg-grey-500;
+    @apply bg-red-600;
 }
 
-#content {
+.content {
     flex: 1;
 }
 
@@ -15,4 +14,19 @@ body{
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+.color-1{
+    @apply bg-blue-400;
+    @apply dark: bg-blue-400;
+}
+
+.color-2{
+    @apply bg-blue-600;
+    @apply dark: bg-blue-600;
+}
+
+.color-3{
+    @apply bg-purple-600;
+    @apply dark: bg-purple-600;
 }
