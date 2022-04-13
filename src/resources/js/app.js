@@ -5,6 +5,7 @@ import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 //Views
 import Home from "../views/Home.vue";
+import About from "../views/About.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Profile from "../views/Profile.vue";
@@ -26,6 +27,11 @@ const routes = [
     path: "/",
     component: Home,
     name: "Home",
+  },
+  {
+    path: "/about",
+    component: About,
+    name: "About",
   },
   {
     path: "/login",
