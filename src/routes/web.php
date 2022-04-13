@@ -31,7 +31,7 @@ Route::get('/images/{filename}', function ($filename) {
 
     return $response;
 });
-Route::get('', function () {
+Route::get('/{route?}', function () {
     return view('page');
 });
 /*

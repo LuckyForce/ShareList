@@ -1,16 +1,42 @@
+// resources/views/Verification.vue
 <template>
-    <div>
-        <div class="w-1/2 bg-white rounded-lg shadow-lg mx-auto p-4">
-            <h1 class="text-2xl text-gray-700 text-center mb-4">
-                Verification {{ $slot }}
-            </h1>
-            <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ad, expedita? Officiis autem, omnis hic similique facere tempora culpa animi quisquam commodi illum sapiente error fugiat? Nobis, architecto? Sapiente, laborum sint!
-            </p>
-        </div>
+    <div class="flex flex-col justify-center align-middle h-full">
+        <p class="text-xl sm:text-5xl text-gray-700 text-center">
+            {{ message }}
+        </p>
     </div>
 </template>
 
 <script>
-export default {};
+export default {
+    data() {
+        return {
+            message: "Loading...",
+        };
+    },
+    async mounted(){
+        const result = await checkVerification(this.$route.params.id, this.$route.params.token);
+        this.message = result;
+    }
+};
+
+async function checkVerification(id, token) {
+    //Fetch verification token from url
+    console.log(token);
+    console.log(id);
+    //Axios request to verify user
+    const result = await axios
+        .post("/api/user/verify", {
+            token: token,
+            id: id,
+        })
+        .then(function (response) {
+            return response.data.message;
+        })
+        .catch(function (error) {
+            return error.response.data.error;
+        });
+    console.log(result);
+    return result;
+}
 </script>

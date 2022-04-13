@@ -12,8 +12,8 @@
 create table sl_a_access(
      a_l_id varchar(255) not null,
      a_u_id int not null,
-     a_p_id int not null,
-     primary key(a_l_id,a_u_id,a_p_id)
+     a_write tinyint,
+     primary key(a_l_id,a_u_id)
 );
 
 -- table l_list
@@ -36,20 +36,12 @@ create table sl_i_item(
      primary key(i_id,i_l_id)
 );
 
--- table p_priviledge
-create table sl_p_priviledge(
-     p_id int not null,
-     p_description varchar(100) not null,
-     primary key(p_id)
-);
-
 -- table t_token
 create table sl_t_token(
-     t_id int AUTO_INCREMENT,
      t_u_id int not null,
      t_token varchar(255) not null,
-     t_expiration datetime not null,
-     primary key (t_id)
+     t_expires datetime not null,
+     primary key (t_token)
 );
 
 -- table u_user
@@ -59,7 +51,7 @@ create table sl_u_user(
      u_password varchar(255) not null,
      u_lastlogin datetime,
      u_verified tinyint default 0,
-     u_verificationcode varchar(100),
+     u_verifytoken varchar(255),
      u_resetpwd varchar(100),
      u_resetpwdexpirationdate datetime
 );
@@ -97,5 +89,3 @@ add foreign key (i_p_id) references sl_p_priviledge(p_id) on delete restrict on 
 -- #######################################################
 -- commit all changes
 -- commit;
--- add priveledges write and read
-insert into sl_p_priviledge (p_id,p_description) values (1,'read/write'),(2,'read');

@@ -3,7 +3,7 @@
     <nav class="flex items-center justify-between flex-wrap color-2">
         <div class="flex justify-center align-center">
             <router-link to="/" class="flex items-center nav-link">
-                <img src="images/logo.png" alt="Logo" class="sm:h-12 h-8" />
+                <img :src="imgPath" alt="Logo" class="sm:h-12 h-8" />
                 Home
             </router-link>
             <router-link
@@ -35,6 +35,7 @@ export default {
     data() {
         return {
             isLoggedIn: checkLogin(),
+            imgPath: window.location.origin + "/images/logo.png",
         };
     },
 };
@@ -44,9 +45,35 @@ function checkLogin() {
     const pwd = window.localStorage.getItem("pwd");
     //If account data is set, check if token is still valid
     if (email && pwd) {
-        return true;
+        //Check if credentials are still valid
+        let success = login(email, pwd);
+        return success;
     } else {
         return false;
     }
+}
+
+async function login(email, pwd) {
+    let success = false;
+    //fetch
+    await axios
+        .post("/api/user/login", {
+            email: email,
+            password: pwd,
+        })
+        .then((response) => {
+            //Set token in session
+            window.sessionStorage.setItem("token", response.data.token);
+            //Set Expires in session
+            window.sessionStorage.setItem("expires", response.data.expires);
+            //Set success to true
+            success = true;
+        })
+        .catch((error) => {
+            //If credentials are not valid, remove account data from cookies
+            window.localStorage.removeItem("email");
+            window.localStorage.removeItem("pwd");
+        });
+    return success;
 }
 </script>
