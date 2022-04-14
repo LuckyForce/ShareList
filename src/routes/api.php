@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
+//Symfony Mailer
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +78,18 @@ Route::post('/user/register', function (Request $request) {
 
     //TODO: Send verification email
     $link = url('/verify'. '/' . $user->u_id . '/' . $code);
+
+    //Send Mail to email address from variable $request->email
+    $email = (new Email())
+        ->from('info@adrian-schauer.at')
+        ->to($request->email)
+        ->subject('ShareList Verification')
+        ->text('Please click on the following link to verify your email address: ' . $link)
+        ->html('<p>Please click on the following link to verify your email address: <a href="' . $link . '">' . $link . '</a></p>');
+
+    //Send Mail per Symfony Mailer
+    $mailer = resolve(MailerInterface::class);
+    $mailer->send($email);
 
     //Return success
     return response()->json(['message' => 'User created'], 200);
@@ -526,7 +541,7 @@ Route::post('/list/invite', function (Request $request) {
     //Check invited user from the database
     $invitedUser = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
 
-    //Check if the invited user exists. By checkking that you also check if the user is verified
+    //Check if the invited user exists. By checking that you also check if the user is verified
     if (!$invitedUser) { 
         return response()->json([
             'error' => 'Invited user not found',

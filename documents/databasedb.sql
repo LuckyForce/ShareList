@@ -61,12 +61,11 @@ create table sl_in_invites(
      i_id varchar(255) not null,
      i_l_id varchar(255) not null,
      i_u_id int not null,
-     i_invitedby varchar(255) not null,
+     i_invitedby int not null,
      i_created datetime not null,
      i_accepted tinyint default 0,
      i_accepteddate datetime,
      i_deleted tinyint default 0,
-     i_p_id int not null,
      primary key(i_id)
 );
 
