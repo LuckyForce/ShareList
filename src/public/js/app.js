@@ -5937,8 +5937,17 @@ function warn(msg, ...args) {
 let activeEffectScope;
 class EffectScope {
     constructor(detached = false) {
+        /**
+         * @internal
+         */
         this.active = true;
+        /**
+         * @internal
+         */
         this.effects = [];
+        /**
+         * @internal
+         */
         this.cleanups = [];
         if (!detached && activeEffectScope) {
             this.parent = activeEffectScope;
@@ -5948,21 +5957,30 @@ class EffectScope {
     }
     run(fn) {
         if (this.active) {
+            const currentEffectScope = activeEffectScope;
             try {
                 activeEffectScope = this;
                 return fn();
             }
             finally {
-                activeEffectScope = this.parent;
+                activeEffectScope = currentEffectScope;
             }
         }
         else if ((true)) {
             warn(`cannot run an inactive effect scope.`);
         }
     }
+    /**
+     * This should only be called on non-detached scopes
+     * @internal
+     */
     on() {
         activeEffectScope = this;
     }
+    /**
+     * This should only be called on non-detached scopes
+     * @internal
+     */
     off() {
         activeEffectScope = this.parent;
     }
@@ -6104,10 +6122,17 @@ class ReactiveEffect {
             activeEffect = this.parent;
             shouldTrack = lastShouldTrack;
             this.parent = undefined;
+            if (this.deferStop) {
+                this.stop();
+            }
         }
     }
     stop() {
-        if (this.active) {
+        // stopped while running itself - defer the cleanup
+        if (activeEffect === this) {
+            this.deferStop = true;
+        }
+        else if (this.active) {
             cleanupEffect(this);
             if (this.onStop) {
                 this.onStop();
@@ -6191,9 +6216,7 @@ function trackEffects(dep, debuggerEventExtraInfo) {
         dep.add(activeEffect);
         activeEffect.deps.push(dep);
         if (( true) && activeEffect.onTrack) {
-            activeEffect.onTrack(Object.assign({
-                effect: activeEffect
-            }, debuggerEventExtraInfo));
+            activeEffect.onTrack(Object.assign({ effect: activeEffect }, debuggerEventExtraInfo));
         }
     }
 }
@@ -6292,7 +6315,9 @@ function triggerEffects(dep, debuggerEventExtraInfo) {
 }
 
 const isNonTrackableKeys = /*#__PURE__*/ (0,_vue_shared__WEBPACK_IMPORTED_MODULE_0__.makeMap)(`__proto__,__v_isRef,__isVue`);
-const builtInSymbols = new Set(Object.getOwnPropertyNames(Symbol)
+const builtInSymbols = new Set(
+/*#__PURE__*/
+Object.getOwnPropertyNames(Symbol)
     .map(key => Symbol[key])
     .filter(_vue_shared__WEBPACK_IMPORTED_MODULE_0__.isSymbol));
 const get = /*#__PURE__*/ createGetter();
@@ -6444,13 +6469,13 @@ const readonlyHandlers = {
     get: readonlyGet,
     set(target, key) {
         if ((true)) {
-            console.warn(`Set operation on key "${String(key)}" failed: target is readonly.`, target);
+            warn(`Set operation on key "${String(key)}" failed: target is readonly.`, target);
         }
         return true;
     },
     deleteProperty(target, key) {
         if ((true)) {
-            console.warn(`Delete operation on key "${String(key)}" failed: target is readonly.`, target);
+            warn(`Delete operation on key "${String(key)}" failed: target is readonly.`, target);
         }
         return true;
     }
@@ -7053,7 +7078,7 @@ function computed(getterOrOptions, debugOptions, isSSR = false) {
 }
 
 var _a;
-const tick = Promise.resolve();
+const tick = /*#__PURE__*/ Promise.resolve();
 const queue = [];
 let queued = false;
 const scheduler = (fn) => {
@@ -7504,7 +7529,7 @@ let preFlushIndex = 0;
 const pendingPostFlushCbs = [];
 let activePostFlushCbs = null;
 let postFlushIndex = 0;
-const resolvedPromise = Promise.resolve();
+const resolvedPromise = /*#__PURE__*/ Promise.resolve();
 let currentFlushPromise = null;
 let currentPreFlushParentJob = null;
 const RECURSION_LIMIT = 100;
@@ -7923,6 +7948,8 @@ function devtoolsComponentEmit(component, event, params) {
 }
 
 function emit$1(instance, event, ...rawArgs) {
+    if (instance.isUnmounted)
+        return;
     const props = instance.vnode.props || _vue_shared__WEBPACK_IMPORTED_MODULE_1__.EMPTY_OBJ;
     if ((true)) {
         const { emitsOptions, propsOptions: [propsOptions] } = instance;
@@ -8912,13 +8939,11 @@ function watchEffect(effect, options) {
 }
 function watchPostEffect(effect, options) {
     return doWatch(effect, null, (( true)
-        ? Object.assign(options || {}, { flush: 'post' })
-        : 0));
+        ? Object.assign(Object.assign({}, options), { flush: 'post' }) : 0));
 }
 function watchSyncEffect(effect, options) {
     return doWatch(effect, null, (( true)
-        ? Object.assign(options || {}, { flush: 'sync' })
-        : 0));
+        ? Object.assign(Object.assign({}, options), { flush: 'sync' }) : 0));
 }
 // initial value for watchers to trigger on undefined initial values
 const INITIAL_WATCHER_VALUE = {};
@@ -9221,10 +9246,24 @@ const BaseTransitionImpl = {
             if (!children || !children.length) {
                 return;
             }
-            // warn multiple elements
-            if (( true) && children.length > 1) {
-                warn('<transition> can only be used on a single element or component. Use ' +
-                    '<transition-group> for lists.');
+            let child = children[0];
+            if (children.length > 1) {
+                let hasFound = false;
+                // locate first non-comment child
+                for (const c of children) {
+                    if (c.type !== Comment) {
+                        if (( true) && hasFound) {
+                            // warn more than one non-comment child
+                            warn('<transition> can only be used on a single element or component. ' +
+                                'Use <transition-group> for lists.');
+                            break;
+                        }
+                        child = c;
+                        hasFound = true;
+                        if (false)
+                            {}
+                    }
+                }
             }
             // there's no need to track reactivity for these props so use the raw
             // props for a bit better perf
@@ -9233,11 +9272,11 @@ const BaseTransitionImpl = {
             // check mode
             if (( true) &&
                 mode &&
-                mode !== 'in-out' && mode !== 'out-in' && mode !== 'default') {
+                mode !== 'in-out' &&
+                mode !== 'out-in' &&
+                mode !== 'default') {
                 warn(`invalid <transition> mode: ${mode}`);
             }
-            // at this point children has a guaranteed length of 1.
-            const child = children[0];
             if (state.isLeaving) {
                 return emptyPlaceholder(child);
             }
@@ -9460,20 +9499,24 @@ function setTransitionHooks(vnode, hooks) {
         vnode.transition = hooks;
     }
 }
-function getTransitionRawChildren(children, keepComment = false) {
+function getTransitionRawChildren(children, keepComment = false, parentKey) {
     let ret = [];
     let keyedFragmentCount = 0;
     for (let i = 0; i < children.length; i++) {
-        const child = children[i];
+        let child = children[i];
+        // #5360 inherit parent key in case of <template v-for>
+        const key = parentKey == null
+            ? child.key
+            : String(parentKey) + String(child.key != null ? child.key : i);
         // handle fragment children case, e.g. v-for
         if (child.type === Fragment) {
             if (child.patchFlag & 128 /* KEYED_FRAGMENT */)
                 keyedFragmentCount++;
-            ret = ret.concat(getTransitionRawChildren(child.children, keepComment));
+            ret = ret.concat(getTransitionRawChildren(child.children, keepComment, key));
         }
         // comment placeholders should be skipped, e.g. v-if
         else if (keepComment || child.type !== Comment) {
-            ret.push(child);
+            ret.push(key != null ? cloneVNode(child, { key }) : child);
         }
     }
     // #1126 if a transition children list contains multiple sub fragments, these
@@ -10443,6 +10486,10 @@ function updateProps(instance, rawProps, rawPrevProps, optimized) {
             const propsToUpdate = instance.vnode.dynamicProps;
             for (let i = 0; i < propsToUpdate.length; i++) {
                 let key = propsToUpdate[i];
+                // skip if the prop key is a declared emit event listener
+                if (isEmitListener(instance.emitsOptions, key)) {
+                    continue;
+                }
                 // PROPS flag guarantees rawProps to be non-null
                 const value = rawProps[key];
                 if (options) {
@@ -10968,7 +11015,8 @@ function withDirectives(vnode, directives) {
         ( true) && warn(`withDirectives can only be used inside render functions.`);
         return vnode;
     }
-    const instance = internalInstance.proxy;
+    const instance = getExposeProxy(internalInstance) ||
+        internalInstance.proxy;
     const bindings = vnode.dirs || (vnode.dirs = []);
     for (let i = 0; i < directives.length; i++) {
         let [dir, value, arg, modifiers = _vue_shared__WEBPACK_IMPORTED_MODULE_1__.EMPTY_OBJ] = directives[i];
@@ -11040,6 +11088,9 @@ function createAppContext() {
 let uid = 0;
 function createAppAPI(render, hydrate) {
     return function createApp(rootComponent, rootProps = null) {
+        if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isFunction)(rootComponent)) {
+            rootComponent = Object.assign({}, rootComponent);
+        }
         if (rootProps != null && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isObject)(rootProps)) {
             ( true) && warn(`root props passed to app.mount() must be an object.`);
             rootProps = null;
@@ -11237,6 +11288,9 @@ function setRef(rawRef, oldRawRef, parentSuspense, vnode, isUnmount = false) {
                         if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isArray)(existing)) {
                             if (_isString) {
                                 refs[ref] = [refValue];
+                                if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.hasOwn)(setupState, ref)) {
+                                    setupState[ref] = refs[ref];
+                                }
                             }
                             else {
                                 ref.value = [refValue];
@@ -11613,7 +11667,7 @@ function startMeasure(instance, type) {
         perf.mark(`vue-${type}-${instance.uid}`);
     }
     if (true) {
-        devtoolsPerfStart(instance, type, supported ? perf.now() : Date.now());
+        devtoolsPerfStart(instance, type, isSupported() ? perf.now() : Date.now());
     }
 }
 function endMeasure(instance, type) {
@@ -11626,7 +11680,7 @@ function endMeasure(instance, type) {
         perf.clearMarks(endTag);
     }
     if (true) {
-        devtoolsPerfEnd(instance, type, supported ? perf.now() : Date.now());
+        devtoolsPerfEnd(instance, type, isSupported() ? perf.now() : Date.now());
     }
 }
 function isSupported() {
@@ -12781,7 +12835,23 @@ function baseCreateRenderer(options, createHydrationFns) {
     const remove = vnode => {
         const { type, el, anchor, transition } = vnode;
         if (type === Fragment) {
-            removeFragment(el, anchor);
+            if (( true) &&
+                vnode.patchFlag > 0 &&
+                vnode.patchFlag & 2048 /* DEV_ROOT_FRAGMENT */ &&
+                transition &&
+                !transition.persisted) {
+                vnode.children.forEach(child => {
+                    if (child.type === Comment) {
+                        hostRemove(child.el);
+                    }
+                    else {
+                        remove(child);
+                    }
+                });
+            }
+            else {
+                removeFragment(el, anchor);
+            }
             return;
         }
         if (type === Static) {
@@ -13805,7 +13875,10 @@ function renderSlot(slots, name, props = {},
 // this is not a user-facing function, so the fallback is always generated by
 // the compiler and guaranteed to be a function returning an array
 fallback, noSlotted) {
-    if (currentRenderingInstance.isCE) {
+    if (currentRenderingInstance.isCE ||
+        (currentRenderingInstance.parent &&
+            isAsyncWrapper(currentRenderingInstance.parent) &&
+            currentRenderingInstance.parent.isCE)) {
         return createVNode('slot', name === 'default' ? null : { name }, fallback && fallback());
     }
     let slot = slots[name];
@@ -13878,7 +13951,10 @@ const getPublicInstance = (i) => {
         return getExposeProxy(i) || i.proxy;
     return getPublicInstance(i.parent);
 };
-const publicPropertiesMap = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.extend)(Object.create(null), {
+const publicPropertiesMap = 
+// Move PURE marker to new line to workaround compiler discarding it
+// due to type annotation
+/*#__PURE__*/ (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.extend)(Object.create(null), {
     $: i => i,
     $el: i => i.vnode.el,
     $data: i => i.data,
@@ -14051,9 +14127,10 @@ const PublicInstanceProxyHandlers = {
     },
     defineProperty(target, key, descriptor) {
         if (descriptor.get != null) {
-            this.set(target, key, descriptor.get(), null);
+            // invalidate key cache of a getter based property #5417
+            target._.accessCache[key] = 0;
         }
-        else if (descriptor.value != null) {
+        else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.hasOwn)(descriptor, 'value')) {
             this.set(target, key, descriptor.value, null);
         }
         return Reflect.defineProperty(target, key, descriptor);
@@ -14260,6 +14337,7 @@ function setupComponent(instance, isSSR = false) {
     return setupResult;
 }
 function setupStatefulComponent(instance, isSSR) {
+    var _a;
     const Component = instance.type;
     if ((true)) {
         if (Component.name) {
@@ -14317,6 +14395,13 @@ function setupStatefulComponent(instance, isSSR) {
                 // async setup returned Promise.
                 // bail here and wait for re-entry.
                 instance.asyncDep = setupResult;
+                if (( true) && !instance.suspense) {
+                    const name = (_a = Component.name) !== null && _a !== void 0 ? _a : 'Anonymous';
+                    warn(`Component <${name}>: setup function returned a promise, but no ` +
+                        `<Suspense> boundary was found in the parent component tree. ` +
+                        `A component with async setup() must be nested in a <Suspense> ` +
+                        `in order to be rendered.`);
+                }
             }
         }
         else {
@@ -14944,7 +15029,7 @@ function isMemoSame(cached, memo) {
 }
 
 // Core API ------------------------------------------------------------------
-const version = "3.2.31";
+const version = "3.2.33";
 const _ssrUtils = {
     createComponentInstance,
     setupComponent,
@@ -15135,7 +15220,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const svgNS = 'http://www.w3.org/2000/svg';
 const doc = (typeof document !== 'undefined' ? document : null);
-const templateContainer = doc && doc.createElement('template');
+const templateContainer = doc && /*#__PURE__*/ doc.createElement('template');
 const nodeOps = {
     insert: (child, parent, anchor) => {
         parent.insertBefore(child, anchor || null);
@@ -15286,6 +15371,8 @@ function setStyle(style, name, val) {
         val.forEach(v => setStyle(style, name, v));
     }
     else {
+        if (val == null)
+            val = '';
         if (name.startsWith('--')) {
             // custom property definition
             style.setProperty(name, val);
@@ -15380,31 +15467,28 @@ prevChildren, parentComponent, parentSuspense, unmountChildren) {
         }
         return;
     }
+    let needRemove = false;
     if (value === '' || value == null) {
         const type = typeof el[key];
         if (type === 'boolean') {
             // e.g. <select multiple> compiles to { multiple: '' }
-            el[key] = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.includeBooleanAttr)(value);
-            return;
+            value = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.includeBooleanAttr)(value);
         }
         else if (value == null && type === 'string') {
             // e.g. <div :id="null">
-            el[key] = '';
-            el.removeAttribute(key);
-            return;
+            value = '';
+            needRemove = true;
         }
         else if (type === 'number') {
             // e.g. <img :width="null">
             // the value of some IDL attr must be greater than 0, e.g. input.size = 0 -> error
-            try {
-                el[key] = 0;
-            }
-            catch (_a) { }
-            el.removeAttribute(key);
-            return;
+            value = 0;
+            needRemove = true;
         }
     }
-    // some properties perform value validation and throw
+    // some properties perform value validation and throw,
+    // some properties has getter, no setter, will error in 'use strict'
+    // eg. <select :type="null"></select> <select :willValidate="null"></select>
     try {
         el[key] = value;
     }
@@ -15414,31 +15498,35 @@ prevChildren, parentComponent, parentSuspense, unmountChildren) {
                 `value ${value} is invalid.`, e);
         }
     }
+    needRemove && el.removeAttribute(key);
 }
 
 // Async edge case fix requires storing an event listener's attach timestamp.
-let _getNow = Date.now;
-let skipTimestampCheck = false;
-if (typeof window !== 'undefined') {
-    // Determine what event timestamp the browser is using. Annoyingly, the
-    // timestamp can either be hi-res (relative to page load) or low-res
-    // (relative to UNIX epoch), so in order to compare time we have to use the
-    // same timestamp type when saving the flush timestamp.
-    if (_getNow() > document.createEvent('Event').timeStamp) {
-        // if the low-res timestamp which is bigger than the event timestamp
-        // (which is evaluated AFTER) it means the event is using a hi-res timestamp,
-        // and we need to use the hi-res version for event listeners as well.
-        _getNow = () => performance.now();
+const [_getNow, skipTimestampCheck] = /*#__PURE__*/ (() => {
+    let _getNow = Date.now;
+    let skipTimestampCheck = false;
+    if (typeof window !== 'undefined') {
+        // Determine what event timestamp the browser is using. Annoyingly, the
+        // timestamp can either be hi-res (relative to page load) or low-res
+        // (relative to UNIX epoch), so in order to compare time we have to use the
+        // same timestamp type when saving the flush timestamp.
+        if (Date.now() > document.createEvent('Event').timeStamp) {
+            // if the low-res timestamp which is bigger than the event timestamp
+            // (which is evaluated AFTER) it means the event is using a hi-res timestamp,
+            // and we need to use the hi-res version for event listeners as well.
+            _getNow = () => performance.now();
+        }
+        // #3485: Firefox <= 53 has incorrect Event.timeStamp implementation
+        // and does not fire microtasks in between event propagation, so safe to exclude.
+        const ffMatch = navigator.userAgent.match(/firefox\/(\d+)/i);
+        skipTimestampCheck = !!(ffMatch && Number(ffMatch[1]) <= 53);
     }
-    // #3485: Firefox <= 53 has incorrect Event.timeStamp implementation
-    // and does not fire microtasks in between event propagation, so safe to exclude.
-    const ffMatch = navigator.userAgent.match(/firefox\/(\d+)/i);
-    skipTimestampCheck = !!(ffMatch && Number(ffMatch[1]) <= 53);
-}
+    return [_getNow, skipTimestampCheck];
+})();
 // To avoid the overhead of repeatedly calling performance.now(), we cache
 // and use the same timestamp for all event listeners attached in the same tick.
 let cachedNow = 0;
-const p = Promise.resolve();
+const p = /*#__PURE__*/ Promise.resolve();
 const reset = () => {
     cachedNow = 0;
 };
@@ -15563,13 +15651,13 @@ function shouldSetAsProp(el, key, value, isSVG) {
         }
         return false;
     }
-    // spellcheck and draggable are numerated attrs, however their
-    // corresponding DOM properties are actually booleans - this leads to
-    // setting it with a string "false" value leading it to be coerced to
-    // `true`, so we need to always treat them as attributes.
+    // these are enumerated attrs, however their corresponding DOM properties
+    // are actually booleans - this leads to setting it with a string "false"
+    // value leading it to be coerced to `true`, so we need to always treat
+    // them as attributes.
     // Note that `contentEditable` doesn't have this problem: its DOM
     // property is also enumerated string values.
-    if (key === 'spellcheck' || key === 'draggable') {
+    if (key === 'spellcheck' || key === 'draggable' || key === 'translate') {
         return false;
     }
     // #1787, #2840 form property on form elements is readonly and must be set as
@@ -16674,7 +16762,7 @@ function initVShowForSSR() {
     };
 }
 
-const rendererOptions = (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.extend)({ patchProp }, nodeOps);
+const rendererOptions = /*#__PURE__*/ (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.extend)({ patchProp }, nodeOps);
 // lazy create the renderer - this makes core renderer logic tree-shakable
 // in case the user only imports reactivity utilities from Vue.
 let renderer;
@@ -19757,6 +19845,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/PrivacyPolicy.vue?vue&type=script&lang=js":
+/*!***********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/PrivacyPolicy.vue?vue&type=script&lang=js ***!
+  \***********************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/Profile.vue?vue&type=script&lang=js":
 /*!*****************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/Profile.vue?vue&type=script&lang=js ***!
@@ -20044,8 +20147,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 mt-5\"><h1 class=\"text-3xl\">Impressum</h1><br> Informationspflicht laut §5 E-Commerce Gesetz, §14 Unternehmensgesetzbuch, §63 Gewerbeordnung und Offenlegungspflicht laut §25 Mediengesetz. <br><br> Adrian Schauer <br><br> Wilhelmstraße 7b <br> 3032 Eichgraben, <br> Österreich <br><br><h2 class=\"font-bold\">Email:</h2><a href=\"mailto:info@adrian-schauer.at\">info@adrian-schauer.at</a></div><div class=\"md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 my-5\"><h1 class=\"text-3xl\">EU-Streitschlichtung</h1><p> Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten wir Sie über die Online-Streitbeilegungsplattform (OS-Plattform) informieren. Verbraucher haben die Möglichkeit, Beschwerden an die Online Streitbeilegungsplattform der Europäischen Kommission unter http://ec.europa.eu/odr?tid=221142735 zu richten. Die dafür notwendigen Kontaktdaten finden Sie oberhalb in unserem Impressum. Wir möchten Sie jedoch darauf hinweisen, dass wir nicht bereit oder verpflichtet sind, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. </p><br><h1 class=\"text-3xl\">Haftung für Inhalte dieser Webseite</h1><p> Wir entwickeln die Inhalte dieser Webseite ständig weiter und bemühen uns korrekte und aktuelle Informationen bereitzustellen. Leider können wir keine Haftung für die Korrektheit aller Inhalte auf dieser Webseite übernehmen, speziell für jene die seitens Dritter bereitgestellt wurden. Sollten Ihnen problematische oder rechtswidrige Inhalte auffallen, bitten wir Sie uns umgehend zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><br><h1 class=\"text-3xl\">Haftung für Links auf dieser Webseite</h1><p> Unsere Webseite enthält Links zu anderen Webseiten für deren Inhalt wir nicht verantwortlich sind. Haftung für verlinkte Websites besteht laut § 17 ECG für uns nicht, da wir keine Kenntnis rechtswidriger Tätigkeiten hatten und haben, uns solche Rechtswidrigkeiten auch bisher nicht aufgefallen sind und wir Links sofort entfernen würden, wenn uns Rechtswidrigkeiten bekannt werden. Wenn Ihnen rechtswidrige Links auf unserer Website auffallen, bitten wir Sie uns zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><br><h1 class=\"text-3xl\">Urheberrechtshinweis</h1><p> Alle durch Benutzer verfasste Texte dieser Webseite gehören nicht uns. Wir sind nicht verantwortlich für Texte, die User in ihre Liste schreiben. </p><a href=\"PrivacyPolicy.vue\" class=\"text-center text-gray-500\">Datenschutzerklärung</a></div>", 2);
+
+var _hoisted_3 = [_hoisted_1];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, " TODO: Static About Page with legal stuff. About ");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_3);
 }
 
 /***/ }),
@@ -20335,6 +20442,32 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/PrivacyPolicy.vue?vue&type=template&id=cf3d305e":
+/*!***************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/PrivacyPolicy.vue?vue&type=template&id=cf3d305e ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 mt-5"
+};
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"text-2xl\">Datenschutz</h1> Wir haben diese Datenschutzerklärung (Fassung 28.02.2021-211142736) verfasst, um Ihnen gemäß der Vorgaben der Datenschutz-Grundverordnung (EU) 2016/679 zu erklären, welche Informationen wir sammeln, wie wir Daten verwenden und welche Entscheidungsmöglichkeiten Sie als Besucher dieser Webseite haben. <br> Datenschutzerklärungen klingen für gewöhnlich sehr technisch. Diese Version soll Ihnen hingegen die wichtigsten Dinge so einfach und klar wie möglich beschreiben. Soweit es möglich ist, werden technische Begriffe leserfreundlich erklärt. Außerdem möchten wir vermitteln, dass wir mit dieser Website nur dann Informationen sammeln und verwenden, wenn eine entsprechende gesetzliche Grundlage gegeben ist. Das ist sicher nicht möglich, wenn man möglichst knappe, technische Erklärungen abgibt, so wie sie im Internet oft Standard sind, wenn es um Datenschutz geht. Ich hoffe Sie finden die folgenden Erläuterungen interessant und informativ und vielleicht ist die eine oder andere Information dabei, die Sie noch nicht kannten. Wenn trotzdem Fragen bleiben, möchten wir Sie bitten den vorhandenen Links zu folgen und sich weitere Informationen auf Drittseiten anzusehen, oder uns einfach eine E-Mail zu schreiben. Unsere Kontaktdaten finden Sie im Impressum. <br> Automatische Datenspeicherung Wenn Sie heutzutage Websites besuchen, werden gewisse Informationen automatisch erstellt und gespeichert, so auch auf dieser Website. Diese gesammelten Daten sollten möglichst sparsam und nur mit Begründung gesammelt werden werden. Mit Website meinen wir übrigens die Gesamtheit aller Webseiten auf Ihrer Domain, d.h. alles von der Startseite (Homepage) bis hin zur aller letzten Unterseite (wie dieser hier). Mit Domain meinen wir zum Beispiel beispiel.de oder musterbeispiel.com. <br> Auch während Sie unsere Website jetzt gerade besuchen, speichert unser Webserver – das ist der Computer auf dem diese Webseite gespeichert ist – aus Gründen der Betriebssicherheit, zur Erstellung von Zugriffsstatistik usw. in der Regel automatisch Daten wie <br> die komplette Internetadresse (URL) der aufgerufenen Webseite (z. B. https://www.beispielwebsite.de/beispielunterseite.html/) Browser und Browserversion (z. B. Chrome 87) das verwendete Betriebssystem (z. B. Windows 10) die Adresse (URL) der zuvor besuchten Seite (Referrer URL) (z. B. https://www.beispielquellsite.de/vondabinichgekommen.html/) den Hostname und die IP-Adresse des Geräts von welchem aus zugegriffen wird (z. B. COMPUTERNAME und 194.23.43.121) Datum und Uhrzeit in Dateien, den sogenannten Webserver-Logfiles. Zur Veranschaulichung: <br><br> In der Regel werden diese Dateien zwei Wochen gespeichert und danach automatisch gelöscht. Wir geben diese Daten nicht weiter, können jedoch nicht ausschließen, dass diese Daten beim Vorliegen von rechtswidrigem Verhalten von Behörden eingesehen werden. <br> Kurz gesagt: Ihr Besuch wird durch unseren Provider (Firma, die unsere Website auf speziellen Computern (Servern) laufen lässt), protokolliert, aber wir geben Ihre Daten nicht weiter! <br> Cookies Unsere Webseite verwendet HTTP-Cookies, um nutzerspezifische Daten zu speichern. Im Folgenden erklären wir, was Cookies sind und warum Sie genutzt werden, damit Sie die folgende Datenschutzerklärung besser verstehen. <br> Was genau sind Cookies? Immer wenn Sie durch das Internet surfen, verwenden Sie einen Browser. Bekannte Browser sind beispielsweise Chrome, Safari, Firefox, Internet Explorer und Microsoft Edge. Die meisten Webseiten speichern kleine Text-Dateien in Ihrem Browser. Diese Dateien nennt man Cookies. <br> Eines ist nicht von der Hand zu weisen: Cookies sind echt nützliche Helferlein. Fast alle Webseiten verwenden Cookies. Genauer gesprochen sind es HTTP-Cookies, da es auch noch andere Cookies für andere Anwendungsbereiche gibt. HTTP-Cookies sind kleine Dateien, die von unserer Webseite auf Ihrem Computer gespeichert werden. Diese Cookie-Dateien werden automatisch im Cookie-Ordner, quasi dem „Hirn“ Ihres Browsers, untergebracht. Ein Cookie besteht aus einem Namen und einem Wert. Bei der Definition eines Cookies müssen zusätzlich ein oder mehrere Attribute angegeben werden. <br> Cookies speichern gewisse Nutzerdaten von Ihnen, wie beispielsweise Sprache oder persönliche Seiteneinstellungen. Wenn Sie unsere Seite wieder aufrufen, übermittelt Ihr Browser die „userbezogenen“ Informationen an unsere Seite zurück. Dank der Cookies weiß unsere Webseite, wer Sie sind und bietet Ihnen die Einstellung, die Sie gewohnt sind. In einigen Browsern hat jedes Cookie eine eigene Datei, in anderen wie beispielsweise Firefox sind alle Cookies in einer einzigen Datei gespeichert. <br> Es gibt sowohl Erstanbieter Cookies als auch Drittanbieter-Cookies. Erstanbieter-Cookies werden direkt von unserer Seite erstellt, Drittanbieter-Cookies werden von Partner-Webseiten (z.B. Google Analytics) erstellt. Jedes Cookie ist individuell zu bewerten, da jedes Cookie andere Daten speichert. Auch die Ablaufzeit eines Cookies variiert von ein paar Minuten bis hin zu ein paar Jahren. Cookies sind keine Software-Programme und enthalten keine Viren, Trojaner oder andere „Schädlinge“. Cookies können auch nicht auf Informationen Ihres PCs zugreifen. <br> So können zum Beispiel Cookie-Daten aussehen: <br> Name: _ga Wert: GA1.2.1326744211.152211142736-6 Verwendungszweck: Unterscheidung der Webseitenbesucher Ablaufdatum: nach 2 Jahren <br> Diese Mindestgrößen sollte ein Browser unterstützen können: <br> Mindestens 4096 Bytes pro Cookie Mindestens 50 Cookies pro Domain Mindestens 3000 Cookies insgesamt Welche Arten von Cookies gibt es? Die Frage welche Cookies wir im Speziellen verwenden, hängt von den verwendeten Diensten ab und wird in den folgenden Abschnitten der Datenschutzerklärung geklärt. An dieser Stelle möchten wir kurz auf die verschiedenen Arten von HTTP-Cookies eingehen. <br> Man kann 4 Arten von Cookies unterscheiden: <br> Unerlässliche Cookies Diese Cookies sind nötig, um grundlegende Funktionen der Webseite sicherzustellen. Zum Beispiel braucht es diese Cookies, wenn ein User ein Produkt in den Warenkorb legt, dann auf anderen Seiten weitersurft und später erst zur Kasse geht. Durch diese Cookies wird der Warenkorb nicht gelöscht, selbst wenn der User sein Browserfenster schließt. <br> Zweckmäßige Cookies Diese Cookies sammeln Infos über das Userverhalten und ob der User etwaige Fehlermeldungen bekommt. Zudem werden mithilfe dieser Cookies auch die Ladezeit und das Verhalten der Webseite bei verschiedenen Browsern gemessen. <br> Zielorientierte Cookies Diese Cookies sorgen für eine bessere Nutzerfreundlichkeit. Beispielsweise werden eingegebene Standorte, Schriftgrößen oder Formulardaten gespeichert. <br> Werbe-Cookies Diese Cookies werden auch Targeting-Cookies genannt. Sie dienen dazu dem User individuell angepasste Werbung zu liefern. Das kann sehr praktisch, aber auch sehr nervig sein. <br> Üblicherweise werden Sie beim erstmaligen Besuch einer Webseite gefragt, welche dieser Cookiearten Sie zulassen möchten. Und natürlich wird diese Entscheidung auch in einem Cookie gespeichert. <br> Wie kann ich Cookies löschen? Wie und ob Sie Cookies verwenden wollen, entscheiden Sie selbst. Unabhängig von welchem Service oder welcher Webseite die Cookies stammen, haben Sie immer die Möglichkeit Cookies zu löschen, zu deaktivieren oder nur teilweise zuzulassen. Zum Beispiel können Sie Cookies von Drittanbietern blockieren, aber alle anderen Cookies zulassen. <br> Wenn Sie feststellen möchten, welche Cookies in Ihrem Browser gespeichert wurden, wenn Sie Cookie-Einstellungen ändern oder löschen wollen, können Sie dies in Ihren Browser-Einstellungen finden: <br> Chrome: Cookies in Chrome löschen, aktivieren und verwalten <br> Safari: Verwalten von Cookies und Websitedaten mit Safari <br> Firefox: Cookies löschen, um Daten zu entfernen, die Websites auf Ihrem Computer abgelegt haben <br> Internet Explorer: Löschen und Verwalten von Cookies <br> Microsoft Edge: Löschen und Verwalten von Cookies <br> Falls Sie grundsätzlich keine Cookies haben wollen, können Sie Ihren Browser so einrichten, dass er Sie immer informiert, wenn ein Cookie gesetzt werden soll. So können Sie bei jedem einzelnen Cookie entscheiden, ob Sie das Cookie erlauben oder nicht. Die Vorgangsweise ist je nach Browser verschieden. Am besten Sie suchen die Anleitung in Google mit dem Suchbegriff “Cookies löschen Chrome” oder „Cookies deaktivieren Chrome“ im Falle eines Chrome Browsers. <br> Wie sieht es mit meinem Datenschutz aus? Seit 2009 gibt es die sogenannten „Cookie-Richtlinien“. Darin ist festgehalten, dass das Speichern von Cookies eine Einwilligung von Ihnen verlangt. Innerhalb der EU-Länder gibt es allerdings noch sehr unterschiedliche Reaktionen auf diese Richtlinien. In Österreich erfolgte aber die Umsetzung dieser Richtlinie in § 96 Abs. 3 des Telekommunikationsgesetzes (TKG). <br> Wenn Sie mehr über Cookies wissen möchten und technische Dokumentationen nicht scheuen, empfehlen wir https://tools.ietf.org/html/rfc6265, dem Request for Comments der Internet Engineering Task Force (IETF) namens „HTTP State Management Mechanism“. <br> Speicherung persönlicher Daten Persönliche Daten, die Sie uns auf dieser Website elektronisch übermitteln, wie zum Beispiel Name, E-Mail-Adresse, Adresse oder andere persönlichen Angaben im Rahmen der Übermittlung eines Formulars oder Kommentaren im Blog, werden von uns gemeinsam mit dem Zeitpunkt und der IP-Adresse nur zum jeweils angegebenen Zweck verwendet, sicher verwahrt und nicht an Dritte weitergegeben. <br> Wir nutzen Ihre persönlichen Daten somit nur für die Kommunikation mit jenen Besuchern, die Kontakt ausdrücklich wünschen und für die Abwicklung der auf dieser Webseite angebotenen Dienstleistungen und Produkte. Wir geben Ihre persönlichen Daten ohne Zustimmung nicht weiter, können jedoch nicht ausschließen, dass diese Daten beim Vorliegen von rechtswidrigem Verhalten eingesehen werden. <br> Wenn Sie uns persönliche Daten per E-Mail schicken – somit abseits dieser Webseite – können wir keine sichere Übertragung und den Schutz Ihrer Daten garantieren. Wir empfehlen Ihnen, vertrauliche Daten niemals unverschlüsselt per E-Mail zu übermitteln. <br> Rechte laut Datenschutzgrundverordnung Ihnen stehen laut den Bestimmungen der DSGVO und des österreichischen Datenschutzgesetzes (DSG) grundsätzlich die folgende Rechte zu: <br> Recht auf Berichtigung (Artikel 16 DSGVO) Recht auf Löschung („Recht auf Vergessenwerden“) (Artikel 17 DSGVO) Recht auf Einschränkung der Verarbeitung (Artikel 18 DSGVO) Recht auf Benachrichtigung – Mitteilungspflicht im Zusammenhang mit der Berichtigung oder Löschung personenbezogener Daten oder der Einschränkung der Verarbeitung (Artikel 19 DSGVO) Recht auf Datenübertragbarkeit (Artikel 20 DSGVO) Widerspruchsrecht (Artikel 21 DSGVO) Recht, nicht einer ausschließlich auf einer automatisierten Verarbeitung — einschließlich Profiling — beruhenden Entscheidung unterworfen zu werden (Artikel 22 DSGVO) Wenn Sie glauben, dass die Verarbeitung Ihrer Daten gegen das Datenschutzrecht verstößt oder Ihre datenschutzrechtlichen Ansprüche sonst in einer Weise verletzt worden sind, können Sie sich bei der Aufsichtsbehörde beschweren, welche in Österreich die Datenschutzbehörde ist, deren Webseite Sie unter https://www.dsb.gv.at/ finden. <br> Auswertung des Besucherverhaltens In der folgenden Datenschutzerklärung informieren wir Sie darüber, ob und wie wir Daten Ihres Besuchs dieser Website auswerten. Die Auswertung der gesammelten Daten erfolgt in der Regel anonym und wir können von Ihrem Verhalten auf dieser Website nicht auf Ihre Person schließen. <br> Mehr über Möglichkeiten dieser Auswertung der Besuchsdaten zu widersprechen erfahren Sie in der folgenden Datenschutzerklärung. <br> TLS-Verschlüsselung mit https TLS, Verschlüsselung und https klingen sehr technisch und sind es auch. Wir verwenden HTTPS (das Hypertext Transfer Protocol Secure steht für „sicheres Hypertext-Übertragungsprotokoll“) um Daten abhörsicher im Internet zu übertragen. Das bedeutet, dass die komplette Übertragung aller Daten von Ihrem Browser zu unserem Webserver abgesichert ist – niemand kann „mithören“. <br> Damit haben wir eine zusätzliche Sicherheitsschicht eingeführt und erfüllen Datenschutz durch Technikgestaltung Artikel 25 Absatz 1 DSGVO). Durch den Einsatz von TLS (Transport Layer Security), einem Verschlüsselungsprotokoll zur sicheren Datenübertragung im Internet können wir den Schutz vertraulicher Daten sicherstellen. Sie erkennen die Benutzung dieser Absicherung der Datenübertragung am kleinen Schlosssymbol links oben im Browser links von der Internetadresse (z. B. beispielseite.de) und der Verwendung des Schemas https (anstatt http) als Teil unserer Internetadresse. Wenn Sie mehr zum Thema Verschlüsselung wissen möchten, empfehlen wir die Google Suche nach „Hypertext Transfer Protocol Secure wiki“ um gute Links zu weiterführenden Informationen zu erhalten. <br> WP Statistics Datenschutzerklärung Wir verwenden auf unserer Website das Analyse-Plugin WP Statistics. Entwickelt wurde dieses Plugin von Veronalabs (5460 W Main St, Verona, NY 13478, Vereinigte Staaten), einem amerikanischen Software-Unternehmen. Mit diesem Plugin erhalten wir einfache Statistiken, wie Sie als User unsere Website nutzen. In dieser Datenschutzerklärung gehen wir näher auf das Analyse-Tool ein und zeigen Ihnen, welche Daten wo und wie lange gespeichert werden. <br> Was ist WP Statistics? Bei diesem Plugin handelt es sich um eine Analyse-Software, die speziell für Websites entwickelt wurde, die das Content-Management-System WordPress verwenden. WordPress hilft uns, unsere Website auch ohne Programmierkenntnisse leicht zu bearbeiten. WP Statistics kann etwa Daten darüber sammeln, wie lange Sie auf unserer Website verweilen, welche Unterseiten Sie besuchen, wie viele Besucher auf der Website sind oder von welcher Website Sie zu uns gekommen sind. Es werden durch WP Statistics keine Cookies gesetzt und Sie können als Person durch die erhobenen Daten nicht identifiziert werden. <br> Warum verwenden wir WP Statistics? Mithilfe von WP Statistics erhalten wir einfache Statistiken, die uns dabei helfen, unsere Website für Sie noch interessanter und besser zu machen. Unsere Website und die darauf angebotenen Inhalte, Produkte und/oder Dienstleistungen sollen Ihren Anforderungen und Wünschen so gut wie möglich entsprechen. Um dieses Ziel zu erreichen, müssen wir natürlich auch in Erfahrung bringen, wo wir Verbesserungen und Änderungen vornehmen sollen. Die erhaltenen Statistiken, helfen uns dabei, diesem Ziel einen Schritt näher zu kommen. <br> Welche Daten werden von WP Statistics gespeichert? WP Statistics setzt keine Cookies und durch die erhobenen Daten werden nur in anonymisierter Form Statistiken über die Verwendung unserer Website erstellt. WP Statistics anonymisiert auch Ihre IP-Adresse. Sie als Person können nicht identifiziert werden. <br> Durch WP Statistics werden Besucher-Daten (sogenannte Visitos´Data) erhoben, wenn sich Ihr Webbrowser mit unserem Webserver verbindet. Diese Daten werden in unserer Datenbank auf unserem Server gespeichert. Dazu zählen beispielsweise: <br> die Adresse (URL) der aufgerufenen Webseite Browser und Browserversion das verwendete Betriebssystem die Adresse (URL) der zuvor besuchten Seite (Referrer URL) den Hostname und die IP-Adresse des Geräts von welchem aus zugegriffen wird Datum und Uhrzeit Informationen zu Land/Stadt Anzahl der Besucher, die von einer Suchmaschine kommen Dauer des Webseitenaufenthalts Klicks auf der Website Die Daten werden nicht weitergegeben und auch nicht verkauft. <br> Wie lange und wo werden die Daten gespeichert? Alle Daten werden lokal auf unserem Webserver gespeichert. Die Daten werden solange auf unserem Webserver gespeichert, bis sie für die oben angeführten Zwecke nicht mehr benötigt werden. <br> Wie kann ich meine Daten löschen bzw. die Datenspeicherung verhindern? Sie haben jederzeit das Recht auf Auskunft, Berichtigung bzw. Löschung und Einschränkung der Verarbeitung Ihrer personenbezogenen Daten. Sie können zudem auch jederzeit die Einwilligung zur Verarbeitung von Daten widerrufen. <br> Wir haben Ihnen nun die wichtigsten Informationen zur Datenverarbeitung durch WP Analytics mitgeteilt. Dadurch, dass das Plugin keine Cookies verwendet und die Daten zur statistischen Auswertung lokal im Webserver gespeichert werden, wird hier mit Ihren Daten sehr sorgsam umgegangen. Wenn Sie mehr über WP Analytics erfahren wollen, sollten Sie sich die Datenschutzerklärung des Unternehmens unter https://wp-statistics.com/privacy-and-policy/ ansehen. <br> IONOS WebAnalytics Datenschutzerklärung Wir nutzen auf unserer Website das Analyse-Tool IONOS WebAnalytics des deutschen Unternehmens 1&amp;1 IONOS SE, Elgendorfer Straße 57, 56410 Montabaur, Deutschland. Das Tool hilft uns bei der Analyse unserer Website und dafür werden auch Daten erhoben und gespeichert. Allerdings verzichtet dieses Tool auf die Erhebung von Daten, die Sie als Person identifizieren könnten. Dennoch wollen wir Sie in dieser Datenschutzerklärung genauer über die Datenverarbeitung und Speicherung informieren und auch erklären, warum wir IONOS WebAnalytics nutzen. <br> Was ist IONOS WebAnalytics? IONOS WebAnalytics ist, wie es der Name auch vermuten lässt, ein Tool, das der Analyse unserer Website dient. Das Softwareprogramm sammelt etwa Daten darüber, wie lange Sie sich auf unserer Website befinden, welche Buttons Sie klicken oder von welcher anderen Website Sie zu uns gefunden haben. So bekommen wir einen guten Überblick über das Userverhalten auf unserer Website. All diese Informationen sind anonym. Das bedeutet, dass wir durch diese Daten nicht Sie als Person identifizieren, sondern lediglich allgemeine Nutzungsinformationen und Statistiken erhalten. <br> Warum verwenden wir IONOS WebAnalytics auf unserer Website? Unser Ziel ist es, Ihnen ein bestmögliches Erlebnis auf unserer Website zu bieten. Wir sind von unseren Angeboten überzeugt und wollen, dass unserer Website für Sie ein hilfreicher und nützlicher Ort ist. Dafür müssen wir unsere Website so gut wie möglich an Ihre Wünsche und Anliegen anpassen. Mit einem Webanalysetool wie IONOS WebAnalytics und den daraus resultierenden Daten können wir unsere Website dahingehend verbessern. Die Daten können uns weiters auch dienlich sein, Werbe- und Marketingmaßnahmen individueller zu gestalten. Bei all diesen Webanalysen liegt uns aber dennoch der Schutz personenbezogener Daten am Herzen. Entgegen anderen Analysetools speichert und verarbeitet IONOS WebAnalytics keine Daten, die Sie als Person erkennen könnten. <br> Welche Daten werden von IONOS WebAnalytics gespeichert? Die Daten werden durch Logfiles oder durch einen sogenannten Pixel erhoben und gespeichert. Ein Pixel ist ein Ausschnitt aus JavaScript-Code, der eine Ansammlung von Funktionen lädt, mit dem man Userverhalten verfolgen kann. WebAnalytics verzichtet bewusst auf die Verwendung von Cookies. <br> IONOS speichert keine personenbezogenen Daten von Ihnen. Bei der Übermittlung eines Seitenaufrufes wird zwar Ihre IP-Adresse übertragen, allerdings dann sofort anonymisiert und so verarbeitet, dass man Sie als Person nicht identifizieren kann. <br> Folgenden Daten werden von IONOS WebAnalytics gespeichert: <br> Ihr Browsertyp und Ihre Browserversion welche Website Sie zuvor besucht haben (Referrer) welche spezifische Webseite Sie bei uns aufgerufen haben welches Betriebssystem Sie nutzen welches Endgerät Sie verwenden (PC, Tablet oder Smartphone) wann Sie auf unsere Seite gekommen sind Ihre IP-Adresse in anonymisierter Form Die Daten werden an keine Drittanbieter weitergegeben und nur für statistische Auswertungen genutzt. <br> Wie lange und wo werden die Daten gespeichert? Die Daten werden solange gespeichert, bis der Vertrag zwischen IONOS WebAnalytics und uns ausläuft. Die Daten werden im Falle eines regulären Webhosting-Tarifs in unserem Log-Verzeichnis gespeichert und daraus grafische Statistiken erzeugt. Diese Logs werden alle 8 Wochen gelöscht. Im Falle eines MyWebsite-Tarifs werden die Daten über einen Pixel ermittelt. Hier werden die Daten nur innerhalb der IONOS WebAnalytics gespeichert und verarbeitet. <br> Wie kann ich meine Daten löschen bzw. die Datenspeicherung verhindern? Grundsätzlich haben Sie jederzeit das Recht auf Auskunft, Berichtigung bzw. Löschung und Einschränkung der Verarbeitung Ihrer personenbezogenen Daten. Sie können zudem auch jederzeit die Einwilligung zur Verarbeitung der Daten widerrufen. Da über IONOS WebAnalytics allerdings keine personenbezogenen Daten gespeichert oder verarbeitet werden und somit eine Zuordnung von Ihnen als Person nicht möglich ist, gibt es auch die Möglichkeit solche Daten zu löschen nicht. <br> Wir hoffen wir konnten Ihnen die wichtigsten Informationen rund um die wirklich sparsame Datenverarbeitung von IONOS WebAnalytics näherbringen. Wenn Sie mehr über den Tracking-Dienst erfahren wollen, empfehlen wir Ihnen die Datenschutzerklärung des Unternehmens unter https://www.ionos.de/hilfe/datenschutz/datenverarbeitung-von-webseitenbesuchern-ihres-11-ionos-produktes/webanalytics/?tid=211142736. <br> Quelle: Erstellt mit dem Datenschutz Generator von firmenwebseiten.at ", 123);
+
+var _hoisted_125 = [_hoisted_2];
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, _hoisted_125);
+}
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/Profile.vue?vue&type=template&id=ad269340":
 /*!*********************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/Profile.vue?vue&type=template&id=ad269340 ***!
@@ -20463,27 +20596,29 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm-bundler.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm-bundler.js");
 /* harmony import */ var _views_Home_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../views/Home.vue */ "./resources/views/Home.vue");
 /* harmony import */ var _views_About_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../views/About.vue */ "./resources/views/About.vue");
-/* harmony import */ var _views_Login_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../views/Login.vue */ "./resources/views/Login.vue");
-/* harmony import */ var _views_Register_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../views/Register.vue */ "./resources/views/Register.vue");
-/* harmony import */ var _views_Profile_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../views/Profile.vue */ "./resources/views/Profile.vue");
-/* harmony import */ var _views_Lists_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../views/Lists.vue */ "./resources/views/Lists.vue");
-/* harmony import */ var _views_List_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../views/List.vue */ "./resources/views/List.vue");
-/* harmony import */ var _views_ListEdit_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../views/ListEdit.vue */ "./resources/views/ListEdit.vue");
-/* harmony import */ var _views_ListInvites_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../views/ListInvites.vue */ "./resources/views/ListInvites.vue");
-/* harmony import */ var _views_ListMembers_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../views/ListMembers.vue */ "./resources/views/ListMembers.vue");
-/* harmony import */ var _views_Invite_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../views/Invite.vue */ "./resources/views/Invite.vue");
-/* harmony import */ var _views_Verification_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../views/Verification.vue */ "./resources/views/Verification.vue");
-/* harmony import */ var _views_PageNotFound_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../views/PageNotFound.vue */ "./resources/views/PageNotFound.vue");
-/* harmony import */ var _components_Header_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../components/Header.vue */ "./resources/components/Header.vue");
-/* harmony import */ var _components_Footer_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../components/Footer.vue */ "./resources/components/Footer.vue");
+/* harmony import */ var _views_PrivacyPolicy_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../views/PrivacyPolicy.vue */ "./resources/views/PrivacyPolicy.vue");
+/* harmony import */ var _views_Login_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../views/Login.vue */ "./resources/views/Login.vue");
+/* harmony import */ var _views_Register_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../views/Register.vue */ "./resources/views/Register.vue");
+/* harmony import */ var _views_Profile_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../views/Profile.vue */ "./resources/views/Profile.vue");
+/* harmony import */ var _views_Lists_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../views/Lists.vue */ "./resources/views/Lists.vue");
+/* harmony import */ var _views_List_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../views/List.vue */ "./resources/views/List.vue");
+/* harmony import */ var _views_ListEdit_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../views/ListEdit.vue */ "./resources/views/ListEdit.vue");
+/* harmony import */ var _views_ListInvites_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../views/ListInvites.vue */ "./resources/views/ListInvites.vue");
+/* harmony import */ var _views_ListMembers_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../views/ListMembers.vue */ "./resources/views/ListMembers.vue");
+/* harmony import */ var _views_Invite_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../views/Invite.vue */ "./resources/views/Invite.vue");
+/* harmony import */ var _views_Verification_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../views/Verification.vue */ "./resources/views/Verification.vue");
+/* harmony import */ var _views_PageNotFound_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../views/PageNotFound.vue */ "./resources/views/PageNotFound.vue");
+/* harmony import */ var _components_Header_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../components/Header.vue */ "./resources/components/Header.vue");
+/* harmony import */ var _components_Footer_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../components/Footer.vue */ "./resources/components/Footer.vue");
 // resources/js/app.js
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
  //Views
+
 
 
 
@@ -20511,59 +20646,63 @@ var routes = [{
   component: _views_About_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
   name: "About"
 }, {
+  path: "/privacy_policy",
+  component: _views_PrivacyPolicy_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+  name: "PrivacyPolicy"
+}, {
   path: "/login",
-  component: _views_Login_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+  component: _views_Login_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
   name: "Login"
 }, {
   path: "/register",
-  component: _views_Register_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+  component: _views_Register_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
   name: "Register"
 }, {
   path: "/profile",
-  component: _views_Profile_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+  component: _views_Profile_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
   name: "Profile"
 }, {
   path: "/lists",
-  component: _views_Lists_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+  component: _views_Lists_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
   name: "Lists"
 }, {
   path: "/list/:id",
-  component: _views_List_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+  component: _views_List_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
   name: "List"
 }, {
   path: "/list/:id/edit",
-  component: _views_ListEdit_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
+  component: _views_ListEdit_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
   name: "ListEdit"
 }, {
   path: "/list/:id/invites",
-  component: _views_ListInvites_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
+  component: _views_ListInvites_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
   name: "ListInvites"
 }, {
   path: "/list/:id/members",
-  component: _views_ListMembers_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
+  component: _views_ListMembers_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
   name: "ListMembers"
 }, {
   path: "/invite/:id",
-  component: _views_Invite_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
+  component: _views_Invite_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
   name: "Invite"
 }, {
   path: "/verify/:id/:token",
-  component: _views_Verification_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
+  component: _views_Verification_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
   name: "Verification"
 }, {
   path: "/:pathMatch(.*)*",
-  component: _views_PageNotFound_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
+  component: _views_PageNotFound_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
   name: "PageNotFound"
 }]; //Create Router
 
-var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_16__.createRouter)({
-  history: (0,vue_router__WEBPACK_IMPORTED_MODULE_16__.createWebHistory)(),
+var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_17__.createRouter)({
+  history: (0,vue_router__WEBPACK_IMPORTED_MODULE_17__.createWebHistory)(),
   routes: routes
 });
 var app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({
   components: {
-    'header-component': _components_Header_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
-    'footer-component': _components_Footer_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
+    'header-component': _components_Header_vue__WEBPACK_IMPORTED_MODULE_15__["default"],
+    'footer-component': _components_Footer_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
   }
 });
 app.use(router);
@@ -38833,13 +38972,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Footer_vue_vue_type_template_id_7561c04c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Footer.vue?vue&type=template&id=7561c04c */ "./resources/components/Footer.vue?vue&type=template&id=7561c04c");
 /* harmony import */ var _Footer_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Footer.vue?vue&type=script&lang=js */ "./resources/components/Footer.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Footer_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Footer_vue_vue_type_template_id_7561c04c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/components/Footer.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Footer_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Footer_vue_vue_type_template_id_7561c04c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/components/Footer.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -38861,13 +39000,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Header_vue_vue_type_template_id_d2d7b784__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Header.vue?vue&type=template&id=d2d7b784 */ "./resources/components/Header.vue?vue&type=template&id=d2d7b784");
 /* harmony import */ var _Header_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Header.vue?vue&type=script&lang=js */ "./resources/components/Header.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Header_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Header_vue_vue_type_template_id_d2d7b784__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/components/Header.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Header_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Header_vue_vue_type_template_id_d2d7b784__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/components/Header.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -38889,13 +39028,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _About_vue_vue_type_template_id_edd24bf8__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./About.vue?vue&type=template&id=edd24bf8 */ "./resources/views/About.vue?vue&type=template&id=edd24bf8");
 /* harmony import */ var _About_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./About.vue?vue&type=script&lang=js */ "./resources/views/About.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_About_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_About_vue_vue_type_template_id_edd24bf8__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/About.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_About_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_About_vue_vue_type_template_id_edd24bf8__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/About.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -38917,13 +39056,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Home_vue_vue_type_template_id_765745b8__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Home.vue?vue&type=template&id=765745b8 */ "./resources/views/Home.vue?vue&type=template&id=765745b8");
 /* harmony import */ var _Home_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Home.vue?vue&type=script&lang=js */ "./resources/views/Home.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Home_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Home_vue_vue_type_template_id_765745b8__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Home.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Home_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Home_vue_vue_type_template_id_765745b8__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Home.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -38945,13 +39084,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Invite_vue_vue_type_template_id_e2ee22bc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Invite.vue?vue&type=template&id=e2ee22bc */ "./resources/views/Invite.vue?vue&type=template&id=e2ee22bc");
 /* harmony import */ var _Invite_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Invite.vue?vue&type=script&lang=js */ "./resources/views/Invite.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Invite_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Invite_vue_vue_type_template_id_e2ee22bc__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Invite.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Invite_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Invite_vue_vue_type_template_id_e2ee22bc__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Invite.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -38973,13 +39112,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _List_vue_vue_type_template_id_38f1ec12__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./List.vue?vue&type=template&id=38f1ec12 */ "./resources/views/List.vue?vue&type=template&id=38f1ec12");
 /* harmony import */ var _List_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./List.vue?vue&type=script&lang=js */ "./resources/views/List.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_List_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_List_vue_vue_type_template_id_38f1ec12__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/List.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_List_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_List_vue_vue_type_template_id_38f1ec12__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/List.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -39001,13 +39140,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _ListEdit_vue_vue_type_template_id_442400be__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ListEdit.vue?vue&type=template&id=442400be */ "./resources/views/ListEdit.vue?vue&type=template&id=442400be");
 /* harmony import */ var _ListEdit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ListEdit.vue?vue&type=script&lang=js */ "./resources/views/ListEdit.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ListEdit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ListEdit_vue_vue_type_template_id_442400be__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/ListEdit.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ListEdit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ListEdit_vue_vue_type_template_id_442400be__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/ListEdit.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -39027,11 +39166,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 const script = {}
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__["default"])(script, [['__file',"resources/views/ListInvites.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__["default"])(script, [['__file',"resources/views/ListInvites.vue"]])
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
 
@@ -39048,11 +39187,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 const script = {}
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__["default"])(script, [['__file',"resources/views/ListMembers.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__["default"])(script, [['__file',"resources/views/ListMembers.vue"]])
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
 
@@ -39071,13 +39210,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Lists_vue_vue_type_template_id_ddf453e8__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Lists.vue?vue&type=template&id=ddf453e8 */ "./resources/views/Lists.vue?vue&type=template&id=ddf453e8");
 /* harmony import */ var _Lists_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Lists.vue?vue&type=script&lang=js */ "./resources/views/Lists.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Lists_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Lists_vue_vue_type_template_id_ddf453e8__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Lists.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Lists_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Lists_vue_vue_type_template_id_ddf453e8__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Lists.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -39099,13 +39238,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Login_vue_vue_type_template_id_727657e0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Login.vue?vue&type=template&id=727657e0 */ "./resources/views/Login.vue?vue&type=template&id=727657e0");
 /* harmony import */ var _Login_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login.vue?vue&type=script&lang=js */ "./resources/views/Login.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Login_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Login_vue_vue_type_template_id_727657e0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Login.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Login_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Login_vue_vue_type_template_id_727657e0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Login.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -39127,13 +39266,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _PageNotFound_vue_vue_type_template_id_03504f12__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PageNotFound.vue?vue&type=template&id=03504f12 */ "./resources/views/PageNotFound.vue?vue&type=template&id=03504f12");
 /* harmony import */ var _PageNotFound_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageNotFound.vue?vue&type=script&lang=js */ "./resources/views/PageNotFound.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_PageNotFound_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_PageNotFound_vue_vue_type_template_id_03504f12__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/PageNotFound.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_PageNotFound_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_PageNotFound_vue_vue_type_template_id_03504f12__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/PageNotFound.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
+/***/ "./resources/views/PrivacyPolicy.vue":
+/*!*******************************************!*\
+  !*** ./resources/views/PrivacyPolicy.vue ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _PrivacyPolicy_vue_vue_type_template_id_cf3d305e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PrivacyPolicy.vue?vue&type=template&id=cf3d305e */ "./resources/views/PrivacyPolicy.vue?vue&type=template&id=cf3d305e");
+/* harmony import */ var _PrivacyPolicy_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PrivacyPolicy.vue?vue&type=script&lang=js */ "./resources/views/PrivacyPolicy.vue?vue&type=script&lang=js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_PrivacyPolicy_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_PrivacyPolicy_vue_vue_type_template_id_cf3d305e__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/PrivacyPolicy.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -39155,13 +39322,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Profile_vue_vue_type_template_id_ad269340__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Profile.vue?vue&type=template&id=ad269340 */ "./resources/views/Profile.vue?vue&type=template&id=ad269340");
 /* harmony import */ var _Profile_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Profile.vue?vue&type=script&lang=js */ "./resources/views/Profile.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Profile_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Profile_vue_vue_type_template_id_ad269340__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Profile.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Profile_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Profile_vue_vue_type_template_id_ad269340__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Profile.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -39183,13 +39350,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Register_vue_vue_type_template_id_4fe59608__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Register.vue?vue&type=template&id=4fe59608 */ "./resources/views/Register.vue?vue&type=template&id=4fe59608");
 /* harmony import */ var _Register_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Register.vue?vue&type=script&lang=js */ "./resources/views/Register.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Register_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Register_vue_vue_type_template_id_4fe59608__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Register.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Register_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Register_vue_vue_type_template_id_4fe59608__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Register.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -39211,13 +39378,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Verification_vue_vue_type_template_id_5243d7f4__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Verification.vue?vue&type=template&id=5243d7f4 */ "./resources/views/Verification.vue?vue&type=template&id=5243d7f4");
 /* harmony import */ var _Verification_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Verification.vue?vue&type=script&lang=js */ "./resources/views/Verification.vue?vue&type=script&lang=js");
-/* harmony import */ var C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_adria_Dropbox_Adrian_und_Mami_Spengergasse_3BHIF_PRE_PRE_Semester_2_Projekt_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Verification_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Verification_vue_vue_type_template_id_5243d7f4__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Verification.vue"]])
+const __exports__ = /*#__PURE__*/(0,G_Schule_3_Klasse_PR_2_Semester_PRE_Semester_2_src_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Verification_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Verification_vue_vue_type_template_id_5243d7f4__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/views/Verification.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -39382,6 +39549,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PageNotFound_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PageNotFound_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./PageNotFound.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/PageNotFound.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
+/***/ "./resources/views/PrivacyPolicy.vue?vue&type=script&lang=js":
+/*!*******************************************************************!*\
+  !*** ./resources/views/PrivacyPolicy.vue?vue&type=script&lang=js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PrivacyPolicy_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PrivacyPolicy_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./PrivacyPolicy.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/PrivacyPolicy.vue?vue&type=script&lang=js");
  
 
 /***/ }),
@@ -39590,6 +39773,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PageNotFound_vue_vue_type_template_id_03504f12__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PageNotFound_vue_vue_type_template_id_03504f12__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./PageNotFound.vue?vue&type=template&id=03504f12 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/PageNotFound.vue?vue&type=template&id=03504f12");
+
+
+/***/ }),
+
+/***/ "./resources/views/PrivacyPolicy.vue?vue&type=template&id=cf3d305e":
+/*!*************************************************************************!*\
+  !*** ./resources/views/PrivacyPolicy.vue?vue&type=template&id=cf3d305e ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PrivacyPolicy_vue_vue_type_template_id_cf3d305e__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PrivacyPolicy_vue_vue_type_template_id_cf3d305e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./PrivacyPolicy.vue?vue&type=template&id=cf3d305e */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/views/PrivacyPolicy.vue?vue&type=template&id=cf3d305e");
 
 
 /***/ }),
@@ -43286,9 +43485,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "withScopeId": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withScopeId)
 /* harmony export */ });
 /* harmony import */ var _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-dom */ "./node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js");
-/* harmony import */ var _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @vue/runtime-dom */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+/* harmony import */ var _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/runtime-dom */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
 /* harmony import */ var _vue_compiler_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/compiler-dom */ "./node_modules/@vue/compiler-dom/dist/compiler-dom.esm-bundler.js");
-/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
+/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
 
 
 
@@ -43297,7 +43496,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function initDev() {
     {
-        (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_2__.initCustomFormatter)();
+        (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.initCustomFormatter)();
     }
 }
 
@@ -43307,13 +43506,13 @@ if ((true)) {
 }
 const compileCache = Object.create(null);
 function compileToFunction(template, options) {
-    if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isString)(template)) {
+    if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.isString)(template)) {
         if (template.nodeType) {
             template = template.innerHTML;
         }
         else {
-            ( true) && (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_2__.warn)(`invalid template option: `, template);
-            return _vue_shared__WEBPACK_IMPORTED_MODULE_1__.NOOP;
+            ( true) && (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.warn)(`invalid template option: `, template);
+            return _vue_shared__WEBPACK_IMPORTED_MODULE_2__.NOOP;
         }
     }
     const key = template;
@@ -43324,7 +43523,7 @@ function compileToFunction(template, options) {
     if (template[0] === '#') {
         const el = document.querySelector(template);
         if (( true) && !el) {
-            (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_2__.warn)(`Template element not found or is empty: ${template}`);
+            (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.warn)(`Template element not found or is empty: ${template}`);
         }
         // __UNSAFE__
         // Reason: potential execution of JS expressions in in-DOM template.
@@ -43332,7 +43531,7 @@ function compileToFunction(template, options) {
         // by the server, the template should not contain any user data.
         template = el ? el.innerHTML : ``;
     }
-    const { code } = (0,_vue_compiler_dom__WEBPACK_IMPORTED_MODULE_3__.compile)(template, (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.extend)({
+    const { code } = (0,_vue_compiler_dom__WEBPACK_IMPORTED_MODULE_3__.compile)(template, (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.extend)({
         hoistStatic: true,
         onError: ( true) ? onError : 0,
         onWarn: ( true) ? e => onError(e, true) : 0
@@ -43342,8 +43541,8 @@ function compileToFunction(template, options) {
             ? err.message
             : `Template compilation error: ${err.message}`;
         const codeFrame = err.loc &&
-            (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.generateCodeFrame)(template, err.loc.start.offset, err.loc.end.offset);
-        (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_2__.warn)(codeFrame ? `${message}\n${codeFrame}` : message);
+            (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.generateCodeFrame)(template, err.loc.start.offset, err.loc.end.offset);
+        (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.warn)(codeFrame ? `${message}\n${codeFrame}` : message);
     }
     // The wildcard import results in a huge object with every export
     // with keys that cannot be mangled, and can be quite heavy size-wise.
@@ -43353,7 +43552,7 @@ function compileToFunction(template, options) {
     render._rc = true;
     return (compileCache[key] = render);
 }
-(0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_2__.registerRuntimeCompiler)(compileToFunction);
+(0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.registerRuntimeCompiler)(compileToFunction);
 
 
 

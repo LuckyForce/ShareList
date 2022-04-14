@@ -6,6 +6,7 @@ import { createRouter, createWebHistory } from "vue-router";
 //Views
 import Home from "../views/Home.vue";
 import About from "../views/About.vue";
+import PrivacyPolicy from "../views/PrivacyPolicy.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Profile from "../views/Profile.vue";
@@ -32,6 +33,11 @@ const routes = [
     path: "/about",
     component: About,
     name: "About",
+  },
+  {
+  path: "/privacy_policy",
+    component: PrivacyPolicy,
+    name: "PrivacyPolicy",
   },
   {
     path: "/login",
