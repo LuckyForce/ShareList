@@ -610,7 +610,7 @@ Route::post('/list/invites', function (Request $request) {
     return response()->json(['invites' => $invites], 200);
 });
 
-//TODO: Delete Invite. Needs to be owner of the list
+//Delete Invite. Needs to be owner of the list
 /*
 @param string token
 @param string list
@@ -619,17 +619,88 @@ Route::post('/list/invites', function (Request $request) {
 @return json success
 */
 Route::post('/list/invite/delete', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->invite)){
+        return response()->json(['message' => 'Token or invite is missing'], 400);
+    }
+
+    //Get the user
+    $user = getUser($request->token);
+
+    //Get the invite
+    $invite = DB::table('sl_in_invite')->where('in_id', $request->invite)->where('in_accepted', 0)->where('in_deleted', 0)->first();
+
+    //Check if the invite exists.
+    if (!$invite) { 
+        return response()->json([
+            'error' => 'Invite not found',
+        ], 404);
+    }
+
+    //Check if the user is the owner of the list that corresponds to the invite
+    $list = DB::table('sl_l_list')->where('l_id', $invite->in_l_id)->where('l_u_id', $user->u_id)->first();
+
+    if (!$list) {
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Delete invite
+    DB::table('sl_in_invite')->where('in_id', $invite->in_id)->update(['in_deleted' => 1]);
+
+    //Return success
+    return response()->json(['message' => 'Invite deleted'], 200);
 });
 
-//TODO: Accept Invite. Needs to be owner of the list.
+//Accept Invite. Needs to be owner of the list.
 /*
-@param string token
 @param string invite
 @return json success
 */
 Route::post('/list/invite/accept', function (Request $request) {
+    //Validate data
+    if (!isset($request->invite)){
+        return response()->json(['message' => 'Invite is missing'], 400);
+    }
 
+    //Get the invite
+    $invite = DB::table('sl_in_invite')->where('in_id', $request->invite)->first();
 
+    //Check if the invite exists.
+    if (!$invite) { 
+        return response()->json([
+            'error' => 'Invite not found',
+        ], 404);
+    }
+
+    //Check if the invite is deleted
+    if ($invite->in_deleted) {
+        return response()->json([
+            'error' => 'Invite is deleted',
+        ], 400);
+    }
+
+    //Check if the invite is already accepted
+    if ($invite->in_accepted) {
+        return response()->json([
+            'error' => 'Invite is already accepted',
+        ], 400);
+    }
+
+    //Accept invite
+    DB::table('sl_in_invite')->where('in_id', $invite->in_id)->update(['in_accepted' => 1]);
+
+    //Add User of invite to list
+    //Check if user is already in list
+    $userInList = DB::table('sl_a_access')->where('a_l_id', $invite->in_l_id)->where('a_u_id', $invite->in_u_id)->first();
+
+    if (!$userInList) {
+        DB::table('sl_a_access')->insert(['a_l_id' => $invite->in_l_id, 'a_u_id' => $invite->in_u_id, 'a_write' => 0]);
+    }
+
+    //Return success
+    return response()->json(['message' => 'Invite accepted'], 200);
 });
 
 //Get Members of list.
