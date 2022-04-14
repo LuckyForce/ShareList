@@ -20547,7 +20547,7 @@ var routes = [{
   component: _views_Invite_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
   name: "Invite"
 }, {
-  path: "/verification/:id/:token",
+  path: "/verify/:id/:token",
   component: _views_Verification_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
   name: "Verification"
 }, {

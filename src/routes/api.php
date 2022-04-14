@@ -47,7 +47,11 @@ Route::post('/user/register', function (Request $request) {
     }
 
     //Check if email is valid
-
+    if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+        return response()->json([
+            'error' => 'Email is invalid',
+        ], 400);
+    }
 
     //Generate 6 Character long Code containing only numbers.
     $numbers = "0123456789";
@@ -66,8 +70,11 @@ Route::post('/user/register', function (Request $request) {
         DB::table('sl_u_user')->insert(['u_email' => $request->email, 'u_password' => password_hash($request->password, PASSWORD_DEFAULT), 'u_verifytoken' => $code]);
     }
 
+    //Get User ID
+    $user = DB::table('sl_u_user')->where('u_email', $request->email)->first();
+
     //TODO: Send verification email
-    
+    $link = url('/verify'. '/' . $user->u_id . '/' . $code);
 
     //Return success
     return response()->json(['message' => 'User created'], 200);
@@ -93,19 +100,8 @@ Route::post('/user/delete', function (Request $request) {
         return response()->json(['message' => 'Password is incorrect'], 400);
     }
 
-    //Transfer Ownership of the lists to another user
-    $lists = DB::table('sl_l_list')->where('l_u_user', $user->u_id)->get();
-    //Get from each list the next user who has access to the list
-    foreach ($lists as $list) {
-        $nextUser = DB::table('sl_l_list')->join('sl_a_access', 'l_id', '=', 'a_l_id')->where('l_id', $list->l_id)->where('a_u_id', "!=", $user->u_id)->orderBy('a_p_id', 'asc')->first();
-        if ($nextUser) {
-            //Update the list
-            DB::table('sl_l_list')->where('l_id', $list->l_id)->update(['l_u_id' => $nextUser->a_u_id]);
-        }else{
-            //Delete the list
-            DB::table('sl_l_list')->where('l_id', $list->l_id)->delete();
-        }
-    }
+    //Delete all lists where the user is owner.
+    DB::table('sl_l_list')->where('l_u_id', $user->u_id)->delete();
 
     //Delete user
     DB::table('sl_u_user')->where('u_id', $user->u_id)->delete();
@@ -382,7 +378,7 @@ Route::post('/list', function (Request $request) {
     if($user->u_id == $list->l_u_id) $admin = true; else $admin = false;
 
     //Check if the user has write permission for the list.
-    $write = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->where('a_p_id', 2)->first();
+    $write = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->where('a_write', 1)->first();
     if($write) $write = true; else $write = false;
     
     //Return list
@@ -511,7 +507,7 @@ Route::post('/list/transfer', function (Request $request) {
 
     //Remove Access From new Owner and add Access to old Owner
     DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $userToTransfer->u_id)->delete();
-    DB::table('sl_a_access')->insert(['a_l_id' => $list->l_id, 'a_u_id' => $user->u_id, 'a_p_id' => 1]);
+    DB::table('sl_a_access')->insert(['a_l_id' => $list->l_id, 'a_u_id' => $user->u_id, 'a_write' => 1]);
 
     //Return success
     return response()->json(['message' => 'List transferred'], 200);
@@ -572,7 +568,7 @@ Route::post('/list/invite', function (Request $request) {
     DB::table('sl_in_invite')->insert(['in_id' => $uuid, 'in_l_id' => $list->l_id, 'in_u_id' => $invitedUser->u_id, 'in_created' => now()->toDateTimeString(), 'in_p_id' => 2]);
 
     //TODO: Send Invite Email
-    
+    $link = url('/invite' . '/' . $uuid);
 
     //Return success
     return response()->json(['message' => 'User invited to list'], 200);
@@ -786,7 +782,7 @@ Route::post('/list/member/remove', function (Request $request) {
     return response()->json(['message' => 'User removed from list'], 200);
 });
 
-//TODO: Change rights for user on list. Has to be owner of the list
+//Change rights for user on list. Has to be owner of the list
 /*
 @param string token
 @param string list

@@ -79,7 +79,7 @@ const routes = [
     name: "Invite",
   },
   {
-    path: "/verification/:id/:token",
+    path: "/verify/:id/:token",
     component: Verification,
     name: "Verification",
   },
