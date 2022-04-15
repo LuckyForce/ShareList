@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-//Symfony Mailer
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mailer\MailerInterface;
+use App\Jobs\SendEmail;
 
 
 /*
@@ -78,18 +76,18 @@ Route::post('/user/register', function (Request $request) {
 
     //TODO: Send verification email
     $link = url('/verify'. '/' . $user->u_id . '/' . $code);
-
-    //Send Mail to email address from variable $request->email
-    $email = (new Email())
-        ->from('info@adrian-schauer.at')
-        ->to($request->email)
-        ->subject('ShareList Verification')
-        ->text('Please click on the following link to verify your email address: ' . $link)
-        ->html('<p>Please click on the following link to verify your email address: <a href="' . $link . '">' . $link . '</a></p>');
-
-    //Send Mail per Symfony Mailer
-    $mailer = resolve(MailerInterface::class);
-    $mailer->send($email);
+    
+    //Create Email
+    $recipient = $user->u_email;
+    $subject = 'Verify your email';
+    $body = '<p>Please click on the following link to verify your email address:</p>
+    <p><a href="' . $link . '">' . $link . '</a></p>';
+    $altBody = 'Please click on the following link to verify your email address: ' . $link;
+    
+    //Create Email
+    $email = new SendEmail($recipient, $subject, $body, $altBody);
+    //Dispatch Email
+    dispatch($email);
 
     //Return success
     return response()->json(['message' => 'User created'], 200);
