@@ -1,6 +1,7 @@
 <template>
     <div>
         Profile
+        HERE SHOULD BE YOUR HTML CODE
     </div>
 </template>
 
