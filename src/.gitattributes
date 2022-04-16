@@ -10,3 +10,4 @@
 CHANGELOG.md export-ignore
 
 public/js/app.js linguist-vendored
+public/css/app.css linguist-vendored
