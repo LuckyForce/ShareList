@@ -148,6 +148,22 @@ body {
     @apply disabled:opacity-50;
 }
 
+.btn-create {
+    @apply ml-11;
+    @apply rounded-lg;
+    @apply border-2;
+    @apply border-gray-200;
+    @apply focus:border-blue-700;
+    @apply focus:outline-none;
+    @apply text-center;
+    @apply text-white;
+    @apply bg-blue-600;
+    @apply hover:bg-blue-700;
+    @apply transition;
+    @apply mt-2;
+    @apply disabled:opacity-50;
+}
+
 .status-message {
     @apply mb-2;
     @apply text-gray-600;
