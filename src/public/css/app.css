@@ -436,18 +436,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .right-0 {
   right: 0px;
 }
-.bottom-0 {
-  bottom: 0px;
-}
-.bottom-6 {
-  bottom: 1.5rem;
-}
-.bottom-8 {
-  bottom: 2rem;
-}
-.bottom-10 {
-  bottom: 2.5rem;
-}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -498,6 +486,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .ml-1 {
   margin-left: 0.25rem;
 }
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+.ml-10 {
+  margin-left: 2.5rem;
+}
 .mb-5 {
   margin-bottom: 1.25rem;
 }
@@ -522,14 +516,8 @@ Ensure the default browser behavior of the `hidden` attribute.
 .-mt-px {
   margin-top: -1px;
 }
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
-.ml-40 {
-  margin-left: 10rem;
-}
-.ml-10 {
-  margin-left: 2.5rem;
+.mb-7 {
+  margin-bottom: 1.75rem;
 }
 .block {
   display: block;
@@ -575,9 +563,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-full {
   width: 100%;
-}
-.w-screen {
-  width: 100vw;
 }
 .w-60 {
   width: 15rem;
@@ -668,14 +653,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-gray-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}
-.object-cover {
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-.object-left {
-  -o-object-position: left;
-     object-position: left;
 }
 .p-5 {
   padding: 1.25rem;
@@ -916,7 +893,7 @@ body {
   }
 }
 
-.login-form, .register-form {
+.login-form, .register-form, .profile-form {
   z-index: 50;
   position: fixed;
   margin-left: auto;
@@ -993,7 +970,7 @@ body {
   background-color: rgb(37 99 235 / var(--tw-bg-opacity));
 }
 
-.btn-register, .btn-login {
+.btn-register, .btn-login, .btn-save {
   padding: 0.5rem;
   border-radius: 0.5rem;
   border-width: 2px;
@@ -1001,14 +978,14 @@ body {
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
 }
 
-.btn-register:focus, .btn-login:focus {
+.btn-register:focus, .btn-login:focus, .btn-save:focus {
   --tw-border-opacity: 1;
   border-color: rgb(59 130 246 / var(--tw-border-opacity));
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
 
-.btn-register, .btn-login {
+.btn-register, .btn-login, .btn-save {
   width: 100%;
   text-align: center;
   --tw-text-opacity: 1;
@@ -1017,12 +994,12 @@ body {
   background-color: rgb(96 165 250 / var(--tw-bg-opacity));
 }
 
-.btn-register:hover, .btn-login:hover {
+.btn-register:hover, .btn-login:hover, .btn-save:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
 }
 
-.btn-register, .btn-login {
+.btn-register, .btn-login, .btn-save {
   transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
@@ -1031,7 +1008,49 @@ body {
   margin-top: 0.5rem;
 }
 
-.btn-register:disabled, .btn-login:disabled {
+.btn-register:disabled, .btn-login:disabled, .btn-save:disabled {
+  opacity: 0.5;
+}
+
+.btn-deleteAccount {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+}
+
+.btn-deleteAccount:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(239 68 68 / var(--tw-border-opacity));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.btn-deleteAccount {
+  width: 100%;
+  text-align: center;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+}
+
+.btn-deleteAccount:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+}
+
+.btn-deleteAccount {
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  margin-top: 0.5rem;
+}
+
+.btn-deleteAccount:disabled {
   opacity: 0.5;
 }
 

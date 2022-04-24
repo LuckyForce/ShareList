@@ -20503,8 +20503,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div id=\"profile\" class=\"profile-form\"><h2 class=\"text-2xl text-blue-400 mx-auto mb-5\">Edit Account Details</h2><label for=\"profile-password\">Old Password</label><input type=\"password\" name=\"profile-password\" id=\"profile-password\" placeholder=\"******\" class=\"input\"><label for=\"profile-password-new\">New Password</label><input type=\"password\" name=\"profile-password-new\" id=\"profile-password-new\" placeholder=\"******\" class=\"input\"><label for=\"profile-password-confirm\">Confirm Password</label><input type=\"password\" name=\"profile-password-confirm\" id=\"profile-password-confirm\" placeholder=\"******\" class=\"input\"><button class=\"btn-save\">Save</button><button class=\"btn-deleteAccount\">Delete Account</button></div>", 1);
+
+var _hoisted_2 = [_hoisted_1];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, " Profile HERE SHOULD BE YOUR HTML CODE ");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_2);
 }
 
 /***/ }),

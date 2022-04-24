@@ -43,7 +43,7 @@ body {
 }
 
 .login-form,
-.register-form {
+.register-form, .profile-form {
     @apply z-50;
     @apply fixed;
     @apply mx-auto;
@@ -95,7 +95,7 @@ body {
 }
 
 .btn-register,
-.btn-login {
+.btn-login, .btn-save {
     @apply p-2;
     @apply rounded-lg;
     @apply border-2;
@@ -107,6 +107,23 @@ body {
     @apply text-white;
     @apply bg-blue-400;
     @apply hover:bg-blue-500;
+    @apply transition;
+    @apply mt-2;
+    @apply disabled:opacity-50;
+}
+
+.btn-deleteAccount{
+    @apply p-2;
+    @apply rounded-lg;
+    @apply border-2;
+    @apply border-gray-200;
+    @apply focus:border-red-500;
+    @apply focus:outline-none;
+    @apply w-full;
+    @apply text-center;
+    @apply text-white;
+    @apply bg-red-400;
+    @apply hover:bg-red-500;
     @apply transition;
     @apply mt-2;
     @apply disabled:opacity-50;
