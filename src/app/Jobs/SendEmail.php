@@ -9,9 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 class SendEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -42,56 +39,49 @@ class SendEmail implements ShouldQueue
      */
     public function handle()
     {
-        require base_path("vendor/autoload.php");
-        $mail = new PHPMailer(true);     // Passing `true` enables exceptions
+        //Make API Request to https://www.adrian-schauer.at/projects/emailapi
+        //Make API request so that the program does not wait for the api request to answer.
+        //Needed Post Fields:
+        //$_POST['sender']
+        //$_POST['email']
+        //$_POST['recipient']
+        //$_POST['subject']
+        //$_POST['html-message']
+        //$_POST['text-message']
+        //$_POST['service']
+        //$_POST['key']
 
-        try {
+        // https://stackoverflow.com/questions/8024821/php-curl-required-only-to-send-and-not-wait-for-response
+        // https://stackoverflow.com/questions/1918383/dont-echo-out-curl
 
-            // Email server settings. Access environment variables.
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = env('MAIL_HOST');
-            $mail->SMTPAuth = true;
-            $mail->Username = env('MAIL_USERNAME');
-            $mail->Password = env('MAIL_PASSWORD');
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = env('MAIL_PORT');
-            $mail->CharSet = 'UTF-8';
-            $mail->Encoding = 'base64';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://www.adrian-schauer.at/projects/emailapi/src/index.php');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTREDIR, 3);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+            'sender' => env('APP_NAME'),
+            'email' => $this->recipient,
+            'recipient' => $this->recipient,
+            'subject' => $this->subject,
+            'html-message' => $this->body,
+            'text-message' => $this->altBody,
+            'service' => env('EMAIL_API_SERVICE'),
+            'key' => env('EMAIL_API_KEY')
+        ));
+        curl_setopt($ch, CURLOPT_USERAGENT, 'api');
 
-            $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
-            $mail->addAddress($this->recipient);
-            //$mail->addCC($request->emailCc);
-            //$mail->addBCC($request->emailBcc);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1); //if your connect is longer than 1s it lose data in POST better is finish script in recieve
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        //Do not echo out the result
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FORBID_REUSE, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
+        curl_setopt($ch, CURLOPT_DNS_CACHE_TIMEOUT, 10);
 
-            //$mail->addReplyTo('sender-reply-email', 'sender-reply-name');
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
 
-            /*
-            if(isset($_FILES['emailAttachments'])) {
-                for ($i=0; $i < count($_FILES['emailAttachments']['tmp_name']); $i++) {
-                    $mail->addAttachment($_FILES['emailAttachments']['tmp_name'][$i], $_FILES['emailAttachments']['name'][$i]);
-                }
-            }
-            */
-
-            $mail->isHTML(true);                // Set email content format to HTML
-
-            $mail->Subject = $this->subject;
-            $mail->Body    = $this->body;
-            $mail->AltBody = $this->altBody;
-
-            if( !$mail->send() ) {
-                return false;
-                //return back()->with("failed", "Email not sent.")->withErrors($mail->ErrorInfo);
-            }
-            
-            else {
-                return true;
-                //return back()->with("success", "Email has been sent.");
-            }
-        } catch (Exception $e) {
-            return false;
-             //return back()->with('error','Message could not be sent.');
-        }
+        curl_exec($ch);
+        curl_close($ch);
     }
 }

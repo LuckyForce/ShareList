@@ -66,7 +66,7 @@ Route::post('/user/register', function (Request $request) {
     if ($user) {
         //User already exists. Overwrite Password.
         DB::table('sl_u_user')->where('u_email', $request->email)->update(['u_password' => password_hash($request->password, PASSWORD_DEFAULT), 'u_verifytoken' => $code]);
-    }else{
+    } else {
         //Create new user
         DB::table('sl_u_user')->insert(['u_email' => $request->email, 'u_password' => password_hash($request->password, PASSWORD_DEFAULT), 'u_verifytoken' => $code]);
     }
@@ -74,20 +74,21 @@ Route::post('/user/register', function (Request $request) {
     //Get User ID
     $user = DB::table('sl_u_user')->where('u_email', $request->email)->first();
 
-    //TODO: Send verification email
-    $link = url('/verify'. '/' . $user->u_id . '/' . $code);
-    
+    //TODO: Design verification email
+    $link = url('/verify' . '/' . $user->u_id . '/' . $code);
+
     //Create Email
     $recipient = $user->u_email;
     $subject = 'Verify your email';
     $body = '<p>Please click on the following link to verify your email address:</p>
     <p><a href="' . $link . '">' . $link . '</a></p>';
     $altBody = 'Please click on the following link to verify your email address: ' . $link;
-    
+
     //Create Email
-    $email = new SendEmail($recipient, $subject, $body, $altBody);
+    $mail = new SendEmail($recipient, $subject, $body, $altBody);
+
     //Dispatch Email
-    dispatch($email);
+    dispatch($mail);
 
     //Return success
     return response()->json(['message' => 'User created'], 200);
@@ -126,7 +127,7 @@ Route::post('/user/delete', function (Request $request) {
 //Login
 Route::post('/user/login', function (Request $request) {
     //Validate data
-    if (!isset($request->email) || !isset($request->password)){
+    if (!isset($request->email) || !isset($request->password)) {
         return response()->json(['message' => 'Email or password is missing'], 400);
     }
 
@@ -134,7 +135,7 @@ Route::post('/user/login', function (Request $request) {
     $user = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
 
     //Check if the user exists
-    if (!$user) { 
+    if (!$user) {
         return response()->json([
             'error' => 'User not found',
         ], 404);
@@ -149,7 +150,7 @@ Route::post('/user/login', function (Request $request) {
 
     //Create Token
     $token = Str::orderedUuid();
-    $expires = now()->addMinutes(60*24)->toDateTimeString();
+    $expires = now()->addMinutes(60 * 24)->toDateTimeString();
     DB::table('sl_t_token')->insert(['t_token' => $token, 't_u_id' => $user->u_id, 't_expires' => $expires]);
 
     //Update last login
@@ -178,7 +179,7 @@ Route::post('/user/verify', function (Request $request) {
     $user = DB::table('sl_u_user')->where('u_id', $request->id)->where('u_verifytoken', $request->token)->first();
 
     //Check if the user exists
-    if (!$user) { 
+    if (!$user) {
         return response()->json([
             'error' => 'Token is invalid',
         ], 400);
@@ -193,7 +194,7 @@ Route::post('/user/verify', function (Request $request) {
 
     //Verify the user
     DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_verified' => 1]);
-    
+
     //Return success
     return response()->json(['message' => 'User verified'], 200);
 });
@@ -214,7 +215,7 @@ Route::post('/user/check', function (Request $request) {
     $user = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
 
     //Check if the user exists
-    if (!$user) { 
+    if (!$user) {
         return response()->json([
             'error' => 'User not found',
         ], 404);
@@ -227,7 +228,7 @@ Route::post('/user/check', function (Request $request) {
 //TODO: Reset Password
 Route::post('/user/resetpwd', function (Request $request) {
     //Validate data
-    
+
 });
 
 //Forgot Password
@@ -238,7 +239,7 @@ This Function generates a code and sends it to the user per mail.
 */
 Route::post('/user/forgotpwd', function (Request $request) {
     //Validate data
-    if (!isset($request->email)){
+    if (!isset($request->email)) {
         return response()->json(['message' => 'Email is missing'], 400);
     }
 
@@ -246,7 +247,7 @@ Route::post('/user/forgotpwd', function (Request $request) {
     $user = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
 
     //Check if the user exists
-    if (!$user) { 
+    if (!$user) {
         return response()->json([
             'error' => 'User not found',
         ], 404);
@@ -260,7 +261,7 @@ Route::post('/user/forgotpwd', function (Request $request) {
     }
 
     //Update the user
-    DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_resetpwd' => $code, 'u_resetpwdexpirationdate' => now()->addMinutes(60*24)->toDateTimeString()]);
+    DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_resetpwd' => $code, 'u_resetpwdexpirationdate' => now()->addMinutes(60 * 24)->toDateTimeString()]);
 
     //TODO: Send mail to user
 
@@ -272,7 +273,7 @@ Route::post('/user/forgotpwd', function (Request $request) {
 //Change Password
 Route::post('/user/changepwd', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->password) || !isset($request->newpassword)){
+    if (!isset($request->token) || !isset($request->password) || !isset($request->newpassword)) {
         return response()->json(['message' => 'Token or password is missing'], 400);
     }
 
@@ -296,7 +297,7 @@ Route::post('/user/changepwd', function (Request $request) {
 
     //Update the password
     DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_password' => password_hash($request->newpassword, PASSWORD_DEFAULT)]);
-    
+
     //Return success
     return response()->json(['message' => 'Password changed'], 200);
 });
@@ -308,13 +309,13 @@ Route::post('/user/changepwd', function (Request $request) {
 //Create List
 Route::post('/list/create', function (Request $request) {
     //Validate data
-    if (!isset($request->token)){
+    if (!isset($request->token)) {
         return response()->json(['message' => 'Token is missing'], 400);
     }
 
     //Get the user
     $user = getUser($request->token);
-    
+
     //Create UUID
     $uuid = Str::orderedUuid();
 
@@ -336,7 +337,7 @@ This Function returns all lists the user has access to.
 */
 Route::post('/lists', function (Request $request) {
     //Validate data
-    if (!isset($request->token)){
+    if (!isset($request->token)) {
         return response()->json(['message' => 'Token is missing'], 400);
     }
 
@@ -360,7 +361,7 @@ Route::post('/lists', function (Request $request) {
 */
 Route::post('/list', function (Request $request) {
     //Validate data
-    if (!isset($request->token ) || !isset($request->list)){
+    if (!isset($request->token) || !isset($request->list)) {
         return response()->json(['message' => 'Token or list is missing'], 400);
     }
 
@@ -371,12 +372,12 @@ Route::post('/list', function (Request $request) {
     $list = DB::table('sl_l_list')->where('l_id', $request->list)->first();
 
     //Check if the list exists
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
     }
-    
+
     //Check if the user has access to the list
     if (!DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->first()) {
         return response()->json([
@@ -388,12 +389,14 @@ Route::post('/list', function (Request $request) {
     $items = DB::table('sl_i_item')->where('i_l_id', $list->l_id)->get();
 
     //Check if the user is owner of the list.
-    if($user->u_id == $list->l_u_id) $admin = true; else $admin = false;
+    if ($user->u_id == $list->l_u_id) $admin = true;
+    else $admin = false;
 
     //Check if the user has write permission for the list.
     $write = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->where('a_write', 1)->first();
-    if($write) $write = true; else $write = false;
-    
+    if ($write) $write = true;
+    else $write = false;
+
     //Return list
     return response()->json(['list' => $list, 'items' => $items, 'admin' => $admin, 'write' => $write], 200);
 });
@@ -407,18 +410,18 @@ Route::post('/list', function (Request $request) {
 */
 Route::post('/list/delete', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list)){
+    if (!isset($request->token) || !isset($request->list)) {
         return response()->json(['message' => 'Token or list is missing'], 400);
     }
 
     //Get the user
     $user = getUser($request->token);
-    
+
     //Get the list
     $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
-    
+
     //Check if the list exists
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
@@ -434,7 +437,7 @@ Route::post('/list/delete', function (Request $request) {
 //Change List Name
 Route::post('/list/rename', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->name)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->name)) {
         return response()->json(['message' => 'Token, list or name is missing'], 400);
     }
 
@@ -445,7 +448,7 @@ Route::post('/list/rename', function (Request $request) {
     $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
@@ -460,7 +463,7 @@ Route::post('/list/rename', function (Request $request) {
 
     //Update the list
     DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->update(['l_name' => $request->name]);
-    
+
     //Return success
     return response()->json(['message' => 'List name changed'], 200);
 });
@@ -474,7 +477,7 @@ Route::post('/list/rename', function (Request $request) {
 */
 Route::post('/list/transfer', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->user) || !isset($request->password)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->user) || !isset($request->password)) {
         return response()->json(['message' => 'Token, list, user or password is missing'], 400);
     }
 
@@ -492,7 +495,7 @@ Route::post('/list/transfer', function (Request $request) {
     $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
@@ -502,7 +505,7 @@ Route::post('/list/transfer', function (Request $request) {
     $userToTransfer = DB::table('sl_u_user')->where('u_id', $request->user)->first();
 
     //Check if the user exists
-    if (!$userToTransfer) { 
+    if (!$userToTransfer) {
         return response()->json([
             'error' => 'User not found',
         ], 404);
@@ -529,7 +532,7 @@ Route::post('/list/transfer', function (Request $request) {
 //Add User to List
 Route::post('/list/invite', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->email)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->email)) {
         return response()->json(['message' => 'Token, list or user is missing'], 400);
     }
 
@@ -540,7 +543,7 @@ Route::post('/list/invite', function (Request $request) {
     $invitedUser = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
 
     //Check if the invited user exists. By checking that you also check if the user is verified
-    if (!$invitedUser) { 
+    if (!$invitedUser) {
         return response()->json([
             'error' => 'Invited user not found',
         ], 404);
@@ -583,6 +586,19 @@ Route::post('/list/invite', function (Request $request) {
     //TODO: Send Invite Email
     $link = url('/invite' . '/' . $uuid);
 
+    //Create Email
+    $recipient = $user->u_email;
+    $subject = 'Verify your email';
+    $body = '<p>Please click on the following link to verify your email address:</p>
+    <p><a href="' . $link . '">' . $link . '</a></p>';
+    $altBody = 'Please click on the following link to verify your email address: ' . $link;
+
+    //Create Email
+    $mail = new SendEmail($recipient, $subject, $body, $altBody);
+
+    //Dispatch Email
+    dispatch($mail);
+
     //Return success
     return response()->json(['message' => 'User invited to list'], 200);
 });
@@ -595,7 +611,7 @@ Route::post('/list/invite', function (Request $request) {
 */
 Route::post('/list/invites', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list)){
+    if (!isset($request->token) || !isset($request->list)) {
         return response()->json(['message' => 'Token or list is missing'], 400);
     }
 
@@ -606,7 +622,7 @@ Route::post('/list/invites', function (Request $request) {
     $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
@@ -629,7 +645,7 @@ Route::post('/list/invites', function (Request $request) {
 */
 Route::post('/list/invite/delete', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->invite)){
+    if (!isset($request->token) || !isset($request->invite)) {
         return response()->json(['message' => 'Token or invite is missing'], 400);
     }
 
@@ -640,7 +656,7 @@ Route::post('/list/invite/delete', function (Request $request) {
     $invite = DB::table('sl_in_invite')->where('in_id', $request->invite)->where('in_accepted', 0)->where('in_deleted', 0)->first();
 
     //Check if the invite exists.
-    if (!$invite) { 
+    if (!$invite) {
         return response()->json([
             'error' => 'Invite not found',
         ], 404);
@@ -669,7 +685,7 @@ Route::post('/list/invite/delete', function (Request $request) {
 */
 Route::post('/list/invite/accept', function (Request $request) {
     //Validate data
-    if (!isset($request->invite)){
+    if (!isset($request->invite)) {
         return response()->json(['message' => 'Invite is missing'], 400);
     }
 
@@ -677,7 +693,7 @@ Route::post('/list/invite/accept', function (Request $request) {
     $invite = DB::table('sl_in_invite')->where('in_id', $request->invite)->first();
 
     //Check if the invite exists.
-    if (!$invite) { 
+    if (!$invite) {
         return response()->json([
             'error' => 'Invite not found',
         ], 404);
@@ -720,7 +736,7 @@ Route::post('/list/invite/accept', function (Request $request) {
 */
 Route::post('/list/members', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list)){
+    if (!isset($request->token) || !isset($request->list)) {
         return response()->json(['message' => 'Token or list is missing'], 400);
     }
 
@@ -731,7 +747,7 @@ Route::post('/list/members', function (Request $request) {
     $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
@@ -752,7 +768,7 @@ Route::post('/list/members', function (Request $request) {
 */
 Route::post('/list/member/remove', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->user)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->user)) {
         return response()->json(['message' => 'Token, list or user is missing'], 400);
     }
 
@@ -763,7 +779,7 @@ Route::post('/list/member/remove', function (Request $request) {
     $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $owner->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
@@ -773,7 +789,7 @@ Route::post('/list/member/remove', function (Request $request) {
     $user = DB::table('sl_u_user')->where('u_id', $request->user)->first();
 
     //Check if the user exists
-    if (!$user) { 
+    if (!$user) {
         return response()->json([
             'error' => 'User not found',
         ], 404);
@@ -805,18 +821,18 @@ Route::post('/list/member/remove', function (Request $request) {
 */
 Route::post('/list/member/write', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->user) || !isset($request->write)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->user) || !isset($request->write)) {
         return response()->json(['message' => 'Token, list, user or rights is missing'], 400);
     }
 
     //Get the owner
     $owner = getUser($request->token);
-    
+
     //Get the list
     $list = DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $owner->u_id)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
@@ -826,7 +842,7 @@ Route::post('/list/member/write', function (Request $request) {
     $user = DB::table('sl_u_user')->where('u_id', $request->user)->first();
 
     //Check if the user exists
-    if (!$user) { 
+    if (!$user) {
         return response()->json([
             'error' => 'User not found',
         ], 404);
@@ -852,7 +868,7 @@ Route::post('/list/member/write', function (Request $request) {
 //Remove Item. Needs to have access to the list
 Route::post('/list/item/remove', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->item)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->item)) {
         return response()->json(['message' => 'Token, list or item is missing'], 400);
     }
 
@@ -863,7 +879,7 @@ Route::post('/list/item/remove', function (Request $request) {
     $list = DB::table('sl_l_list')->join('sl_a_access', 'a_l_id', '=', 'l_id')->where('l_id', $request->list)->where('a_u_id', $user->u_id)->where('a_write', 1)->first();
 
     //Check if the list exists. By checking that you also check if the user has write access to the list.
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
@@ -873,7 +889,7 @@ Route::post('/list/item/remove', function (Request $request) {
     $item = DB::table('sl_i_item')->where('i_id', $request->item)->where('i_l_id', $list->l_id)->first();
 
     //Check if the item exists. By checking that you also check if the user is the owner of the list
-    if (!$item) { 
+    if (!$item) {
         return response()->json([
             'error' => 'Item not found',
         ], 404);
@@ -889,7 +905,7 @@ Route::post('/list/item/remove', function (Request $request) {
 //Edit Item. Needs to have access to the list
 Route::post('/list/item/edit', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->item) || !isset($request->content)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->item) || !isset($request->content)) {
         return response()->json(['message' => 'Token, list, item or name is missing'], 400);
     }
 
@@ -900,7 +916,7 @@ Route::post('/list/item/edit', function (Request $request) {
     $list = DB::table('sl_l_list')->join('sl_a_access', 'a_l_id', '=', 'l_id')->where('l_id', $request->list)->where('a_u_id', $user->u_id)->where('a_write', 1)->first();
 
     //Check if the list exists. By checking that you also check if the user is the owner of the list
-    if (!$list) { 
+    if (!$list) {
         return response()->json([
             'error' => 'List not found',
         ], 404);
@@ -910,7 +926,7 @@ Route::post('/list/item/edit', function (Request $request) {
     $item = DB::table('sl_i_item')->where('i_id', $request->item)->where('i_l_id', $list->l_id)->first();
 
     //Check if the item exists.
-    if (!$item) { 
+    if (!$item) {
         return response()->json([
             'error' => 'Item not found',
         ], 404);
@@ -926,7 +942,7 @@ Route::post('/list/item/edit', function (Request $request) {
 //Add Item. Needs to have access to the list
 Route::post('/list/item/add', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->content)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->content)) {
         return response()->json(['message' => 'Token, list or item is missing'], 400);
     }
 
@@ -963,7 +979,7 @@ Route::post('/list/item/add', function (Request $request) {
 //Check/Uncheck Item. Needs to have access to the list
 Route::post('/list/item/check', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->item)){
+    if (!isset($request->token) || !isset($request->list) || !isset($request->item)) {
         return response()->json(['message' => 'Token, list or item is missing'], 400);
     }
 
@@ -1006,10 +1022,11 @@ Route::post('/tokens/clear', function (Request $request) {
     return response()->json(['message' => 'Tokens cleared'], 200);
 });
 
-function getUser($token) {
+function getUser($token)
+{
     //Get user from database
     $user = DB::table('sl_u_user')->join('sl_t_token', 't_u_id', '=', 'u_id')->where('t_token', $token)->where('t_expires', '>', now()->toDateTimeString())->first();
-    if (!$user) { 
+    if (!$user) {
         return response()->json([
             'error' => 'User not found',
         ], 404);
