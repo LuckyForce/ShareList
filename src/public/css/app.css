@@ -480,14 +480,17 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mt-6 {
   margin-top: 1.5rem;
 }
-.mb-3 {
-  margin-bottom: 0.75rem;
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
-.mb-9 {
-  margin-bottom: 2.25rem;
+.ml-1 {
+  margin-left: 0.25rem;
 }
-.mt-1 {
-  margin-top: 0.25rem;
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+.ml-10 {
+  margin-left: 2.5rem;
 }
 .mb-5 {
   margin-bottom: 1.25rem;
@@ -497,9 +500,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .mt-2 {
   margin-top: 0.5rem;
-}
-.ml-1 {
-  margin-left: 0.25rem;
 }
 .mt-4 {
   margin-top: 1rem;
@@ -515,15 +515,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .-mt-px {
   margin-top: -1px;
-}
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
-.ml-10 {
-  margin-left: 2.5rem;
 }
 .block {
   display: block;
@@ -1203,53 +1194,6 @@ body {
   color: rgb(239 68 68 / var(--tw-text-opacity));
   font-size: 0.875rem;
   line-height: 1.25rem;
-}
-
-.btn-edit {
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border-width: 2px;
-  --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
-}
-
-.btn-edit:focus {
-  --tw-border-opacity: 1;
-  border-color: rgb(59 130 246 / var(--tw-border-opacity));
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
-
-.btn-edit {
-  text-align: center;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
-}
-
-.btn-edit:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-}
-
-.btn-edit {
-  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-  margin-bottom: 0.75rem;
-  margin-top: 0.25rem;
-}
-
-.btn-edit:disabled {
-  opacity: 0.5;
-}
-
-.btn-edit {
-  justify-items: center;
-  margin-left: 10rem;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -194,22 +194,3 @@ body {
     @apply text-sm;
 }
 
-.btn-edit {
-    @apply p-2;
-    @apply rounded-lg;
-    @apply border-2;
-    @apply border-gray-200;
-    @apply focus:border-blue-500;
-    @apply focus:outline-none;
-    @apply text-center;
-    @apply text-white;
-    @apply bg-blue-400;
-    @apply hover:bg-blue-500;
-    @apply transition;
-    @apply mb-3;
-    @apply mt-1;
-    @apply disabled:opacity-50;
-    @apply justify-items-center;
-    @apply ml-40;
-}
-
