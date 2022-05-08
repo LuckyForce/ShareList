@@ -1,7 +1,6 @@
 <template>
     <div>
-        Invite
-        HERE SHOULD BE YOUR HTML CODE
+        
     </div>    
 </template>
 

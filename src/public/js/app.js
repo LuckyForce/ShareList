@@ -20224,7 +20224,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, " Invite HERE SHOULD BE YOUR HTML CODE ");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div");
 }
 
 /***/ }),
@@ -20242,8 +20242,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">Listname</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Post</button></div></div>", 5);
+
+var _hoisted_6 = [_hoisted_1];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, " List HERE SHOULD BE YOUR HTML CODE ");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_6);
 }
 
 /***/ }),
@@ -20261,8 +20265,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">List Edit</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center\"><div class=\"w-100 p-2 bg-white rounded-xl p-2\"><p class=\"mb-3 text-2xl\">Bearbeite:</p><div class=\"flex\"><div><div class=\"mb-9 mt-1\">ListName</div><div class=\"mb-9 mt-1\">Inhalt 1</div><div class=\"mb-9 mt-1\">Inhalt 2</div><div class=\"mb-9 mt-1\">Inhalt 3</div></div><div><button class=\"btn-edit\">Bearbeiten</button><br><button class=\"btn-edit\">Bearbeiten</button><br><button class=\"btn-edit\">Bearbeiten</button><br><button class=\"btn-edit\">Bearbeiten</button></div></div><br><br><br><p>Willst du diese Liste wirklich löschen?</p><button type=\"submit\" class=\"btn-delete1\">Delete</button></div></div>", 2);
+
+var _hoisted_3 = [_hoisted_1];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, " ListEdit HERE SHOULD BE YOUR HTML CODE ");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_3);
 }
 
 /***/ }),
@@ -20280,8 +20288,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  id: "dropdownDefault",
+  "data-dropdown-toggle": "dropdown",
+  "class": "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800",
+  type: "button"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Dropdown button "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+  "class": "w-4 h-4 ml-2",
+  fill: "none",
+  stroke: "currentColor",
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  "stroke-width": "2",
+  d: "M19 9l-7 7-7-7"
+})])], -1
+/* HOISTED */
+);
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div id=\"dropdown\" class=\"z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700\"><ul class=\"py-1 text-sm text-gray-700 dark:text-gray-200\" aria-labelledby=\"dropdownDefault\"><li><a href=\"#\" class=\"block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white\">Dashboard</a></li><li><a href=\"#\" class=\"block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white\">Settings</a></li><li><a href=\"#\" class=\"block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white\">Earnings</a></li><li><a href=\"#\" class=\"block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white\">Sign out</a></li></ul></div>", 1);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, " ListInvites HERE SHOULD BE YOUR HTML CODE ");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Dropdown menu "), _hoisted_2]);
 }
 
 /***/ }),
@@ -20299,8 +20330,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">List Of Users</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-120 p-2 bg-white rounded-xl p-2\"><div><div class=\"flex mb-2\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">Username</p><div class=\"flex\"><p class=\"text-sm text-gray-600 ml-5 mr-2\">Rights:</p><div><p class=\"text-sm text-gray-600\">Read</p><p class=\"text-sm text-gray-600\">Write</p><p class=\"text-sm text-gray-600\">Delete</p></div></div></div><div class=\"flex\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">E-Mail</p></div></div><button type=\"submit\" class=\"btn-delete1\">Ban</button><button type=\"submit\" class=\"btn-edit1\">Edit</button></div><div class=\"w-120 p-2 bg-white rounded-xl p-2\"><div><div class=\"flex mb-2\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">Username</p><div class=\"flex\"><p class=\"text-sm text-gray-600 ml-5 mr-2\">Rights:</p><div><p class=\"text-sm text-gray-600\">Read</p><p class=\"text-sm text-gray-600\">Write</p><p class=\"text-sm text-gray-600\">Delete</p></div></div></div><div class=\"flex\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">E-Mail</p></div></div><button type=\"submit\" class=\"btn-delete1\">Ban</button><button type=\"submit\" class=\"btn-edit1\">Edit</button></div><div class=\"w-120 p-2 bg-white rounded-xl p-2\"><div><div class=\"flex mb-2\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">Username</p><div class=\"flex\"><p class=\"text-sm text-gray-600 ml-5 mr-2\">Rights:</p><div><p class=\"text-sm text-gray-600\">Read</p><p class=\"text-sm text-gray-600\">Write</p><p class=\"text-sm text-gray-600\">Delete</p></div></div></div><div class=\"flex\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">E-Mail</p></div></div><button type=\"submit\" class=\"btn-delete1\">Ban</button><button type=\"submit\" class=\"btn-edit1\">Edit</button></div></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-120 p-2 bg-white rounded-xl p-2\"><div><div class=\"flex mb-2\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">Username</p><div class=\"flex\"><p class=\"text-sm text-gray-600 ml-5 mr-2\">Rights:</p><div><p class=\"text-sm text-gray-600\">Read</p><p class=\"text-sm text-gray-600\">Write</p><p class=\"text-sm text-gray-600\">Delete</p></div></div></div><div class=\"flex\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">E-Mail</p></div></div><button type=\"submit\" class=\"btn-delete1\">Ban</button><button type=\"submit\" class=\"btn-edit1\">Edit</button></div><div class=\"w-120 p-2 bg-white rounded-xl p-2\"><div><div class=\"flex mb-2\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">Username</p><div class=\"flex\"><p class=\"text-sm text-gray-600 ml-5 mr-2\">Rights:</p><div><p class=\"text-sm text-gray-600\">Read</p><p class=\"text-sm text-gray-600\">Write</p><p class=\"text-sm text-gray-600\">Delete</p></div></div></div><div class=\"flex\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">E-Mail</p></div></div><button type=\"submit\" class=\"btn-delete1\">Ban</button><button type=\"submit\" class=\"btn-edit1\">Edit</button></div><div class=\"w-120 p-2 bg-white rounded-xl p-2\"><div><div class=\"flex mb-2\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">Username</p><div class=\"flex\"><p class=\"text-sm text-gray-600 ml-5 mr-2\">Rights:</p><div><p class=\"text-sm text-gray-600\">Read</p><p class=\"text-sm text-gray-600\">Write</p><p class=\"text-sm text-gray-600\">Delete</p></div></div></div><div class=\"flex\"><p class=\"text-sm text-gray-600 mr-5 ml-2\">E-Mail</p></div></div><button type=\"submit\" class=\"btn-delete1\">Ban</button><button type=\"submit\" class=\"btn-edit1\">Edit</button></div></div>", 3);
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "flex justify-center items-center mt-20"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": ""
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  type: "email",
+  id: "invite-email",
+  placeholder: "max.mustermann@gmail.com",
+  "class": "input",
+  formControlName: "email"
+})]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  type: "submit",
+  "class": "btn-edit1 ml-10"
+}, "Add")], -1
+/* HOISTED */
+);
+
+var _hoisted_5 = [_hoisted_1, _hoisted_4];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, " ListMembers HERE SHOULD BE YOUR HTML CODE ");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_5);
 }
 
 /***/ }),
