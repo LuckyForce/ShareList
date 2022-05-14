@@ -187,7 +187,7 @@ Route::post('/user/verify', function (Request $request) {
     //Check if the user exists
     if (!$user) {
         return response()->json([
-            'error' => 'Token is invalid',
+            'error' => 'Invite is invalid',
         ], 400);
     }
 

@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import {getToken} from '../js/utilities';
 export default {
     async mounted(){
         //Get Email from localStorage
@@ -23,7 +22,6 @@ export default {
                 const result = await this.checkVerification(email);
                 if(result){
                     clearInterval(interval);
-                    this.isLoggedIn = true;
                     this.$router.push("/lists");
                 }
             }, 5000);
@@ -31,7 +29,7 @@ export default {
     },
     methods:
     {
-        async checkVerification(email) {
+        checkVerification: async function(email) {
             //Axios request to verify user
             const result = await axios
                 .post("/api/user/check", {

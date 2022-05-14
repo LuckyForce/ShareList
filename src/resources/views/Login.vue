@@ -12,11 +12,9 @@
                 placeholder="max.mustermann@gmail.com"
                 class="input"
                 formControlName="email"
+                @input="valid = true"
+                v-model="email"
             />
-            <div class="invalid-input">
-                <span> E-Mail is required </span>
-                <span> E-Mail is not valid </span>
-            </div>
             <label for="login-password">Password</label>
             <input
                 type="password"
@@ -25,13 +23,13 @@
                 placeholder="******"
                 class="input"
                 formControlName="password"
+                @input="valid = true"
+                v-model="password"
             />
             <div class="invalid-input">
-                <span> Password is required </span>
-                <span> Password is too short </span>
-                <span> Password is too long </span>
+                <span v-if="valid === false">Credentials are invalid.</span>
             </div>
-            <button type="submit" class="btn-login">Login</button>
+            <button type="submit" class="btn-login" @click="login">Login</button>
             <p>
                 Don't have an account?
                 <router-link to="/register" class="underline"
@@ -43,9 +41,51 @@
 </template>
 
 <script>
+import { mainLogin } from "../js/utilities";
+
 export default {
-    login() {
-        console.log("Login");
+    data() {
+        return {
+            valid: true,
+            loginText: "Login",
+            loginDisabled: false,
+        };
+    },
+    props: {
+        email: {
+            type: String,
+        },
+        password: {
+            type: String,
+        },
+    },
+    methods: {
+        login: async function () {
+            //Disable Button
+            this.loginText = "Logging in...";
+            this.loginDisabled = true;
+
+            //Set all to valid
+            this.valid = true;
+
+            //Check if credentials are valid
+            const result = await mainLogin(this.email, this.password);
+
+            //If credentials are valid, redirect to home
+            if (result === true) {
+                //Set localStorage
+                localStorage.setItem("email", this.email);
+                localStorage.setItem("pwd", this.password);
+                //Redirect to lists
+                this.$router.push("/lists");
+            } else {
+                this.valid = false;
+            }
+
+            //Reset Button
+            this.loginText = "Login";
+            this.loginDisabled = false;
+        },
     },
 };
 </script>

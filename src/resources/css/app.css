@@ -192,5 +192,6 @@ body {
     @apply border-red-500;
     @apply text-red-500;
     @apply text-sm;
+    @apply italic;
 }
 

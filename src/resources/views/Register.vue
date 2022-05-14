@@ -12,18 +12,14 @@
                 class="input"
                 v-model="email"
             />
-            <span
-                class="text-red-500 text-sm italic"
-                v-if="emailValid === false"
-            >
-                Please enter a valid email address
-            </span>
-            <span
-                class="text-red-500 text-sm italic"
-                v-if="emailTaken === true"
-            >
-                This email address is already in use
-            </span>
+            <div class="invalid-input">
+                <span v-if="emailValid === false">
+                    Please enter a valid email address
+                </span>
+                <span v-if="emailTaken === true">
+                    This email address is already in use
+                </span>
+            </div>
             <label for="register-password">Password</label>
             <input
                 type="password"
@@ -33,12 +29,14 @@
                 class="input"
                 v-model="password"
             />
-            <span class="text-red-500 text-sm italic" v-if="pwdTooShort">
-                Password must be at least 6 characters long
-            </span>
-            <span class="text-red-500 text-sm italic" v-if="pwdTooLong">
-                Password must be at most 20 characters long
-            </span>
+            <div class="invalid-input">
+                <span v-if="pwdTooShort">
+                    Password must be at least 6 characters long
+                </span>
+                <span v-if="pwdTooLong">
+                    Password must be at most 20 characters long
+                </span>
+            </div>
             <label for="register-password-confirm">Confirm Password</label>
             <input
                 type="password"
@@ -48,7 +46,7 @@
                 class="input"
                 v-model="passwordConfirm"
             />
-            <span class="text-red-500 text-sm italic" v-if="pwdConfirmWrong">
+            <span class="invalid-input" v-if="pwdConfirmWrong">
                 Passwords do not match
             </span>
             <div class="flex align-center">
@@ -62,13 +60,11 @@
                 <label for="register-agreement-confirm"
                     >I hereby agree to the terms and conditions stated in
                     <a routerLink="/about" class="underline">About Us</a> of
-                    ShareList and take to knowledge that my login data will be stored in cookies for functional reasons.
+                    ShareList and take to knowledge that my login data will be
+                    stored in cookies for functional reasons.
                 </label>
             </div>
-            <span
-                class="text-red-500 text-sm italic"
-                v-if="aboutAccepted === false"
-            >
+            <span class="invalid-input" v-if="aboutAccepted === false">
                 Terms and conditions have to be accepted!</span
             >
             <button

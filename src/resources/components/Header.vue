@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mainLogin } from "../js/utilities";
 export default {
     //Create Property isLoggedIn which results with the value of the checkLogin() function
     data() {
@@ -38,45 +39,25 @@ export default {
             imgPath: window.location.origin + "/images/logo.png",
         };
     },
-    async mounted(){
-        this.isLoggedIn = await checkLogin();
+    async mounted() {
+        this.isLoggedIn = await this.checkLogin;
+    },
+    watch: {
+        async $route(to, from) {
+            this.isLoggedIn = await this.checkLogin;
+        },
+    },
+    methods: {
+        checkLogin: async function () {
+            //Check if account data is set in cookies
+            const email = window.localStorage.getItem("email");
+            const pwd = window.localStorage.getItem("pwd");
+            if (email && pwd) {
+                return true;
+            } else {
+                return false;
+            }
+        },
     },
 };
-async function checkLogin() {
-    //Check if account data is set in cookies
-    const email = window.localStorage.getItem("email");
-    const pwd = window.localStorage.getItem("pwd");
-    //If account data is set, check if token is still valid
-    if (email && pwd) {
-        //Check if credentials are still valid
-        const success = await login(email, pwd);
-        return success;
-    } else {
-        return false;
-    }
-}
-
-async function login(email, pwd) {
-    const success = await axios
-        .post("/api/user/login", {
-            email: email,
-            password: pwd,
-        })
-        .then((response) => {
-            //Set token in session
-            window.sessionStorage.setItem("token", response.data.token);
-            //Set Expires in session
-            window.sessionStorage.setItem("expires", response.data.expires);
-
-            return true;
-        })
-        .catch((error) => {
-            //If credentials are not valid, remove account data from cookies
-            window.localStorage.removeItem("email");
-            window.localStorage.removeItem("pwd");
-
-            return false;
-        });
-    return success;
-}
 </script>
