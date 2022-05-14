@@ -19566,24 +19566,72 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   //Create Property isLoggedIn which results with the value of the checkLogin() function
   data: function data() {
     return {
-      isLoggedIn: checkLogin(),
+      isLoggedIn: false,
       imgPath: window.location.origin + "/images/logo.png"
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return checkLogin();
+
+            case 2:
+              _this.isLoggedIn = _context.sent;
+
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   }
 });
 
 function checkLogin() {
-  //Check if account data is set in cookies
-  var email = window.localStorage.getItem("email");
-  var pwd = window.localStorage.getItem("pwd"); //If account data is set, check if token is still valid
+  return _checkLogin.apply(this, arguments);
+}
 
-  if (email && pwd) {
-    //Check if credentials are still valid
-    var success = login(email, pwd);
-    return success;
-  } else {
-    return false;
-  }
+function _checkLogin() {
+  _checkLogin = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+    var email, pwd, success;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            //Check if account data is set in cookies
+            email = window.localStorage.getItem("email");
+            pwd = window.localStorage.getItem("pwd"); //If account data is set, check if token is still valid
+
+            if (!(email && pwd)) {
+              _context2.next = 9;
+              break;
+            }
+
+            _context2.next = 5;
+            return login(email, pwd);
+
+          case 5:
+            success = _context2.sent;
+            return _context2.abrupt("return", success);
+
+          case 9:
+            return _context2.abrupt("return", false);
+
+          case 10:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _checkLogin.apply(this, arguments);
 }
 
 function login(_x, _x2) {
@@ -19591,15 +19639,15 @@ function login(_x, _x2) {
 }
 
 function _login() {
-  _login = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(email, pwd) {
+  _login = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(email, pwd) {
     var success;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             success = false; //fetch
 
-            _context.next = 3;
+            _context3.next = 3;
             return axios.post("/api/user/login", {
               email: email,
               password: pwd
@@ -19619,14 +19667,14 @@ function _login() {
             });
 
           case 3:
-            return _context.abrupt("return", success);
+            return _context3.abrupt("return", success);
 
           case 4:
           case "end":
-            return _context.stop();
+            return _context3.stop();
         }
       }
-    }, _callee);
+    }, _callee3);
   }));
   return _login.apply(this, arguments);
 }

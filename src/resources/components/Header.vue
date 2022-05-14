@@ -34,19 +34,22 @@ export default {
     //Create Property isLoggedIn which results with the value of the checkLogin() function
     data() {
         return {
-            isLoggedIn: checkLogin(),
+            isLoggedIn: false,
             imgPath: window.location.origin + "/images/logo.png",
         };
     },
+    async mounted(){
+        this.isLoggedIn = await checkLogin();
+    },
 };
-function checkLogin() {
+async function checkLogin() {
     //Check if account data is set in cookies
     const email = window.localStorage.getItem("email");
     const pwd = window.localStorage.getItem("pwd");
     //If account data is set, check if token is still valid
     if (email && pwd) {
         //Check if credentials are still valid
-        let success = login(email, pwd);
+        let success = await login(email, pwd);
         return success;
     } else {
         return false;
