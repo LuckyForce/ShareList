@@ -33,12 +33,9 @@ Route::post('/user/register', function (Request $request) {
     if (!isset($request->email) || !isset($request->password)) {
         return response()->json(['message' => 'Please provide email and password'], 400);
     }
-
-    //Check if user already exists
-    $user = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
-    if ($user) {
-        return response()->json(['message' => 'User already exists'], 400);
-    }
+    
+    //Make Email Lowercase
+    $email = mb_strtolower($request->email);
 
     //Check if the password is valid
     if ($request->password == null || strlen($request->password) < 6 || !is_string($request->password)) {
@@ -46,12 +43,18 @@ Route::post('/user/register', function (Request $request) {
             'error' => 'Password is invalid',
         ], 400);
     }
-
+    
     //Check if email is valid
-    if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return response()->json([
             'error' => 'Email is invalid',
         ], 400);
+    }
+    
+    //Check if user already exists
+    $user = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 1)->first();
+    if ($user) {
+        return response()->json(['message' => 'User already exists'], 400);
     }
 
     //Generate 6 Character long Code containing only numbers.
@@ -62,17 +65,17 @@ Route::post('/user/register', function (Request $request) {
     }
 
     //Check if user already exists but not already verified
-    $user = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 0)->first();
+    $user = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 0)->first();
     if ($user) {
         //User already exists. Overwrite Password.
-        DB::table('sl_u_user')->where('u_email', $request->email)->update(['u_password' => password_hash($request->password, PASSWORD_DEFAULT), 'u_verifytoken' => $code]);
+        DB::table('sl_u_user')->where('u_email', $email)->update(['u_password' => password_hash($request->password, PASSWORD_DEFAULT), 'u_verifytoken' => $code]);
     } else {
         //Create new user
-        DB::table('sl_u_user')->insert(['u_email' => $request->email, 'u_password' => password_hash($request->password, PASSWORD_DEFAULT), 'u_verifytoken' => $code]);
+        DB::table('sl_u_user')->insert(['u_email' => $email, 'u_password' => password_hash($request->password, PASSWORD_DEFAULT), 'u_verifytoken' => $code]);
     }
 
     //Get User ID
-    $user = DB::table('sl_u_user')->where('u_email', $request->email)->first();
+    $user = DB::table('sl_u_user')->where('u_email', $email)->first();
 
     //TODO: Design verification email
     $link = url('/verify' . '/' . $user->u_id . '/' . $code);
@@ -131,8 +134,11 @@ Route::post('/user/login', function (Request $request) {
         return response()->json(['message' => 'Email or password is missing'], 400);
     }
 
+    //Make Email Lowercase
+    $email = mb_strtolower($request->email);
+
     //Get the user from the database
-    $user = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
+    $user = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 1)->first();
 
     //Check if the user exists
     if (!$user) {
@@ -211,8 +217,11 @@ Route::post('/user/check', function (Request $request) {
         return response()->json(['message' => 'Email is missing'], 400);
     }
 
+    //Make Email Lowercase
+    $email = mb_strtolower($request->email);
+
     //Get the user from the database
-    $user = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
+    $user = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 1)->first();
 
     //Check if the user exists
     if (!$user) {
@@ -225,13 +234,13 @@ Route::post('/user/check', function (Request $request) {
     return response()->json(['message' => 'User verified'], 200);
 });
 
-//TODO: Reset Password
+//OPTIONAL: Reset Password
 Route::post('/user/resetpwd', function (Request $request) {
     //Validate data
 
 });
 
-//Forgot Password
+//OPTIONAL: Forgot Password
 /*
 This Function generates a code and sends it to the user per mail.
 @param email
@@ -320,13 +329,13 @@ Route::post('/list/create', function (Request $request) {
     $uuid = Str::orderedUuid();
 
     //Create List
-    DB::table('sl_l_list')->insert(['l_id' => $uuid, 'l_u_id' => $user->u_id, 'l_name' => 'Untitled', 'l_created' => now()->toDateTimeString()]);
+    DB::table('sl_l_list')->insert(['l_id' => $uuid, 'l_u_id' => $user->u_id, 'l_name' => 'Untitled', 'l_description' => 'Untitled', 'l_created' => now()->toDateTimeString()]);
 
     //Add user to list
-    DB::table('sl_a_access')->insert(['a_l_id' => $uuid, 'a_u_id' => $user->u_id, 'a_p_id' => 1]);
+    DB::table('sl_a_access')->insert(['a_l_id' => $uuid, 'a_u_id' => $user->u_id, 'a_write' => 1]);
 
-    //Return success
-    return response()->json(['message' => 'List created'], 200);
+    //Return success with list id
+    return response()->json(['message' => 'List created', 'list' => $uuid], 200);
 });
 
 //Get Lists
@@ -536,11 +545,14 @@ Route::post('/list/invite', function (Request $request) {
         return response()->json(['message' => 'Token, list or user is missing'], 400);
     }
 
+    //Make email lowercase
+    $email = strtolower($request->email);
+
     //Get the user from the database
     $user = getUser($request->token);
 
     //Check invited user from the database
-    $invitedUser = DB::table('sl_u_user')->where('u_email', $request->email)->where('u_verified', 1)->first();
+    $invitedUser = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 1)->first();
 
     //Check if the invited user exists. By checking that you also check if the user is verified
     if (!$invitedUser) {
@@ -569,7 +581,7 @@ Route::post('/list/invite', function (Request $request) {
     }
 
     //Check if the user is already invited
-    $userInvited = DB::table('sl_in_invite')->where('i_l_id', $request->list)->where('i_u_id', $invitedUser->u_id)->where('i_accepted', 0)->where('i_deleted', 0)->first();
+    $userInvited = DB::table('sl_in_invite')->where('in_l_id', $request->list)->where('in_u_id', $invitedUser->u_id)->where('in_accepted', 0)->where('in_deleted', 0)->first();
 
     if ($userInvited) {
         return response()->json([
@@ -581,17 +593,18 @@ Route::post('/list/invite', function (Request $request) {
     $uuid = Str::orderedUuid();
 
     //Create Invite to add user to list
-    DB::table('sl_in_invite')->insert(['in_id' => $uuid, 'in_l_id' => $list->l_id, 'in_u_id' => $invitedUser->u_id, 'in_created' => now()->toDateTimeString(), 'in_p_id' => 2]);
+    DB::table('sl_in_invite')->insert(['in_id' => $uuid, 'in_l_id' => $list->l_id, 'in_u_id' => $invitedUser->u_id, 'in_invitedby' => $user->u_id, 'in_accepted' => 0, 'in_deleted' => 0, 'in_created' => now()->toDateTimeString()]);
 
-    //TODO: Send Invite Email
+    //TODO: Design Email
+    //Send Invite Email
     $link = url('/invite' . '/' . $uuid);
 
     //Create Email
-    $recipient = $user->u_email;
-    $subject = 'Verify your email';
-    $body = '<p>Please click on the following link to verify your email address:</p>
+    $recipient = $invitedUser->u_email;
+    $subject = 'Invite to '. $list->l_name . ' on ShareList';
+    $body = '<p>Please click on the following link to accept the invite:</p>
     <p><a href="' . $link . '">' . $link . '</a></p>';
-    $altBody = 'Please click on the following link to verify your email address: ' . $link;
+    $altBody = 'Please click on the following link to accept the invite: ' . $link;
 
     //Create Email
     $mail = new SendEmail($recipient, $subject, $body, $altBody);
@@ -678,7 +691,7 @@ Route::post('/list/invite/delete', function (Request $request) {
     return response()->json(['message' => 'Invite deleted'], 200);
 });
 
-//Accept Invite. Needs to be owner of the list.
+//Accept Invite.
 /*
 @param string invite
 @return json success
@@ -1024,12 +1037,16 @@ Route::post('/tokens/clear', function (Request $request) {
 
 function getUser($token)
 {
+    $exists = DB::table('sl_u_user')->join('sl_t_token', 't_u_id', '=', 'u_id')->where('t_token', $token)->where('t_expires', '>', now()->toDateTimeString())->exists();
+    //Check if User exists
+    if (!$exists) {
+        response()->json([
+            'error' => 'User not found',
+        ], 404)->send();
+        exit;
+    }
+
     //Get user from database
     $user = DB::table('sl_u_user')->join('sl_t_token', 't_u_id', '=', 'u_id')->where('t_token', $token)->where('t_expires', '>', now()->toDateTimeString())->first();
-    if (!$user) {
-        return response()->json([
-            'error' => 'User not found',
-        ], 404);
-    }
     return $user;
 }

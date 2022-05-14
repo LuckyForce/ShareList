@@ -21,7 +21,7 @@ create table sl_l_list(
      l_id varchar(255) not null,
      l_created datetime not null,
      l_name varchar(100) not null,
-     l_description varchar(255) not null,
+     l_description varchar(255) not null default '',
      l_u_id int not null,
      primary key(l_id)
 );
@@ -57,16 +57,16 @@ create table sl_u_user(
 );
 
 -- table in_invites
-create table sl_in_invites(
-     i_id varchar(255) not null,
-     i_l_id varchar(255) not null,
-     i_u_id int not null,
-     i_invitedby int not null,
-     i_created datetime not null,
-     i_accepted tinyint default 0,
-     i_accepteddate datetime,
-     i_deleted tinyint default 0,
-     primary key(i_id)
+create table sl_in_invite(
+     in_id varchar(255) not null,
+     in_l_id varchar(255) not null,
+     in_u_id int not null,
+     in_invitedby int not null,
+     in_created datetime not null,
+     in_accepted tinyint default 0,
+     in_accepteddate datetime,
+     in_deleted tinyint default 0,
+     primary key(in_id)
 );
 
 -- foreign keys-#################################################
