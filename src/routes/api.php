@@ -38,7 +38,7 @@ Route::post('/user/register', function (Request $request) {
     $email = mb_strtolower($request->email);
 
     //Check if the password is valid
-    if ($request->password == null || strlen($request->password) < 6 || !is_string($request->password)) {
+    if ($request->password == null || !is_string($request->password) || strlen($request->password) < 6 || strlen($request->password) > 20) {
         return response()->json([
             'error' => 'Password is invalid',
         ], 400);
@@ -221,7 +221,7 @@ Route::post('/user/check', function (Request $request) {
     $email = mb_strtolower($request->email);
 
     //Get the user from the database
-    $user = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 1)->first();
+    $user = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 1)->exists();
 
     //Check if the user exists
     if (!$user) {
@@ -232,6 +232,35 @@ Route::post('/user/check', function (Request $request) {
 
     //Return success
     return response()->json(['message' => 'User verified'], 200);
+});
+
+//Email in use
+/*
+This function checks if the email is in use.
+@param $email: The email of the user.
+@return 200 if the email is not in use.
+*/
+Route::post('/user/checkemail', function (Request $request) {
+    //Validate data
+    if (!isset($request->email)) {
+        return response()->json(['message' => 'Email is missing'], 400);
+    }
+
+    //Make Email Lowercase
+    $email = mb_strtolower($request->email);
+
+    //Get the user from the database
+    $user = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 1)->exists();
+
+    //Check if the user exists
+    if ($user) {
+        return response()->json([
+            'error' => 'Email is already in use',
+        ], 400);
+    }
+
+    //Return success
+    return response()->json(['message' => 'Email is not in use'], 200);
 });
 
 //OPTIONAL: Reset Password

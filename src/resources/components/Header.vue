@@ -49,7 +49,7 @@ async function checkLogin() {
     //If account data is set, check if token is still valid
     if (email && pwd) {
         //Check if credentials are still valid
-        let success = await login(email, pwd);
+        const success = await login(email, pwd);
         return success;
     } else {
         return false;
@@ -57,9 +57,7 @@ async function checkLogin() {
 }
 
 async function login(email, pwd) {
-    let success = false;
-    //fetch
-    await axios
+    const success = await axios
         .post("/api/user/login", {
             email: email,
             password: pwd,
@@ -69,13 +67,15 @@ async function login(email, pwd) {
             window.sessionStorage.setItem("token", response.data.token);
             //Set Expires in session
             window.sessionStorage.setItem("expires", response.data.expires);
-            //Set success to true
-            success = true;
+
+            return true;
         })
         .catch((error) => {
             //If credentials are not valid, remove account data from cookies
             window.localStorage.removeItem("email");
             window.localStorage.removeItem("pwd");
+
+            return false;
         });
     return success;
 }

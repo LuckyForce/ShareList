@@ -3,12 +3,14 @@ require("./bootstrap");
 
 import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
+import { mixin } from "lodash";
 //Views
 import Home from "../views/Home.vue";
 import About from "../views/About.vue";
 import PrivacyPolicy from "../views/PrivacyPolicy.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import RegisterSuccess from "../views/RegisterSuccess.vue";
 import Profile from "../views/Profile.vue";
 import Lists from "../views/Lists.vue";
 import List from "../views/List.vue";
@@ -48,6 +50,11 @@ const routes = [
     path: "/register",
     component: Register,
     name: "Register",
+  },
+  {
+    path: "/register/success",
+    component: RegisterSuccess,
+    name: "RegisterSuccess",
   },
   {
     path: "/profile",
