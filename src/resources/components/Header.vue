@@ -40,11 +40,16 @@ export default {
         };
     },
     async mounted() {
-        this.isLoggedIn = await this.checkLogin;
+        //Get LocalStorage Email
+        const email = window.localStorage.getItem("email");
+        //Get LocalStorage Password
+        const pwd = window.localStorage.getItem("pwd");
+
+        this.isLoggedIn = await mainLogin(email, pwd);
     },
     watch: {
         async $route(to, from) {
-            this.isLoggedIn = await this.checkLogin;
+            this.isLoggedIn = await this.checkLogin();
         },
     },
     methods: {
