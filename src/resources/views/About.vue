@@ -1,4 +1,3 @@
-//TODO: Static About Page with legal stuff.
 <template>
     <div>
         <div
