@@ -40,6 +40,8 @@ export default {
         };
     },
     async mounted() {
+        console.log("Header Init");
+
         //Get LocalStorage Email
         const email = window.localStorage.getItem("email");
         //Get LocalStorage Password
@@ -57,7 +59,8 @@ export default {
             //Check if account data is set in cookies
             const email = window.localStorage.getItem("email");
             const pwd = window.localStorage.getItem("pwd");
-            if (email && pwd) {
+            //Both cant be null
+            if (email === null || pwd === null) {
                 return true;
             } else {
                 return false;

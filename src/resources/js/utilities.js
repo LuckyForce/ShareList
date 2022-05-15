@@ -50,7 +50,7 @@ export const mainLogin = async function (email, password) {
 export const mainLogout = async function (router) {
     //Delete localStorage
     window.localStorage.removeItem("email");
-    window.localStorage.removeItem("password");
+    window.localStorage.removeItem("pwd");
     //Delete sessionStorage
     window.sessionStorage.removeItem("token");
     window.sessionStorage.removeItem("expires");

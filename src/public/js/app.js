@@ -19581,17 +19581,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              //Get LocalStorage Email
+              console.log("Header Init"); //Get LocalStorage Email
+
               email = window.localStorage.getItem("email"); //Get LocalStorage Password
 
               pwd = window.localStorage.getItem("pwd");
-              _context.next = 4;
+              _context.next = 5;
               return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainLogin)(email, pwd);
 
-            case 4:
+            case 5:
               _this.isLoggedIn = _context.sent;
 
-            case 5:
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -19633,9 +19634,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 //Check if account data is set in cookies
                 email = window.localStorage.getItem("email");
-                pwd = window.localStorage.getItem("pwd");
+                pwd = window.localStorage.getItem("pwd"); //Both cant be null
 
-                if (!(email && pwd)) {
+                if (!(email === null || pwd === null)) {
                   _context3.next = 6;
                   break;
                 }
@@ -21875,7 +21876,7 @@ var mainLogout = /*#__PURE__*/function () {
           case 0:
             //Delete localStorage
             window.localStorage.removeItem("email");
-            window.localStorage.removeItem("password"); //Delete sessionStorage
+            window.localStorage.removeItem("pwd"); //Delete sessionStorage
 
             window.sessionStorage.removeItem("token");
             window.sessionStorage.removeItem("expires"); //Redirect to homepage

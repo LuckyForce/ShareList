@@ -659,9 +659,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .gap-24 {
   gap: 6rem;
 }
-.gap-5 {
-  gap: 1.25rem;
-}
 .gap-y-5 {
   row-gap: 1.25rem;
 }
