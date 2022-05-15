@@ -1,7 +1,6 @@
 <template>
-    <div>
-        <router-link to="/" class="cover"></router-link>
-        <div id="register" class="login-form">
+    <div class="h-full flex justify-center p-5">
+        <div id="register" class="register-form">
             <h2 class="text-2xl text-blue-400 mx-auto mb-5">Register</h2>
             <label for="register-email">E-Mail</label>
             <input

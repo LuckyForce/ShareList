@@ -1,7 +1,6 @@
 // resources/views/Login.vue
 <template>
-    <div>
-        <router-link to="/" class="cover"></router-link>
+    <div class="h-full flex justify-center p-5">
         <div id="login" class="login-form">
             <h2 class="text-2xl text-blue-400 mx-auto mb-5">Login</h2>
             <label for="login-email">E-Mail</label>

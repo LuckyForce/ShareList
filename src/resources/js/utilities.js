@@ -1,5 +1,30 @@
-export const getToken = async function () {
-    return "HI"
+export const getToken = async function (router) {
+    //Get token out of session storage
+    const token = sessionStorage.getItem('token');
+    //Get expires out of session storage
+    const expires = sessionStorage.getItem('expires');
+    //If token is not expired
+    if (token && expires) {
+        //If token is expired
+        if (expires < new Date().getTime()) {
+            //Remove token and expires from session storage
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('expires');
+            //Try login again
+            const success = await mainLogin();
+            //If login was successful
+            if (success) {
+                //Return token
+                return sessionStorage.getItem('token');
+            }
+            //If login was not successful
+            else {
+                mainLogout(router);
+            }
+        }
+        //Return token
+        return token;
+    }
 }
 
 export const mainLogin = async function (email, password) {
@@ -21,3 +46,15 @@ export const mainLogin = async function (email, password) {
     );
     return result;
 }
+
+export const mainLogout = async function (router) {
+    //Delete localStorage
+    window.localStorage.removeItem("email");
+    window.localStorage.removeItem("password");
+    //Delete sessionStorage
+    window.sessionStorage.removeItem("token");
+    window.sessionStorage.removeItem("expires");
+    //Redirect to homepage
+    router.push("/");
+}
+

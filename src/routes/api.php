@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/user/register', function (Request $request) {
     //Validate data
     if (!isset($request->email) || !isset($request->password)) {
-        return response()->json(['message' => 'Please provide email and password'], 400);
+        return response()->json(['error' => 'Please provide email and password'], 400);
     }
     
     //Make Email Lowercase
@@ -54,7 +54,7 @@ Route::post('/user/register', function (Request $request) {
     //Check if user already exists
     $user = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 1)->first();
     if ($user) {
-        return response()->json(['message' => 'User already exists'], 400);
+        return response()->json(['error' => 'User already exists'], 400);
     }
 
     //Generate 6 Character long Code containing only numbers.
@@ -101,7 +101,7 @@ Route::post('/user/register', function (Request $request) {
 Route::post('/user/delete', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->password)) {
-        return response()->json(['message' => 'Token or password is missing'], 400);
+        return response()->json(['error' => 'Token or password is missing'], 400);
     }
 
     //Get user
@@ -109,16 +109,33 @@ Route::post('/user/delete', function (Request $request) {
 
     //Check if user exists
     if (!$user) {
-        return response()->json(['message' => 'User does not exist'], 400);
+        return response()->json(['error' => 'User does not exist'], 400);
     }
 
     //Check if password is correct
     if (!password_verify($request->password, $user->u_password)) {
-        return response()->json(['message' => 'Password is incorrect'], 400);
+        return response()->json(['error' => 'Password is incorrect'], 401);
     }
 
-    //Delete all lists where the user is owner.
+    //Get all lists where user is owner
+    $lists = DB::table('sl_l_list')->where('l_u_id', $user->u_id)->get();
+
+    //Delete all accesses to lists
+    foreach ($lists as $list) {
+        DB::table('sl_a_access')->where('a_l_id', $list->l_id)->delete();
+    }
+
+    //Delete all lists where user is owner.
     DB::table('sl_l_list')->where('l_u_id', $user->u_id)->delete();
+
+    //Delete all accesses to user.
+    DB::table('sl_a_access')->where('a_u_id', $user->u_id)->delete();
+
+    //Delete all invites from user.
+    DB::table('sl_in_invite')->where('in_u_id', $user->u_id)->orWhere('in_invitedby', $user->u_id)->delete();
+
+    //Delete all tokens from user.
+    DB::table('sl_t_token')->where('t_u_id', $user->u_id)->delete();
 
     //Delete user
     DB::table('sl_u_user')->where('u_id', $user->u_id)->delete();
@@ -131,7 +148,7 @@ Route::post('/user/delete', function (Request $request) {
 Route::post('/user/login', function (Request $request) {
     //Validate data
     if (!isset($request->email) || !isset($request->password)) {
-        return response()->json(['message' => 'Email or password is missing'], 400);
+        return response()->json(['error' => 'Email or password is missing'], 400);
     }
 
     //Make Email Lowercase
@@ -153,6 +170,9 @@ Route::post('/user/login', function (Request $request) {
             'error' => 'Wrong password',
         ], 401);
     }
+
+    //Delete all tokens that are invalid (t_expires older than now)
+    DB::table('sl_t_token')->where('t_expires', '<', now()->toDateTimeString())->delete();
 
     //Create Token
     $token = Str::orderedUuid();
@@ -178,7 +198,7 @@ It is called when the user clicks on the verification link in the email.
 Route::post('/user/verify', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->id)) {
-        return response()->json(['message' => 'Token is missing'], 400);
+        return response()->json(['error' => 'Token is missing'], 400);
     }
 
     //Get the user from the database
@@ -214,7 +234,7 @@ This function checks if the user is verified.
 Route::post('/user/check', function (Request $request) {
     //Validate data
     if (!isset($request->email)) {
-        return response()->json(['message' => 'Email is missing'], 400);
+        return response()->json(['error' => 'Email is missing'], 400);
     }
 
     //Make Email Lowercase
@@ -243,7 +263,7 @@ This function checks if the email is in use.
 Route::post('/user/checkemail', function (Request $request) {
     //Validate data
     if (!isset($request->email)) {
-        return response()->json(['message' => 'Email is missing'], 400);
+        return response()->json(['error' => 'Email is missing'], 400);
     }
 
     //Make Email Lowercase
@@ -278,7 +298,7 @@ This Function generates a code and sends it to the user per mail.
 Route::post('/user/forgotpwd', function (Request $request) {
     //Validate data
     if (!isset($request->email)) {
-        return response()->json(['message' => 'Email is missing'], 400);
+        return response()->json(['error' => 'Email is missing'], 400);
     }
 
     //Get the user from the database
@@ -309,17 +329,24 @@ Route::post('/user/forgotpwd', function (Request $request) {
 });
 
 //Change Password
+/*
+This function changes the password of the user.
+@param $token: The token that is sent to the user.
+@param $password: The old password.
+@param $newpassword: The new password.
+@return 200 if the password is changed.
+*/
 Route::post('/user/changepwd', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->password) || !isset($request->newpassword)) {
-        return response()->json(['message' => 'Token or password is missing'], 400);
+    if (!isset($request->token) || !isset($request->oldPassword) || !isset($request->newPassword)) {
+        return response()->json(['error' => 'Token or password is missing'], 400);
     }
 
     //Get the user
     $user = getUser($request->token);
 
     //Check if the old password is valid
-    if (!password_verify($request->password, $user->u_password)) {
+    if (!password_verify($request->oldPassword, $user->u_password)) {
         return response()->json([
             'error' => 'Wrong password',
         ], 401);
@@ -327,14 +354,14 @@ Route::post('/user/changepwd', function (Request $request) {
 
     //Check if the new Password is a valid password.
     //It has to be at least 6 characters and be a string.
-    if ($request->newpassword == null || strlen($request->newpassword) < 6 || !is_string($request->newpassword)) {
+    if ($request->newPassword == null || strlen($request->newPassword) < 6 || !is_string($request->newPassword)) {
         return response()->json([
             'error' => 'Password is invalid',
         ], 400);
     }
 
     //Update the password
-    DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_password' => password_hash($request->newpassword, PASSWORD_DEFAULT)]);
+    DB::table('sl_u_user')->where('u_id', $user->u_id)->update(['u_password' => password_hash($request->newPassword, PASSWORD_DEFAULT)]);
 
     //Return success
     return response()->json(['message' => 'Password changed'], 200);
@@ -348,7 +375,7 @@ Route::post('/user/changepwd', function (Request $request) {
 Route::post('/list/create', function (Request $request) {
     //Validate data
     if (!isset($request->token)) {
-        return response()->json(['message' => 'Token is missing'], 400);
+        return response()->json(['error' => 'Token is missing'], 400);
     }
 
     //Get the user
@@ -376,7 +403,7 @@ This Function returns all lists the user has access to.
 Route::post('/lists', function (Request $request) {
     //Validate data
     if (!isset($request->token)) {
-        return response()->json(['message' => 'Token is missing'], 400);
+        return response()->json(['error' => 'Token is missing'], 400);
     }
 
     //Get the user
@@ -400,7 +427,7 @@ Route::post('/lists', function (Request $request) {
 Route::post('/list', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list)) {
-        return response()->json(['message' => 'Token or list is missing'], 400);
+        return response()->json(['error' => 'Token or list is missing'], 400);
     }
 
     //Get the user
@@ -449,7 +476,7 @@ Route::post('/list', function (Request $request) {
 Route::post('/list/delete', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list)) {
-        return response()->json(['message' => 'Token or list is missing'], 400);
+        return response()->json(['error' => 'Token or list is missing'], 400);
     }
 
     //Get the user
@@ -476,7 +503,7 @@ Route::post('/list/delete', function (Request $request) {
 Route::post('/list/rename', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->name)) {
-        return response()->json(['message' => 'Token, list or name is missing'], 400);
+        return response()->json(['error' => 'Token, list or name is missing'], 400);
     }
 
     //Get the user
@@ -516,7 +543,7 @@ Route::post('/list/rename', function (Request $request) {
 Route::post('/list/transfer', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->user) || !isset($request->password)) {
-        return response()->json(['message' => 'Token, list, user or password is missing'], 400);
+        return response()->json(['error' => 'Token, list, user or password is missing'], 400);
     }
 
     //Get the user
@@ -571,7 +598,7 @@ Route::post('/list/transfer', function (Request $request) {
 Route::post('/list/invite', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->email)) {
-        return response()->json(['message' => 'Token, list or user is missing'], 400);
+        return response()->json(['error' => 'Token, list or user is missing'], 400);
     }
 
     //Make email lowercase
@@ -654,7 +681,7 @@ Route::post('/list/invite', function (Request $request) {
 Route::post('/list/invites', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list)) {
-        return response()->json(['message' => 'Token or list is missing'], 400);
+        return response()->json(['error' => 'Token or list is missing'], 400);
     }
 
     //Get the user
@@ -688,7 +715,7 @@ Route::post('/list/invites', function (Request $request) {
 Route::post('/list/invite/delete', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->invite)) {
-        return response()->json(['message' => 'Token or invite is missing'], 400);
+        return response()->json(['error' => 'Token or invite is missing'], 400);
     }
 
     //Get the user
@@ -728,7 +755,7 @@ Route::post('/list/invite/delete', function (Request $request) {
 Route::post('/list/invite/accept', function (Request $request) {
     //Validate data
     if (!isset($request->invite)) {
-        return response()->json(['message' => 'Invite is missing'], 400);
+        return response()->json(['error' => 'Invite is missing'], 400);
     }
 
     //Get the invite
@@ -779,7 +806,7 @@ Route::post('/list/invite/accept', function (Request $request) {
 Route::post('/list/members', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list)) {
-        return response()->json(['message' => 'Token or list is missing'], 400);
+        return response()->json(['error' => 'Token or list is missing'], 400);
     }
 
     //Get the user
@@ -811,7 +838,7 @@ Route::post('/list/members', function (Request $request) {
 Route::post('/list/member/remove', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->user)) {
-        return response()->json(['message' => 'Token, list or user is missing'], 400);
+        return response()->json(['error' => 'Token, list or user is missing'], 400);
     }
 
     //Get the owner
@@ -864,7 +891,7 @@ Route::post('/list/member/remove', function (Request $request) {
 Route::post('/list/member/write', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->user) || !isset($request->write)) {
-        return response()->json(['message' => 'Token, list, user or rights is missing'], 400);
+        return response()->json(['error' => 'Token, list, user or rights is missing'], 400);
     }
 
     //Get the owner
@@ -911,7 +938,7 @@ Route::post('/list/member/write', function (Request $request) {
 Route::post('/list/item/remove', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->item)) {
-        return response()->json(['message' => 'Token, list or item is missing'], 400);
+        return response()->json(['error' => 'Token, list or item is missing'], 400);
     }
 
     //Get the user from the database
@@ -948,7 +975,7 @@ Route::post('/list/item/remove', function (Request $request) {
 Route::post('/list/item/edit', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->item) || !isset($request->content)) {
-        return response()->json(['message' => 'Token, list, item or name is missing'], 400);
+        return response()->json(['error' => 'Token, list, item or name is missing'], 400);
     }
 
     //Get the user from the database
@@ -985,7 +1012,7 @@ Route::post('/list/item/edit', function (Request $request) {
 Route::post('/list/item/add', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->content)) {
-        return response()->json(['message' => 'Token, list or item is missing'], 400);
+        return response()->json(['error' => 'Token, list or item is missing'], 400);
     }
 
     //Get the user from the database
@@ -1022,7 +1049,7 @@ Route::post('/list/item/add', function (Request $request) {
 Route::post('/list/item/check', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->item)) {
-        return response()->json(['message' => 'Token, list or item is missing'], 400);
+        return response()->json(['error' => 'Token, list or item is missing'], 400);
     }
 
     //Get the user
@@ -1053,15 +1080,6 @@ Route::post('/list/item/check', function (Request $request) {
 
     //Return success
     return response()->json(['message' => 'Item checked'], 200);
-});
-
-//Clear Tokens
-Route::post('/tokens/clear', function (Request $request) {
-    //Delete all tokens that are invalid (t_expires older than now)
-    DB::table('sl_t_token')->where('t_expires', '<', now()->toDateTimeString())->delete();
-
-    //Return success
-    return response()->json(['message' => 'Tokens cleared'], 200);
 });
 
 function getUser($token)

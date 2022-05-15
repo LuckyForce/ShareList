@@ -44,32 +44,15 @@ body {
 
 .login-form,
 .register-form, .profile-form {
-    @apply z-50;
-    @apply fixed;
-    @apply mx-auto;
+    @apply m-auto;
     @apply max-w-xs;
     @apply p-4;
     @apply rounded-lg;
     @apply bg-white;
-    top: 20%;
-    right: 10%;
-    left: 10%;
     @apply flex;
     @apply flex-col;
     @apply items-center;
     @apply justify-start;
-}
-
-.cover {
-    @apply z-40;
-    @apply fixed;
-    @apply inset-0;
-    @apply bg-blue-400;
-    @apply opacity-75;
-    @apply p-4;
-    @apply flex;
-    @apply items-center;
-    @apply justify-center;
 }
 
 .input {
@@ -125,7 +108,7 @@ body {
     @apply bg-red-400;
     @apply hover:bg-red-500;
     @apply transition;
-    @apply mt-2;
+    @apply mt-5;
     @apply disabled:opacity-50;
 }
 
