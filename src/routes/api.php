@@ -82,9 +82,9 @@ Route::post('/user/register', function (Request $request) {
 
     //Create Email
     $recipient = $user->u_email;
-    $subject = 'Verify your email';
-    $body = '<p>Please click on the following link to verify your email address:</p>
-    <p><a href="' . $link . '">' . $link . '</a></p>';
+    $subject = '<h2 style="text-align:center">Verify your email</h2>';
+    $body = '<p style="text-align:center">Please click on the following link to verify your email address:</p>
+    <p style="text-align:center;"><a href="' . $link . '">' . $link . '</a></p>';
     $altBody = 'Please click on the following link to verify your email address: ' . $link;
 
     //Create Email

@@ -61,7 +61,7 @@
                     Delete Account
                 </h2>
                 <p class="text-red-500 italic">
-                    TODO: Text what will happen if delete.
+                    Beim Löschen des Accounts werden sämtliche Daten wie die persönlichen Daten des Nutzers und seine Listen gelöscht.
                 </p>
                 <label for="delete-password">Password</label>
                 <input
