@@ -34,10 +34,10 @@ Route::get('/images/{filename}', function ($filename) {
 Route::get('/{route?}', function () {
     return view('page');
 });
-Route::get('/{route?}/{route?}', function () {
+Route::get('/{route?}/{secondRoute?}', function () {
     return view('page');
 });
-Route::get('/{route?}/{route?}/{route?}', function () {
+Route::get('/{route?}/{secondRoute?}/{thirdRoute?}', function () {
     return view('page');
 });
 
