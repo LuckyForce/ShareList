@@ -19819,7 +19819,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      items: [],
+      loading: true
+    };
+  },
+  mounted: function mounted() {
+    this.getItems();
+  },
+  methods: {
+    getItems: function getItems() {
+      this.loading = true;
+    }
+  }
+});
 
 /***/ }),
 
@@ -19894,7 +19909,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       lists: [],
       createListButton: "Create List",
-      createListButtonDisabled: false
+      createListButtonDisabled: false,
+      loaded: false
     };
   },
   mounted: function mounted() {
@@ -19952,6 +19968,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   token: token
                 }).then(function (response) {
                   console.log(response.data);
+                  _this.loaded = true;
                   _this.lists = response.data.lists;
                 })["catch"](function (error) {
                   console.log(error);
@@ -20983,11 +21000,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 mt-5\"><h1 class=\"text-3xl mb-2\">Impressum</h1><p class=\"mb-4\">Informationspflicht laut §5 E-Commerce Gesetz, §14 Unternehmensgesetzbuch, §63 Gewerbeordnung und Offenlegungspflicht laut §25 Mediengesetz. </p><p class=\"mb-4\">Adrian Schauer</p> Wilhelmstraße 7b <br> 3032 Eichgraben, <br><p class=\"mb-4\">Österreich</p><h2 class=\"font-bold\">Email:</h2><a href=\"mailto:info@adrian-schauer.at\">info@adrian-schauer.at</a></div><div class=\"md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 my-5\"><h1 class=\"text-3xl\">EU-Streitschlichtung</h1><p class=\"mb-4\"> Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten wir Sie über die Online-Streitbeilegungsplattform (OS-Plattform) informieren. Verbraucher haben die Möglichkeit, Beschwerden an die Online Streitbeilegungsplattform der Europäischen Kommission unter http://ec.europa.eu/odr?tid=221142735 zu richten. Die dafür notwendigen Kontaktdaten finden Sie oberhalb in unserem Impressum. Wir möchten Sie jedoch darauf hinweisen, dass wir nicht bereit oder verpflichtet sind, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. </p><h1 class=\"text-3xl\">Haftung für Inhalte dieser Webseite</h1><p class=\"mb-4\"> Wir entwickeln die Inhalte dieser Webseite ständig weiter und bemühen uns korrekte und aktuelle Informationen bereitzustellen. Leider können wir keine Haftung für die Korrektheit aller Inhalte auf dieser Webseite übernehmen, speziell für jene die seitens Dritter bereitgestellt wurden. Sollten Ihnen problematische oder rechtswidrige Inhalte auffallen, bitten wir Sie uns umgehend zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><h1 class=\"text-3xl\">Haftung für Links auf dieser Webseite</h1><p class=\"mb-4\"> Unsere Webseite enthält Links zu anderen Webseiten für deren Inhalt wir nicht verantwortlich sind. Haftung für verlinkte Websites besteht laut § 17 ECG für uns nicht, da wir keine Kenntnis rechtswidriger Tätigkeiten hatten und haben, uns solche Rechtswidrigkeiten auch bisher nicht aufgefallen sind und wir Links sofort entfernen würden, wenn uns Rechtswidrigkeiten bekannt werden. Wenn Ihnen rechtswidrige Links auf unserer Website auffallen, bitten wir Sie uns zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><h1 class=\"text-3xl\">Urheberrechtshinweis</h1><p class=\"mb-4\"> Alle durch Benutzer verfasste Texte dieser Webseite gehören nicht uns. Wir sind nicht verantwortlich für Texte, die User in ihre Liste schreiben. </p><a href=\"PrivacyPolicy.vue\" class=\"text-center text-gray-500\">Datenschutzerklärung</a></div>", 2);
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 mt-5\"><h1 class=\"text-3xl mb-2\">Impressum</h1><p class=\"mb-4\">Informationspflicht laut §5 E-Commerce Gesetz, §14 Unternehmensgesetzbuch, §63 Gewerbeordnung und Offenlegungspflicht laut §25 Mediengesetz. </p><p class=\"mb-4\">Adrian Schauer</p> Wilhelmstraße 7b <br> 3032 Eichgraben, <br><p class=\"mb-4\">Österreich</p><h2 class=\"font-bold\">Email:</h2><a href=\"mailto:info@adrian-schauer.at\">info@adrian-schauer.at</a></div>", 1);
 
-var _hoisted_3 = [_hoisted_1];
+var _hoisted_2 = {
+  "class": "md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 my-5"
+};
+
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"text-3xl\">EU-Streitschlichtung</h1><p class=\"mb-4\"> Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten wir Sie über die Online-Streitbeilegungsplattform (OS-Plattform) informieren. Verbraucher haben die Möglichkeit, Beschwerden an die Online Streitbeilegungsplattform der Europäischen Kommission unter http://ec.europa.eu/odr?tid=221142735 zu richten. Die dafür notwendigen Kontaktdaten finden Sie oberhalb in unserem Impressum. Wir möchten Sie jedoch darauf hinweisen, dass wir nicht bereit oder verpflichtet sind, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. </p><h1 class=\"text-3xl\">Haftung für Inhalte dieser Webseite</h1><p class=\"mb-4\"> Wir entwickeln die Inhalte dieser Webseite ständig weiter und bemühen uns korrekte und aktuelle Informationen bereitzustellen. Leider können wir keine Haftung für die Korrektheit aller Inhalte auf dieser Webseite übernehmen, speziell für jene die seitens Dritter bereitgestellt wurden. Sollten Ihnen problematische oder rechtswidrige Inhalte auffallen, bitten wir Sie uns umgehend zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><h1 class=\"text-3xl\">Haftung für Links auf dieser Webseite</h1><p class=\"mb-4\"> Unsere Webseite enthält Links zu anderen Webseiten für deren Inhalt wir nicht verantwortlich sind. Haftung für verlinkte Websites besteht laut § 17 ECG für uns nicht, da wir keine Kenntnis rechtswidriger Tätigkeiten hatten und haben, uns solche Rechtswidrigkeiten auch bisher nicht aufgefallen sind und wir Links sofort entfernen würden, wenn uns Rechtswidrigkeiten bekannt werden. Wenn Ihnen rechtswidrige Links auf unserer Website auffallen, bitten wir Sie uns zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><h1 class=\"text-3xl\">Urheberrechtshinweis</h1><p class=\"mb-4\"> Alle durch Benutzer verfasste Texte dieser Webseite gehören nicht uns. Wir sind nicht verantwortlich für Texte, die User in ihre Liste schreiben. </p>", 8);
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Datenschutzerklärung ");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_3);
+  var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
+
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "privacypolicy",
+    "class": "text-blue-500 hover:text-blue-700 hover:underline"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_11];
+    }),
+    _: 1
+    /* STABLE */
+
+  })])]);
 }
 
 /***/ }),
@@ -21060,7 +21096,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">Listname</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Post</button></div></div>", 5);
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">Listname</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Post</button></div></div>", 5);
 
 var _hoisted_6 = [_hoisted_1];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -21191,45 +21227,49 @@ var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_2 = {
-  "class": "sm:p-5 p-1"
+  "class": "flex flex-col sm:p-5 p-1 gap-y-2"
 };
 var _hoisted_3 = {
   key: 0,
   "class": "text-center text-gray-600 sm:text-2xl text-lg"
 };
-var _hoisted_4 = ["onClick"];
-var _hoisted_5 = {
+var _hoisted_4 = {
+  key: 1,
+  "class": "text-center text-gray-600 sm:text-2xl text-lg"
+};
+var _hoisted_5 = ["onClick"];
+var _hoisted_6 = {
   "class": "text-xl mb-2 ml-1"
 };
-var _hoisted_6 = {
+var _hoisted_7 = {
   "class": "text-sm text-gray-600 mb-2 ml-1"
 };
-var _hoisted_7 = {
+var _hoisted_8 = {
   "class": "sm:p-5 p-1"
 };
-var _hoisted_8 = ["disabled"];
+var _hoisted_9 = ["disabled"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("TODO: Design List Card"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [!$data.lists.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_3, " No lists yet? Create one by clicking the button below! ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.lists, function (list) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("TODO: Design List Card"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [!$data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_3, " Loading... ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.lists.length && $data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_4, " No lists yet? Create one by clicking the button below! ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.lists, function (list) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: list.l_id,
       "class": "list-card",
       onClick: function onClick($event) {
         return _this.getList(list.l_id);
       }
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_name), 1
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_name), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_description), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_description), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Created at: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_created), 1
     /* TEXT */
     )], 8
     /* PROPS */
-    , _hoisted_4);
+    , _hoisted_5);
   }), 128
   /* KEYED_FRAGMENT */
-  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "btn-create text-2xl w-full",
     onClick: _cache[0] || (_cache[0] = function ($event) {
@@ -21238,7 +21278,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     disabled: $data.createListButtonDisabled
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(this.createListButton), 9
   /* TEXT, PROPS */
-  , _hoisted_8)])]);
+  , _hoisted_9)])]);
 }
 
 /***/ }),
@@ -21891,7 +21931,7 @@ var routes = [{
   component: _views_About_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
   name: "About"
 }, {
-  path: "/privacy_policy",
+  path: "/privacypolicy",
   component: _views_PrivacyPolicy_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
   name: "PrivacyPolicy"
 }, {

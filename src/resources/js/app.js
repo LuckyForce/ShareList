@@ -37,7 +37,7 @@ const routes = [
     name: "About",
   },
   {
-  path: "/privacy_policy",
+  path: "/privacypolicy",
     component: PrivacyPolicy,
     name: "PrivacyPolicy",
   },
