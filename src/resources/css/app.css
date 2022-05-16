@@ -149,7 +149,6 @@ body {
 }
 
 .btn-create {
-    @apply ml-11;
     @apply rounded-lg;
     @apply border-2;
     @apply border-gray-200;
@@ -178,3 +177,16 @@ body {
     @apply italic;
 }
 
+.list-card{
+    @apply w-full;
+    @apply border-2;
+    @apply border-gray-200;
+    @apply rounded-lg;
+    @apply p-2;
+    @apply hover:bg-blue-500;
+    @apply focus:bg-blue-500;
+    @apply focus:outline-none;
+    @apply transition;
+    @apply cursor-pointer;
+    @apply bg-white;
+}

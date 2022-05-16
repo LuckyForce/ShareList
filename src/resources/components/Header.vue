@@ -2,7 +2,7 @@
 <template>
     <nav class="flex items-center justify-between flex-wrap color-2">
         <div class="flex justify-center align-center">
-            <router-link to="/" class="flex items-center nav-link">
+            <router-link to="/" class="flex items-center nav-link ml-1">
                 <img :src="imgPath" alt="Logo" class="sm:h-12 h-8" />
                 Home
             </router-link>

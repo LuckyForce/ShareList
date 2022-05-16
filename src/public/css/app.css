@@ -468,6 +468,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mb-0 {
   margin-bottom: 0px;
 }
+.ml-1 {
+  margin-left: 0.25rem;
+}
 .mt-5 {
   margin-top: 1.25rem;
 }
@@ -491,9 +494,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .mt-6 {
   margin-top: 1.5rem;
-}
-.ml-1 {
-  margin-left: 0.25rem;
 }
 .mt-1 {
   margin-top: 0.25rem;
@@ -740,6 +740,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .p-2 {
   padding: 0.5rem;
+}
+.p-1 {
+  padding: 0.25rem;
 }
 .p-6 {
   padding: 1.5rem;
@@ -1229,7 +1232,6 @@ body {
 }
 
 .btn-create {
-  margin-left: 2.75rem;
   border-radius: 0.5rem;
   border-width: 2px;
   --tw-border-opacity: 1;
@@ -1286,6 +1288,38 @@ body {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-style: italic;
+}
+
+.list-card {
+  width: 100%;
+  border-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.list-card:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.list-card:focus {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.list-card {
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  cursor: pointer;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 .checked\:border-blue-600:checked {
@@ -1430,6 +1464,10 @@ body {
     border-radius: 0.5rem;
   }
 
+  .sm\:p-5 {
+    padding: 1.25rem;
+  }
+
   .sm\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -1455,6 +1493,11 @@ body {
   .sm\:text-5xl {
     font-size: 3rem;
     line-height: 1;
+  }
+
+  .sm\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
   }
 
   .sm\:text-9xl {
@@ -1536,5 +1579,4 @@ body {
     padding-right: 2rem;
   }
 }
-
 

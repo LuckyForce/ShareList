@@ -19879,7 +19879,161 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _js_utilities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../js/utilities */ "./resources/js/utilities.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      lists: [],
+      createListButton: "Create List",
+      createListButtonDisabled: false
+    };
+  },
+  mounted: function mounted() {
+    this.getLists();
+  },
+  methods: {
+    getList: function () {
+      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(id) {
+        var link;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                link = "/list/".concat(id); //Redirect to list
+
+                this.$router.push(link);
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function getList(_x) {
+        return _getList.apply(this, arguments);
+      }
+
+      return getList;
+    }(),
+    getLists: function () {
+      var _getLists = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var _this = this;
+
+        var token;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 2:
+                token = _context2.sent;
+
+                //If token is false
+                if (token === false) {
+                  this.$router.push("/");
+                } //Get the lists from the api per post request
+
+
+                _context2.next = 6;
+                return axios.post("/api/lists", {
+                  token: token
+                }).then(function (response) {
+                  console.log(response.data);
+                  _this.lists = response.data.lists;
+                })["catch"](function (error) {
+                  console.log(error);
+                });
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function getLists() {
+        return _getLists.apply(this, arguments);
+      }
+
+      return getLists;
+    }(),
+    createList: function () {
+      var _createList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var token, success, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                //Set the button to loading
+                this.createListButton = "Loading..."; //Disable the button
+
+                this.createListButtonDisabled = true; //Get Token
+
+                _context3.next = 4;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 4:
+                token = _context3.sent;
+
+                //If token is false
+                if (token === false) {
+                  this.$router.push("/");
+                }
+
+                success = false; //Get the lists from the api per post request
+
+                _context3.next = 9;
+                return axios.post("/api/list/create", {
+                  token: token
+                }).then(function (response) {
+                  console.log(response.data);
+                  success = true;
+                  return response.data;
+                })["catch"](function (error) {
+                  console.log(error);
+                  return error.response.data.error;
+                });
+
+              case 9:
+                response = _context3.sent;
+
+                //If the list was created successfully redirect to the list
+                if (success) {
+                  this.$router.push("/list/".concat(response.list));
+                } else {
+                  this.createListButton = response;
+                }
+
+              case 11:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function createList() {
+        return _createList.apply(this, arguments);
+      }
+
+      return createList;
+    }()
+  }
+});
 
 /***/ }),
 
@@ -20753,7 +20907,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("nav", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: "/",
-    "class": "flex items-center nav-link"
+    "class": "flex items-center nav-link ml-1"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
@@ -21030,11 +21184,61 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">Your current Lists</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl p-2\"><h2 class=\"text-xl mb-2 ml-1\"> Listname </h2><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-show1\">Show</button></div><div class=\"w-60 p-2 bg-white rounded-xl p-2\"><h2 class=\"text-xl mb-2 ml-1\"> Listname </h2><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-show1\">Show</button></div><div class=\"w-60 p-2 bg-white rounded-xl p-2\"><h2 class=\"text-xl mb-2 ml-1\"> Listname </h2><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-show1\">Show</button></div><div class=\"w-60 p-2 bg-white rounded-xl p-2\"><h2 class=\"text-xl mb-2 ml-1\"> Listname </h2><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-show1\">Show</button></div></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl p-2\"><h2 class=\"text-xl mb-2 ml-1\"> Listname </h2><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-show1\">Show</button></div><div class=\"w-60 p-2 bg-white rounded-xl p-2\"><h2 class=\"text-xl mb-2 ml-1\"> Listname </h2><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-show1\">Show</button></div><div class=\"w-60 p-2 bg-white rounded-xl p-2\"><h2 class=\"text-xl mb-2 ml-1\"> Listname </h2><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-show1\">Show</button></div><div class=\"w-60 p-2 bg-white rounded-xl p-2\"><h2 class=\"text-xl mb-2 ml-1\"> Listname </h2><p class=\"text-sm text-gray-600 mb-2 ml-1\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-show1\">Show</button></div></div><button type=\"submit\" class=\"btn-create text-2xl mb-6 ml-10\">Create a List</button>", 4);
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+  "class": "mt-6 sm:text-4xl text-lg flex justify-center"
+}, " Your current Lists ", -1
+/* HOISTED */
+);
 
-var _hoisted_5 = [_hoisted_1];
+var _hoisted_2 = {
+  "class": "sm:p-5 p-1"
+};
+var _hoisted_3 = {
+  key: 0,
+  "class": "text-center text-gray-600 sm:text-2xl text-lg"
+};
+var _hoisted_4 = ["onClick"];
+var _hoisted_5 = {
+  "class": "text-xl mb-2 ml-1"
+};
+var _hoisted_6 = {
+  "class": "text-sm text-gray-600 mb-2 ml-1"
+};
+var _hoisted_7 = {
+  "class": "sm:p-5 p-1"
+};
+var _hoisted_8 = ["disabled"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_5);
+  var _this = this;
+
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("TODO: Design List Card"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [!$data.lists.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_3, " No lists yet? Create one by clicking the button below! ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.lists, function (list) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      key: list.l_id,
+      "class": "list-card",
+      onClick: function onClick($event) {
+        return _this.getList(list.l_id);
+      }
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_name), 1
+    /* TEXT */
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_description), 1
+    /* TEXT */
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Created at: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_created), 1
+    /* TEXT */
+    )], 8
+    /* PROPS */
+    , _hoisted_4);
+  }), 128
+  /* KEYED_FRAGMENT */
+  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "submit",
+    "class": "btn-create text-2xl w-full",
+    onClick: _cache[0] || (_cache[0] = function ($event) {
+      return _this.createList();
+    }),
+    disabled: $data.createListButtonDisabled
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(this.createListButton), 9
+  /* TEXT, PROPS */
+  , _hoisted_8)])]);
 }
 
 /***/ }),
@@ -21834,12 +22038,12 @@ var getToken = /*#__PURE__*/function () {
             expires = window.sessionStorage.getItem('expires'); //If token is not expired
 
             if (!(token !== null && expires !== null)) {
-              _context.next = 19;
+              _context.next = 20;
               break;
             }
 
             if (!(expires < new Date().getTime())) {
-              _context.next = 16;
+              _context.next = 17;
               break;
             }
 
@@ -21866,31 +22070,34 @@ var getToken = /*#__PURE__*/function () {
             return mainLogout();
 
           case 16:
+            return _context.abrupt("return", false);
+
+          case 17:
             return _context.abrupt("return", token);
 
-          case 19:
+          case 20:
             console.log('No token'); //Get Email and Password
 
             email = window.localStorage.getItem("email");
             pwd = window.localStorage.getItem("pwd"); //Try login again
 
-            _context.next = 24;
+            _context.next = 25;
             return mainLogin(email, pwd);
 
-          case 24:
+          case 25:
             _success = _context.sent;
 
             if (!_success) {
-              _context.next = 29;
+              _context.next = 30;
               break;
             }
 
             return _context.abrupt("return", window.sessionStorage.getItem('token'));
 
-          case 29:
+          case 30:
             mainLogout();
 
-          case 30:
+          case 31:
           case "end":
             return _context.stop();
         }

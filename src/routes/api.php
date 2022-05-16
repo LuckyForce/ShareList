@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 */
 
 //TODO: FOOTER:
-$footer='';
+const FOOTER = "© 2020 - All rights reserved";
 
 //Register
 Route::post('/user/register', function (Request $request) {
@@ -36,7 +36,7 @@ Route::post('/user/register', function (Request $request) {
     if (!isset($request->email) || !isset($request->password)) {
         return response()->json(['error' => 'Please provide email and password'], 400);
     }
-    
+
     //Make Email Lowercase
     $email = mb_strtolower($request->email);
 
@@ -46,14 +46,14 @@ Route::post('/user/register', function (Request $request) {
             'error' => 'Password is invalid',
         ], 400);
     }
-    
+
     //Check if email is valid
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return response()->json([
             'error' => 'Email is invalid',
         ], 400);
     }
-    
+
     //Check if user already exists
     $user = DB::table('sl_u_user')->where('u_email', $email)->where('u_verified', 1)->first();
     if ($user) {
@@ -87,7 +87,7 @@ Route::post('/user/register', function (Request $request) {
     $recipient = $user->u_email;
     $subject = 'Verify your email';
     $body = '<p style="text-align:center; font-size: 40px;">Please click on the following link to verify your email address:</p>
-    <p style="text-align:center;"><a href="' . $link . '" style="font-size: 50px;">Click Here</a></p>'.$footer;
+    <p style="text-align:center;"><a href="' . $link . '" style="font-size: 50px;">Click Here</a></p>' . FOOTER;
     $altBody = 'Please click on the following link to verify your email address: ' . $link;
 
     //Create Email
@@ -660,9 +660,9 @@ Route::post('/list/invite', function (Request $request) {
 
     //Create Email
     $recipient = $invitedUser->u_email;
-    $subject = 'Invite to '. $list->l_name . ' on ShareList';
+    $subject = 'Invite to ' . $list->l_name . ' on ShareList';
     $body = '<p>Please click on the following link to accept the invite:</p>
-    <p><a href="' . $link . '">' . $link . '</a></p>'.$footer;
+    <p><a href="' . $link . '">' . $link . '</a></p>' . FOOTER;
     $altBody = 'Please click on the following link to accept the invite: ' . $link;
 
     //Create Email

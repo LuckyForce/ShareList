@@ -21,6 +21,7 @@ export const getToken = async function (router) {
             //If login was not successful
             else {
                 await mainLogout();
+                return false;
             }
         }
         //Return token
