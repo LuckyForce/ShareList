@@ -27,6 +27,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
+//TODO: FOOTER:
+$footer='';
+
 //Register
 Route::post('/user/register', function (Request $request) {
     //Validate data
@@ -82,9 +85,9 @@ Route::post('/user/register', function (Request $request) {
 
     //Create Email
     $recipient = $user->u_email;
-    $subject = '<h2 style="text-align:center">Verify your email</h2>';
-    $body = '<p style="text-align:center">Please click on the following link to verify your email address:</p>
-    <p style="text-align:center;"><a href="' . $link . '">' . $link . '</a></p>';
+    $subject = 'Verify your email';
+    $body = '<p style="text-align:center; font-size: 40px;">Please click on the following link to verify your email address:</p>
+    <p style="text-align:center;"><a href="' . $link . '" style="font-size: 50px;">Click Here</a></p>'.$footer;
     $altBody = 'Please click on the following link to verify your email address: ' . $link;
 
     //Create Email
@@ -659,7 +662,7 @@ Route::post('/list/invite', function (Request $request) {
     $recipient = $invitedUser->u_email;
     $subject = 'Invite to '. $list->l_name . ' on ShareList';
     $body = '<p>Please click on the following link to accept the invite:</p>
-    <p><a href="' . $link . '">' . $link . '</a></p>';
+    <p><a href="' . $link . '">' . $link . '</a></p>'.$footer;
     $altBody = 'Please click on the following link to accept the invite: ' . $link;
 
     //Create Email
