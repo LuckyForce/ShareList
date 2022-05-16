@@ -21,8 +21,14 @@ export default {
             const interval = setInterval(async () => {
                 const result = await this.checkVerification(email);
                 if(result){
+                    //Set verified to true
+                    window.localStorage.setItem("verified", true);
+                    //Wait for 5 seconds
+                    setTimeout(() => {
+                        //Redirect to lists
+                        this.$router.push("/lists");
+                    }, 5000);
                     clearInterval(interval);
-                    this.$router.push("/lists");
                 }
             }, 5000);
         }
@@ -43,7 +49,6 @@ export default {
                     console.log(error.response.data.error);
                     return false;
                 });
-            console.log(result);
             return result;
         }
     }

@@ -46,8 +46,17 @@ export default {
         const email = window.localStorage.getItem("email");
         //Get LocalStorage Password
         const pwd = window.localStorage.getItem("pwd");
+        
+        const verified = window.localStorage.getItem("verified");
+        console.log("Verified: "+verified);
 
-        this.isLoggedIn = await mainLogin(email, pwd);
+        if(verified !== undefined && verified !== null){
+            console.log("Verified");
+            this.isLoggedIn = await mainLogin(email, pwd);
+        }else{
+            this.isLoggedIn = false;
+        }
+        console.log("isLoggedIn: "+this.isLoggedIn);
     },
     watch: {
         async $route(to, from) {
@@ -59,11 +68,12 @@ export default {
             //Check if account data is set in cookies
             const email = window.localStorage.getItem("email");
             const pwd = window.localStorage.getItem("pwd");
+            const verified = window.localStorage.getItem("verified");
             //Both cant be null
-            if (email === null || pwd === null) {
-                return true;
-            } else {
+            if (email === null || pwd === null || verified === null || email === undefined || pwd === undefined || verified === undefined) {
                 return false;
+            } else {
+                return true;
             }
         },
     },

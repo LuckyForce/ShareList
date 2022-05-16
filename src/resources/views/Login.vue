@@ -75,6 +75,7 @@ export default {
                 //Set localStorage
                 localStorage.setItem("email", this.email);
                 localStorage.setItem("pwd", this.password);
+                localStorage.setItem("verified", true);
                 //Redirect to lists
                 this.$router.push("/lists");
             } else {

@@ -19576,7 +19576,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var _this = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var email, pwd;
+      var email, pwd, verified;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -19586,13 +19586,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               email = window.localStorage.getItem("email"); //Get LocalStorage Password
 
               pwd = window.localStorage.getItem("pwd");
-              _context.next = 5;
+              verified = window.localStorage.getItem("verified");
+              console.log("Verified: " + verified);
+
+              if (!(verified !== undefined && verified !== null)) {
+                _context.next = 12;
+                break;
+              }
+
+              console.log("Verified");
+              _context.next = 9;
               return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainLogin)(email, pwd);
 
-            case 5:
+            case 9:
               _this.isLoggedIn = _context.sent;
+              _context.next = 13;
+              break;
 
-            case 6:
+            case 12:
+              _this.isLoggedIn = false;
+
+            case 13:
+              console.log("isLoggedIn: " + _this.isLoggedIn);
+
+            case 14:
             case "end":
               return _context.stop();
           }
@@ -19627,26 +19644,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   methods: {
     checkLogin: function () {
       var _checkLogin = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var email, pwd;
+        var email, pwd, verified;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 //Check if account data is set in cookies
                 email = window.localStorage.getItem("email");
-                pwd = window.localStorage.getItem("pwd"); //Both cant be null
+                pwd = window.localStorage.getItem("pwd");
+                verified = window.localStorage.getItem("verified"); //Both cant be null
 
-                if (!(email === null || pwd === null)) {
-                  _context3.next = 6;
+                if (!(email === null || pwd === null || verified === null || email === undefined || pwd === undefined || verified === undefined)) {
+                  _context3.next = 7;
                   break;
                 }
 
-                return _context3.abrupt("return", true);
-
-              case 6:
                 return _context3.abrupt("return", false);
 
               case 7:
+                return _context3.abrupt("return", true);
+
+              case 8:
               case "end":
                 return _context3.stop();
             }
@@ -19922,7 +19940,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 if (result === true) {
                   //Set localStorage
                   localStorage.setItem("email", this.email);
-                  localStorage.setItem("pwd", this.password); //Redirect to lists
+                  localStorage.setItem("pwd", this.password);
+                  localStorage.setItem("verified", true); //Redirect to lists
 
                   this.$router.push("/lists");
                 } else {
@@ -20037,9 +20056,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainLogout)(this.$router);
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainLogout)();
 
               case 2:
+                this.$router.push("/");
+
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -20201,9 +20223,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                         switch (_context3.prev = _context3.next) {
                           case 0:
                             _context3.next = 2;
-                            return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainLogout)(_this2.$router);
+                            return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainLogout)();
 
                           case 2:
+                            //Redirect to homepage
+                            _this2.$router.push("/");
+
+                          case 3:
                           case "end":
                             return _context3.stop();
                         }
@@ -20464,9 +20490,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                           result = _context.sent;
 
                           if (result) {
-                            clearInterval(interval);
+                            //Set verified to true
+                            window.localStorage.setItem("verified", true); //Wait for 5 seconds
 
-                            _this.$router.push("/lists");
+                            setTimeout(function () {
+                              //Redirect to lists
+                              _this.$router.push("/lists");
+                            }, 5000);
+                            clearInterval(interval);
                           }
 
                         case 4:
@@ -20507,10 +20538,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 result = _context3.sent;
-                console.log(result);
                 return _context3.abrupt("return", result);
 
-              case 5:
+              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -20787,7 +20817,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 mt-5\"><h1 class=\"text-3xl\">Impressum</h1><br> Informationspflicht laut §5 E-Commerce Gesetz, §14 Unternehmensgesetzbuch, §63 Gewerbeordnung und Offenlegungspflicht laut §25 Mediengesetz. <br><br> Adrian Schauer <br><br> Wilhelmstraße 7b <br> 3032 Eichgraben, <br> Österreich <br><br><h2 class=\"font-bold\">Email:</h2><a href=\"mailto:info@adrian-schauer.at\">info@adrian-schauer.at</a></div><div class=\"md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 my-5\"><h1 class=\"text-3xl\">EU-Streitschlichtung</h1><p> Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten wir Sie über die Online-Streitbeilegungsplattform (OS-Plattform) informieren. Verbraucher haben die Möglichkeit, Beschwerden an die Online Streitbeilegungsplattform der Europäischen Kommission unter http://ec.europa.eu/odr?tid=221142735 zu richten. Die dafür notwendigen Kontaktdaten finden Sie oberhalb in unserem Impressum. Wir möchten Sie jedoch darauf hinweisen, dass wir nicht bereit oder verpflichtet sind, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. </p><br><h1 class=\"text-3xl\">Haftung für Inhalte dieser Webseite</h1><p> Wir entwickeln die Inhalte dieser Webseite ständig weiter und bemühen uns korrekte und aktuelle Informationen bereitzustellen. Leider können wir keine Haftung für die Korrektheit aller Inhalte auf dieser Webseite übernehmen, speziell für jene die seitens Dritter bereitgestellt wurden. Sollten Ihnen problematische oder rechtswidrige Inhalte auffallen, bitten wir Sie uns umgehend zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><br><h1 class=\"text-3xl\">Haftung für Links auf dieser Webseite</h1><p> Unsere Webseite enthält Links zu anderen Webseiten für deren Inhalt wir nicht verantwortlich sind. Haftung für verlinkte Websites besteht laut § 17 ECG für uns nicht, da wir keine Kenntnis rechtswidriger Tätigkeiten hatten und haben, uns solche Rechtswidrigkeiten auch bisher nicht aufgefallen sind und wir Links sofort entfernen würden, wenn uns Rechtswidrigkeiten bekannt werden. Wenn Ihnen rechtswidrige Links auf unserer Website auffallen, bitten wir Sie uns zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><br><h1 class=\"text-3xl\">Urheberrechtshinweis</h1><p> Alle durch Benutzer verfasste Texte dieser Webseite gehören nicht uns. Wir sind nicht verantwortlich für Texte, die User in ihre Liste schreiben. </p><a href=\"PrivacyPolicy.vue\" class=\"text-center text-gray-500\">Datenschutzerklärung</a></div>", 2);
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 mt-5\"><h1 class=\"text-3xl mb-2\">Impressum</h1><p class=\"mb-4\">Informationspflicht laut §5 E-Commerce Gesetz, §14 Unternehmensgesetzbuch, §63 Gewerbeordnung und Offenlegungspflicht laut §25 Mediengesetz. </p><p class=\"mb-4\">Adrian Schauer</p> Wilhelmstraße 7b <br> 3032 Eichgraben, <br><p class=\"mb-4\">Österreich</p><h2 class=\"font-bold\">Email:</h2><a href=\"mailto:info@adrian-schauer.at\">info@adrian-schauer.at</a></div><div class=\"md:w-1/2 bg-white rounded-lg shadow-lg md:mx-auto mx-2 p-4 my-5\"><h1 class=\"text-3xl\">EU-Streitschlichtung</h1><p class=\"mb-4\"> Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten wir Sie über die Online-Streitbeilegungsplattform (OS-Plattform) informieren. Verbraucher haben die Möglichkeit, Beschwerden an die Online Streitbeilegungsplattform der Europäischen Kommission unter http://ec.europa.eu/odr?tid=221142735 zu richten. Die dafür notwendigen Kontaktdaten finden Sie oberhalb in unserem Impressum. Wir möchten Sie jedoch darauf hinweisen, dass wir nicht bereit oder verpflichtet sind, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. </p><h1 class=\"text-3xl\">Haftung für Inhalte dieser Webseite</h1><p class=\"mb-4\"> Wir entwickeln die Inhalte dieser Webseite ständig weiter und bemühen uns korrekte und aktuelle Informationen bereitzustellen. Leider können wir keine Haftung für die Korrektheit aller Inhalte auf dieser Webseite übernehmen, speziell für jene die seitens Dritter bereitgestellt wurden. Sollten Ihnen problematische oder rechtswidrige Inhalte auffallen, bitten wir Sie uns umgehend zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><h1 class=\"text-3xl\">Haftung für Links auf dieser Webseite</h1><p class=\"mb-4\"> Unsere Webseite enthält Links zu anderen Webseiten für deren Inhalt wir nicht verantwortlich sind. Haftung für verlinkte Websites besteht laut § 17 ECG für uns nicht, da wir keine Kenntnis rechtswidriger Tätigkeiten hatten und haben, uns solche Rechtswidrigkeiten auch bisher nicht aufgefallen sind und wir Links sofort entfernen würden, wenn uns Rechtswidrigkeiten bekannt werden. Wenn Ihnen rechtswidrige Links auf unserer Website auffallen, bitten wir Sie uns zu kontaktieren, Sie finden die Kontaktdaten im Impressum. </p><h1 class=\"text-3xl\">Urheberrechtshinweis</h1><p class=\"mb-4\"> Alle durch Benutzer verfasste Texte dieser Webseite gehören nicht uns. Wir sind nicht verantwortlich für Texte, die User in ihre Liste schreiben. </p><a href=\"PrivacyPolicy.vue\" class=\"text-center text-gray-500\">Datenschutzerklärung</a></div>", 2);
 
 var _hoisted_3 = [_hoisted_1];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -21246,7 +21276,7 @@ var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 
 var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "text-red-500 italic"
-}, " TODO: Text what will happen if delete. ", -1
+}, " Beim Löschen des Accounts werden sämtliche Daten wie die persönlichen Daten des Nutzers und seine Listen gelöscht. ", -1
 /* HOISTED */
 );
 
@@ -21772,50 +21802,75 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var getToken = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(router) {
-    var token, expires, success;
+    var token, expires, success, email, pwd, _success;
+
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             //Get token out of session storage
-            token = sessionStorage.getItem('token'); //Get expires out of session storage
+            token = window.sessionStorage.getItem('token'); //Get expires out of session storage
 
-            expires = sessionStorage.getItem('expires'); //If token is not expired
+            expires = window.sessionStorage.getItem('expires'); //If token is not expired
 
-            if (!(token && expires)) {
-              _context.next = 15;
+            if (!(token !== null && expires !== null)) {
+              _context.next = 19;
               break;
             }
 
             if (!(expires < new Date().getTime())) {
+              _context.next = 16;
+              break;
+            }
+
+            console.log('Token expired'); //Remove token and expires from session storage
+
+            window.sessionStorage.removeItem('token');
+            window.sessionStorage.removeItem('expires'); //Try login again
+
+            _context.next = 9;
+            return mainLogin();
+
+          case 9:
+            success = _context.sent;
+
+            if (!success) {
               _context.next = 14;
               break;
             }
 
-            //Remove token and expires from session storage
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('expires'); //Try login again
+            return _context.abrupt("return", window.sessionStorage.getItem('token'));
 
-            _context.next = 8;
-            return mainLogin();
+          case 14:
+            _context.next = 16;
+            return mainLogout();
 
-          case 8:
-            success = _context.sent;
+          case 16:
+            return _context.abrupt("return", token);
 
-            if (!success) {
-              _context.next = 13;
+          case 19:
+            console.log('No token'); //Get Email and Password
+
+            email = window.localStorage.getItem("email");
+            pwd = window.localStorage.getItem("pwd"); //Try login again
+
+            _context.next = 24;
+            return mainLogin(email, pwd);
+
+          case 24:
+            _success = _context.sent;
+
+            if (!_success) {
+              _context.next = 29;
               break;
             }
 
-            return _context.abrupt("return", sessionStorage.getItem('token'));
+            return _context.abrupt("return", window.sessionStorage.getItem('token'));
 
-          case 13:
-            mainLogout(router);
+          case 29:
+            mainLogout();
 
-          case 14:
-            return _context.abrupt("return", token);
-
-          case 15:
+          case 30:
           case "end":
             return _context.stop();
         }
@@ -21828,60 +21883,52 @@ var getToken = /*#__PURE__*/function () {
   };
 }();
 var mainLogin = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(email, password) {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(email, password) {
     var result;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            _context2.next = 2;
+            _context3.next = 2;
             return axios.post("/api/user/login", {
               email: email,
               password: password
             }).then(function (response) {
               //Set Expires and Token
-              sessionStorage.setItem("expires", response.data.expires);
-              sessionStorage.setItem("token", response.data.token);
+              window.sessionStorage.setItem("expires", response.data.expires);
+              window.sessionStorage.setItem("token", response.data.token);
               return true;
-            })["catch"](function (error) {
-              console.log(error.response.data); //Remove Local Storage
+            })["catch"]( /*#__PURE__*/function () {
+              var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(error) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                  while (1) {
+                    switch (_context2.prev = _context2.next) {
+                      case 0:
+                        console.log(error.response.data.error); //If login was not successful, logout
 
-              //Remove Local Storage
-              localStorage.removeItem("email");
-              localStorage.removeItem("pwd");
-              return false;
-            });
+                        _context2.next = 3;
+                        return mainLogout();
+
+                      case 3:
+                        return _context2.abrupt("return", false);
+
+                      case 4:
+                      case "end":
+                        return _context2.stop();
+                    }
+                  }
+                }, _callee2);
+              }));
+
+              return function (_x4) {
+                return _ref3.apply(this, arguments);
+              };
+            }());
 
           case 2:
-            result = _context2.sent;
-            return _context2.abrupt("return", result);
-
-          case 4:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-
-  return function mainLogin(_x2, _x3) {
-    return _ref2.apply(this, arguments);
-  };
-}();
-var mainLogout = /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(router) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            //Delete localStorage
-            window.localStorage.removeItem("email");
-            window.localStorage.removeItem("pwd"); //Delete sessionStorage
-
-            window.sessionStorage.removeItem("token");
-            window.sessionStorage.removeItem("expires"); //Redirect to homepage
-
-            router.push("/");
+            result = _context3.sent;
+            console.log("Login: " + result);
+            return _context3.abrupt("return", result);
 
           case 5:
           case "end":
@@ -21891,8 +21938,34 @@ var mainLogout = /*#__PURE__*/function () {
     }, _callee3);
   }));
 
-  return function mainLogout(_x4) {
-    return _ref3.apply(this, arguments);
+  return function mainLogin(_x2, _x3) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+var mainLogout = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            //Delete localStorage
+            window.localStorage.removeItem("email");
+            window.localStorage.removeItem("pwd");
+            window.localStorage.removeItem("verified"); //Delete sessionStorage
+
+            window.sessionStorage.removeItem("token");
+            window.sessionStorage.removeItem("expires");
+
+          case 5:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4);
+  }));
+
+  return function mainLogout() {
+    return _ref4.apply(this, arguments);
   };
 }();
 

@@ -113,7 +113,9 @@ export default {
     },
     methods: {
         logout: async function () {
-            await mainLogout(this.$router);
+            await mainLogout();
+
+            this.$router.push("/");
         },
         changePassword: async function () {
             //Disable Button
@@ -218,7 +220,9 @@ export default {
                 })
                 .then(async (response) => {
                     //Logout
-                    await mainLogout(this.$router);
+                    await mainLogout();
+                    //Redirect to homepage
+                    this.$router.push("/");
                 })
                 .catch((error) => {
                     console.log(error.response.data);
