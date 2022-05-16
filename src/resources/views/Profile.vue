@@ -1,9 +1,12 @@
 <template>
     <div class="h-full flex justify-center p-5">
         <div class="my-auto flex flex-col gap-y-5">
-            <h1 class="text-4xl mx-auto font-bold">
+            <h1 class="text-4xl mx-auto font-bold text-center">
                 Edit Account Details
             </h1>
+            <span class="text-2xl text-gray-600 mx-auto">
+                {{ email }}
+            </span>
             <button class="button" @click="logout">Logout</button>
             <div id="change-password" class="w-full profile-form">
                 <h2 class="text-2xl text-blue-400 mx-auto mb-5">
@@ -88,6 +91,7 @@ import { getToken, mainLogout } from "../js/utilities";
 export default {
     data() {
         return {
+            email: "Loading...",
             changePasswordButton: "Change Password",
             pwdWrong: false,
             pwdTooShort: false,
@@ -110,6 +114,9 @@ export default {
         deletePassword: {
             type: String,
         },
+    },
+    mounted() {
+        this.email = window.localStorage.getItem("email");
     },
     methods: {
         logout: async function () {
