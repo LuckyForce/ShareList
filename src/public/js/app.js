@@ -19735,7 +19735,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      message: "Loading..."
+      message: "Loading...",
+      loaded: false
     };
   },
   mounted: function mounted() {
@@ -19748,7 +19749,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return checkInvite(_this.$route.params.id);
+              return _this.checkInvite(_this.$route.params.id);
 
             case 2:
               result = _context.sent;
@@ -19761,46 +19762,49 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       }, _callee);
     }))();
+  },
+  methods: {
+    checkInvite: function () {
+      var _checkInvite = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(id) {
+        var result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                //Fetch invite token from url
+                console.log(id); //Axios request to verify user
+
+                _context2.next = 3;
+                return axios.post("/api/list/invite/accept", {
+                  invite: id
+                }).then(function (response) {
+                  this.loaded = true;
+                  return response.data.message;
+                })["catch"](function (error) {
+                  return error.response.data.error;
+                });
+
+              case 3:
+                result = _context2.sent;
+                console.log(result);
+                return _context2.abrupt("return", result);
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function checkInvite(_x) {
+        return _checkInvite.apply(this, arguments);
+      }
+
+      return checkInvite;
+    }()
   }
 });
-
-function checkInvite(_x) {
-  return _checkInvite.apply(this, arguments);
-}
-
-function _checkInvite() {
-  _checkInvite = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(id) {
-    var result;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            //Fetch invite token from url
-            console.log(id); //Axios request to verify user
-
-            _context2.next = 3;
-            return axios.post("/api/list/invite/accept", {
-              invite: id
-            }).then(function (response) {
-              return response.data.message;
-            })["catch"](function (error) {
-              return error.response.data.error;
-            });
-
-          case 3:
-            result = _context2.sent;
-            console.log(result);
-            return _context2.abrupt("return", result);
-
-          case 6:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-  return _checkInvite.apply(this, arguments);
-}
 
 /***/ }),
 
@@ -20581,7 +20585,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      message: "Loading..."
+      message: "Loading...",
+      loaded: false
     };
   },
   mounted: function mounted() {
@@ -20594,7 +20599,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return checkVerification(_this.$route.params.id, _this.$route.params.token);
+              return _this.checkVerification(_this.$route.params.id, _this.$route.params.token);
 
             case 2:
               result = _context.sent;
@@ -20607,48 +20612,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       }, _callee);
     }))();
+  },
+  methods: {
+    checkVerification: function () {
+      var _checkVerification = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(id, token) {
+        var loaded, result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                loaded = false; //Fetch verification token from url
+
+                console.log(token);
+                console.log(id); //Axios request to verify user
+
+                _context2.next = 5;
+                return axios.post("/api/user/verify", {
+                  token: token,
+                  id: id
+                }).then(function (response) {
+                  console.log("Verified");
+                  loaded = true;
+                  return response.data.message;
+                })["catch"](function (error) {
+                  console.log("Not verified");
+                  return error.response.data.error;
+                });
+
+              case 5:
+                result = _context2.sent;
+                this.loaded = loaded;
+                console.log(result);
+                return _context2.abrupt("return", result);
+
+              case 9:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function checkVerification(_x, _x2) {
+        return _checkVerification.apply(this, arguments);
+      }
+
+      return checkVerification;
+    }()
   }
 });
-
-function checkVerification(_x, _x2) {
-  return _checkVerification.apply(this, arguments);
-}
-
-function _checkVerification() {
-  _checkVerification = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(id, token) {
-    var result;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            //Fetch verification token from url
-            console.log(token);
-            console.log(id); //Axios request to verify user
-
-            _context2.next = 4;
-            return axios.post("/api/user/verify", {
-              token: token,
-              id: id
-            }).then(function (response) {
-              return response.data.message;
-            })["catch"](function (error) {
-              return error.response.data.error;
-            });
-
-          case 4:
-            result = _context2.sent;
-            console.log(result);
-            return _context2.abrupt("return", result);
-
-          case 7:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-  return _checkVerification.apply(this, arguments);
-}
 
 /***/ }),
 
@@ -20868,10 +20880,14 @@ var _hoisted_1 = {
 var _hoisted_2 = {
   "class": "text-xl sm:text-5xl text-gray-700 text-center"
 };
+var _hoisted_3 = {
+  key: 0,
+  "class": "text-lg sm:text-2xl text-gray-700 text-center"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.message), 1
   /* TEXT */
-  )]);
+  ), $data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_3, " You can close this Window now. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
@@ -21595,10 +21611,14 @@ var _hoisted_1 = {
 var _hoisted_2 = {
   "class": "text-xl sm:text-5xl text-gray-700 text-center"
 };
+var _hoisted_3 = {
+  key: 0,
+  "class": "text-lg sm:text-2xl text-gray-700 text-center"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.message), 1
   /* TEXT */
-  )]);
+  ), $data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_3, " You can close this Window now. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
