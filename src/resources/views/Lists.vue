@@ -4,8 +4,11 @@
             Your current Lists
         </h1>
         <!--TODO: Design List Card-->
-        <div class="sm:p-5 p-1">
-            <p v-if="!lists.length" class="text-center text-gray-600 sm:text-2xl text-lg">
+        <div class="flex flex-col sm:p-5 p-1 gap-y-2">
+            <span v-if="!loaded" class="text-center text-gray-600 sm:text-2xl text-lg">
+                Loading...
+            </span>
+            <p v-if="!lists.length&&loaded" class="text-center text-gray-600 sm:text-2xl text-lg">
                 No lists yet? Create one by clicking the button below!
             </p>
             <div
@@ -38,6 +41,7 @@ export default {
             lists: [],
             createListButton: "Create List",
             createListButtonDisabled: false,
+            loaded: false
         };
     },
     mounted() {
@@ -65,6 +69,7 @@ export default {
                 })
                 .then((response) => {
                     console.log(response.data);
+                    this.loaded = true;
                     this.lists = response.data.lists;
                 })
                 .catch((error) => {
