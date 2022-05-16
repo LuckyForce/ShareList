@@ -60,7 +60,9 @@
                 nicht uns. Wir sind nicht verantwortlich für Texte, die User in
                 ihre Liste schreiben.
             </p>
-                    <a href="PrivacyPolicy.vue" class="text-center text-gray-500">Datenschutzerklärung</a>
+            <router-link to="privacypolicy" class="text-blue-500 hover:text-blue-700 hover:underline">
+                Datenschutzerklärung
+            </router-link>
         </div>
     </div>
 </template>
