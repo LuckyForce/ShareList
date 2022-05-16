@@ -34,6 +34,13 @@ Route::get('/images/{filename}', function ($filename) {
 Route::get('/{route?}', function () {
     return view('page');
 });
+Route::get('/{route?}/{route?}', function () {
+    return view('page');
+});
+Route::get('/{route?}/{route?}/{route?}', function () {
+    return view('page');
+});
+
 /*
 if(request()->isMethod('get')){
     $matched = false;
