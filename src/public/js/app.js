@@ -19819,20 +19819,127 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _js_utilities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../js/utilities */ "./resources/js/utilities.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      loading: true,
+      list: {
+        l_created: "Loading...",
+        l_description: "Loading...",
+        l_id: "",
+        l_name: "Loading...",
+        l_u_id: null
+      },
       items: [],
-      loading: true
+      admin: false,
+      write: false
     };
   },
   mounted: function mounted() {
-    this.getItems();
+    this.loadList();
   },
   methods: {
-    getItems: function getItems() {
-      this.loading = true;
-    }
+    loadList: function () {
+      var _loadList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var _this = this;
+
+        var listId;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                //Get id of list
+                listId = this.$route.params.id; // Get list every 5 seconds per post request but get the first one immediately
+
+                this.getList(listId);
+                setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          _this.getList(listId);
+
+                        case 1:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                })), 5000);
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function loadList() {
+        return _loadList.apply(this, arguments);
+      }
+
+      return loadList;
+    }(),
+    getList: function () {
+      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(listId) {
+        var _this2 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 2:
+                token = _context3.sent;
+                _context3.next = 5;
+                return axios.post("/api/list", {
+                  token: token,
+                  list: listId
+                }).then(function (response) {
+                  _this2.list = response.data.list;
+                  _this2.items = response.data.items;
+                  _this2.admin = response.data.admin;
+                  _this2.write = response.data.write;
+                  _this2.loading = false;
+                  console.log(response.data);
+                  return true;
+                })["catch"](function (error) {
+                  console.log(error);
+                  return false;
+                });
+
+              case 5:
+                response = _context3.sent;
+                console.log(response);
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }));
+
+      function getList(_x) {
+        return _getList.apply(this, arguments);
+      }
+
+      return getList;
+    }()
   }
 });
 
@@ -21099,12 +21206,74 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+var _hoisted_1 = {
+  "class": "h-full sm:p-5 p-1"
+};
+var _hoisted_2 = {
+  key: 0,
+  "class": "h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+};
+var _hoisted_3 = {
+  key: 1
+};
+var _hoisted_4 = {
+  key: 0
+};
+var _hoisted_5 = {
+  "class": "text-4xl text-center"
+};
+var _hoisted_6 = {
+  "class": "text-lg text-gray-600 text-center"
+};
+var _hoisted_7 = {
+  "class": "text-xl mb-2 ml-1"
+};
+var _hoisted_8 = {
+  key: 1,
+  "class": "text-sm text-gray-600 text-center"
+};
+var _hoisted_9 = {
+  key: 2,
+  "class": "mt-auto"
+};
+var _hoisted_10 = {
+  "class": "flex justify-center"
+};
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">Listname</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Post</button></div></div>", 5);
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Post</button></div></div>", 4);
 
-var _hoisted_6 = [_hoisted_1];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, _hoisted_6);
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, " List Loading... ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [$data.admin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, " I am Admin ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.list.l_name), 1
+  /* TEXT */
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.list.l_description), 1
+  /* TEXT */
+  ), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.items, function (item) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      key: item.i_id,
+      "class": "flex flex-col sm:p-5 p-1 gap-y-2"
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.i_content), 1
+    /* TEXT */
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Last updated at: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.i_lastupdated), 1
+    /* TEXT */
+    )]);
+  }), 128
+  /* KEYED_FRAGMENT */
+  )), $data.items.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, " There are no items in this list yet. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.write ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+      return _ctx.newItem = $event;
+    }),
+    "class": "w-full sm:w-1/2 p-1",
+    type: "text",
+    placeholder: "New item"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.newItem]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    onClick: _cache[1] || (_cache[1] = function () {
+      return _ctx.addItem && _ctx.addItem.apply(_ctx, arguments);
+    }),
+    "class": "w-full sm:w-1/2 p-1",
+    type: "button"
+  }, " Add ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])), _hoisted_11]);
 }
 
 /***/ }),

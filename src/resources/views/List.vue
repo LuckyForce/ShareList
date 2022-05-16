@@ -1,6 +1,48 @@
 <template>
-    <div>
-        <h1 class="mt-6 text-4xl flex justify-center">Listname</h1>
+    <div class="h-full sm:p-5 p-1">
+        <div
+            v-if="loading"
+            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+        >
+            List Loading...
+        </div>
+        <div v-else>
+            <div v-if="admin">
+                I am Admin
+            </div>
+            <h1 class="text-4xl text-center">{{ list.l_name }}</h1>
+            <p class="text-lg text-gray-600 text-center">
+                {{ list.l_description }}
+            </p>
+            <div
+                v-for="item in items"
+                :key="item.i_id"
+                class="flex flex-col sm:p-5 p-1 gap-y-2"
+            >
+                <h2 class="text-xl mb-2 ml-1">{{ item.i_content }}</h2>
+                <span>Last updated at: {{ item.i_lastupdated }}</span>
+            </div>
+            <div v-if="items.length === 0" class="text-sm text-gray-600 text-center">
+                There are no items in this list yet.
+            </div>
+            <div v-if="write" class="mt-auto">
+                <div class="flex justify-center">
+                    <input
+                        v-model="newItem"
+                        class="w-full sm:w-1/2 p-1"
+                        type="text"
+                        placeholder="New item"
+                    />
+                    <button
+                        @click="addItem"
+                        class="w-full sm:w-1/2 p-1"
+                        type="button"
+                    >
+                        Add
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <div
             class="w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden"
@@ -92,20 +134,60 @@
 </template>
 
 <script>
+import { getToken } from "../js/utilities";
 export default {
     data() {
         return {
-            items: [],
             loading: true,
+            list: {
+                l_created: "Loading...",
+                l_description: "Loading...",
+                l_id: "",
+                l_name: "Loading...",
+                l_u_id: null,
+            },
+            items: [],
+            admin: false,
+            write: false,
         };
     },
     mounted() {
-        this.getItems();
+        this.loadList();
     },
     methods: {
-        getItems() {
-            this.loading = true;
-            
+        loadList: async function () {
+            //Get id of list
+            const listId = this.$route.params.id;
+
+            // Get list every 5 seconds per post request but get the first one immediately
+            this.getList(listId);
+            setInterval(async () => {
+                this.getList(listId);
+            }, 5000);
+        },
+        getList: async function (listId) {
+            //Get Token
+            const token = await getToken();
+
+            const response = await axios
+                .post("/api/list", {
+                    token: token,
+                    list: listId,
+                })
+                .then((response) => {
+                    this.list = response.data.list;
+                    this.items = response.data.items;
+                    this.admin = response.data.admin;
+                    this.write = response.data.write;
+                    this.loading = false;
+                    console.log(response.data);
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return false;
+                });
+            console.log(response);
         },
     },
 };
