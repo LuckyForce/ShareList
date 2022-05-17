@@ -19842,47 +19842,69 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       },
       items: [],
       admin: false,
-      write: false
+      write: false,
+      selectedItem: null
     };
   },
+  props: {
+    itemInput: {
+      type: String
+    }
+  },
   mounted: function mounted() {
-    this.loadList();
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _this.loadList();
+
+            case 2:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   methods: {
     loadList: function () {
-      var _loadList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var _this = this;
+      var _loadList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var _this2 = this;
 
         var listId;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 //Get id of list
                 listId = this.$route.params.id; // Get list every 5 seconds per post request but get the first one immediately
 
                 this.getList(listId);
-                setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
                     while (1) {
-                      switch (_context.prev = _context.next) {
+                      switch (_context2.prev = _context2.next) {
                         case 0:
-                          _this.getList(listId);
+                          _this2.getList(listId);
 
                         case 1:
                         case "end":
-                          return _context.stop();
+                          return _context2.stop();
                       }
                     }
-                  }, _callee);
-                })), 5000);
+                  }, _callee2);
+                })), 10000);
 
               case 3:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
       function loadList() {
@@ -19892,29 +19914,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return loadList;
     }(),
     getList: function () {
-      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(listId) {
-        var _this2 = this;
+      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(listId) {
+        var _this3 = this;
 
         var token, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
-                _context3.next = 2;
+                _context4.next = 2;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
 
               case 2:
-                token = _context3.sent;
-                _context3.next = 5;
+                token = _context4.sent;
+                _context4.next = 5;
                 return axios.post("/api/list", {
                   token: token,
                   list: listId
                 }).then(function (response) {
-                  _this2.list = response.data.list;
-                  _this2.items = response.data.items;
-                  _this2.admin = response.data.admin;
-                  _this2.write = response.data.write;
-                  _this2.loading = false;
+                  _this3.list = response.data.list;
+                  _this3.items = response.data.items;
+                  _this3.admin = response.data.admin;
+                  _this3.write = response.data.write;
+                  _this3.loading = false;
                   console.log(response.data);
                   return true;
                 })["catch"](function (error) {
@@ -19923,15 +19945,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 5:
-                response = _context3.sent;
+                response = _context4.sent;
                 console.log(response);
 
               case 7:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3);
+        }, _callee4);
       }));
 
       function getList(_x) {
@@ -19939,6 +19961,375 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return getList;
+    }(),
+    selectItem: function () {
+      var _selectItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(i_id, i_content) {
+        var input;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                if (!(i_id === this.selectedItem)) {
+                  _context5.next = 6;
+                  break;
+                }
+
+                //Remove Content of input and set selectedItem null
+                this.selectedItem = null;
+                _context5.next = 4;
+                return this.clearInput();
+
+              case 4:
+                _context5.next = 9;
+                break;
+
+              case 6:
+                //Set selectedItem and fill input with content.
+                this.selectedItem = i_id; //Get input
+
+                input = document.getElementById("itemInput"); //Clear input
+
+                input.value = i_content;
+
+              case 9:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      function selectItem(_x2, _x3) {
+        return _selectItem.apply(this, arguments);
+      }
+
+      return selectItem;
+    }(),
+    keydownInput: function () {
+      var _keydownInput = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(event) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                if (!(event.keyCode === 13)) {
+                  _context6.next = 3;
+                  break;
+                }
+
+                _context6.next = 3;
+                return this.enterButton();
+
+              case 3:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      function keydownInput(_x4) {
+        return _keydownInput.apply(this, arguments);
+      }
+
+      return keydownInput;
+    }(),
+    enterButton: function () {
+      var _enterButton = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                if (!(this.selectedItem !== null)) {
+                  _context7.next = 5;
+                  break;
+                }
+
+                _context7.next = 3;
+                return this.updateItem();
+
+              case 3:
+                _context7.next = 7;
+                break;
+
+              case 5:
+                _context7.next = 7;
+                return this.addItem();
+
+              case 7:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      function enterButton() {
+        return _enterButton.apply(this, arguments);
+      }
+
+      return enterButton;
+    }(),
+    addItem: function () {
+      var _addItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9() {
+        var _this4 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                if (!(this.itemInput === "" || this.itemInput === null || this.itemInput === undefined)) {
+                  _context9.next = 2;
+                  break;
+                }
+
+                return _context9.abrupt("return");
+
+              case 2:
+                _context9.next = 4;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 4:
+                token = _context9.sent;
+                _context9.next = 7;
+                return axios.post("/api/list/item/add", {
+                  token: token,
+                  list: this.list.l_id,
+                  content: this.itemInput
+                }).then( /*#__PURE__*/function () {
+                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8(response) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
+                      while (1) {
+                        switch (_context8.prev = _context8.next) {
+                          case 0:
+                            _context8.next = 2;
+                            return _this4.clearInput();
+
+                          case 2:
+                            _this4.getList(_this4.list.l_id);
+
+                            console.log(response.data);
+                            return _context8.abrupt("return", true);
+
+                          case 5:
+                          case "end":
+                            return _context8.stop();
+                        }
+                      }
+                    }, _callee8);
+                  }));
+
+                  return function (_x5) {
+                    return _ref2.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  console.log(error);
+                  return false;
+                });
+
+              case 7:
+                response = _context9.sent;
+                console.log(response);
+
+              case 9:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9, this);
+      }));
+
+      function addItem() {
+        return _addItem.apply(this, arguments);
+      }
+
+      return addItem;
+    }(),
+    updateItem: function () {
+      var _updateItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11() {
+        var _this5 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
+          while (1) {
+            switch (_context11.prev = _context11.next) {
+              case 0:
+                if (!(this.itemInput === "" || this.itemInput === null || this.itemInput === undefined)) {
+                  _context11.next = 3;
+                  break;
+                }
+
+                this.deleteItem();
+                return _context11.abrupt("return");
+
+              case 3:
+                _context11.next = 5;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 5:
+                token = _context11.sent;
+                _context11.next = 8;
+                return axios.post("/api/list/item/update", {
+                  token: token,
+                  list: this.list.l_id,
+                  item: this.selectedItem,
+                  content: this.itemInput
+                }).then( /*#__PURE__*/function () {
+                  var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(response) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
+                      while (1) {
+                        switch (_context10.prev = _context10.next) {
+                          case 0:
+                            _context10.next = 2;
+                            return _this5.clearInput();
+
+                          case 2:
+                            _this5.selectedItem = null;
+
+                            _this5.getList(_this5.list.l_id);
+
+                            console.log(response.data);
+                            return _context10.abrupt("return", true);
+
+                          case 6:
+                          case "end":
+                            return _context10.stop();
+                        }
+                      }
+                    }, _callee10);
+                  }));
+
+                  return function (_x6) {
+                    return _ref3.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  console.log(error);
+                  return false;
+                });
+
+              case 8:
+                response = _context11.sent;
+                console.log(response);
+
+              case 10:
+              case "end":
+                return _context11.stop();
+            }
+          }
+        }, _callee11, this);
+      }));
+
+      function updateItem() {
+        return _updateItem.apply(this, arguments);
+      }
+
+      return updateItem;
+    }(),
+    deleteItem: function () {
+      var _deleteItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13() {
+        var _this6 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                if (!(this.selectedItem === null)) {
+                  _context13.next = 3;
+                  break;
+                }
+
+                _context13.next = 3;
+                return this.clearInput();
+
+              case 3:
+                _context13.next = 5;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 5:
+                token = _context13.sent;
+                _context13.next = 8;
+                return axios.post("/api/list/item/delete", {
+                  token: token,
+                  list: this.list.l_id,
+                  item: this.selectedItem
+                }).then( /*#__PURE__*/function () {
+                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12(response) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
+                      while (1) {
+                        switch (_context12.prev = _context12.next) {
+                          case 0:
+                            _context12.next = 2;
+                            return _this6.clearInput();
+
+                          case 2:
+                            _this6.selectedItem = null;
+
+                            _this6.getList(_this6.list.l_id);
+
+                            console.log(response.data);
+                            return _context12.abrupt("return", true);
+
+                          case 6:
+                          case "end":
+                            return _context12.stop();
+                        }
+                      }
+                    }, _callee12);
+                  }));
+
+                  return function (_x7) {
+                    return _ref4.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  console.log(error);
+                  return false;
+                });
+
+              case 8:
+                response = _context13.sent;
+                console.log(response);
+
+              case 10:
+              case "end":
+                return _context13.stop();
+            }
+          }
+        }, _callee13, this);
+      }));
+
+      function deleteItem() {
+        return _deleteItem.apply(this, arguments);
+      }
+
+      return deleteItem;
+    }(),
+    clearInput: function () {
+      var _clearInput = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14() {
+        var input;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
+          while (1) {
+            switch (_context14.prev = _context14.next) {
+              case 0:
+                //Props are readonly so we cant use this.itemInput = ""
+                //Get input
+                input = document.getElementById("itemInput"); //Clear input
+
+                input.value = "";
+
+              case 2:
+              case "end":
+                return _context14.stop();
+            }
+          }
+        }, _callee14);
+      }));
+
+      function clearInput() {
+        return _clearInput.apply(this, arguments);
+      }
+
+      return clearInput;
     }()
   }
 });
@@ -21214,7 +21605,8 @@ var _hoisted_2 = {
   "class": "h-full flex justify-center items-center text-center sm:text-4xl text-lg"
 };
 var _hoisted_3 = {
-  key: 1
+  key: 1,
+  "class": "h-full flex flex-col"
 };
 var _hoisted_4 = {
   key: 0
@@ -21226,54 +21618,88 @@ var _hoisted_6 = {
   "class": "text-lg text-gray-600 text-center"
 };
 var _hoisted_7 = {
+  "class": "flex flex-col justify-center gap-y-2 mb-4"
+};
+var _hoisted_8 = ["onClick"];
+var _hoisted_9 = {
   "class": "text-xl mb-2 ml-1"
 };
-var _hoisted_8 = {
-  key: 1,
-  "class": "text-sm text-gray-600 text-center"
-};
-var _hoisted_9 = {
-  key: 2,
-  "class": "mt-auto"
-};
 var _hoisted_10 = {
-  "class": "flex justify-center"
+  key: 1,
+  "class": "text-sm text-gray-600 text-center mb-4"
 };
-
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Delete</button><button type=\"submit\" class=\"btn-edit1\">Show</button></div><input class=\"form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer\" type=\"checkbox\" value=\"\" id=\"flexCheckDefault\"><label class=\"form-check-label inline-block text-gray-800\" for=\"flexCheckDefault\"></label></div><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden\"><div class=\"w-80 p-2 bg-white rounded-xl p-2\"><p class=\"text-sm text-gray-600 mb-2 ml-1\"> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam </p><button type=\"submit\" class=\"btn-delete1\">Post</button></div></div>", 4);
-
+var _hoisted_11 = {
+  key: 2,
+  "class": "mt-auto flex flex-col gap-y-2"
+};
+var _hoisted_12 = {
+  "class": "text-gray-500 text-lg"
+};
+var _hoisted_13 = {
+  key: 0
+};
+var _hoisted_14 = {
+  key: 1
+};
+var _hoisted_15 = {
+  key: 0
+};
+var _hoisted_16 = {
+  key: 1
+};
+var _hoisted_17 = {
+  key: 0
+};
+var _hoisted_18 = {
+  key: 1
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, " List Loading... ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [$data.admin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, " I am Admin ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.list.l_name), 1
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, " List Loading... ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [$data.admin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, "I am Admin")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.list.l_name), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.list.l_description), 1
   /* TEXT */
-  ), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.items, function (item) {
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.items, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: item.i_id,
-      "class": "flex flex-col sm:p-5 p-1 gap-y-2"
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.i_content), 1
+      onClick: function onClick($event) {
+        return $options.selectItem(item.i_id, item.i_content);
+      },
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([item.i_id === $data.selectedItem ? 'itemSelected' : '', 'item-card'])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.i_content), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Last updated at: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.i_lastupdated), 1
     /* TEXT */
-    )]);
+    )], 10
+    /* CLASS, PROPS */
+    , _hoisted_8);
   }), 128
   /* KEYED_FRAGMENT */
-  )), $data.items.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, " There are no items in this list yet. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.write ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ))]), $data.items.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, " There are no items in this list yet. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.write ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [$data.selectedItem === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_13, "New Item")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_14, "Changing: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.selectedItem), 1
+  /* TEXT */
+  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    id: "itemInput",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return _ctx.newItem = $event;
+      return $props.itemInput = $event;
     }),
-    "class": "w-full sm:w-1/2 p-1",
+    "class": "input",
     type: "text",
-    placeholder: "New item"
-  }, null, 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.newItem]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    onClick: _cache[1] || (_cache[1] = function () {
-      return _ctx.addItem && _ctx.addItem.apply(_ctx, arguments);
-    }),
-    "class": "w-full sm:w-1/2 p-1",
-    type: "button"
-  }, " Add ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])), _hoisted_11]);
+    placeholder: "Item",
+    onKeypress: _cache[1] || (_cache[1] = function ($event) {
+      return $options.keydownInput($event);
+    })
+  }, null, 544
+  /* HYDRATE_EVENTS, NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $props.itemInput]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "button text-2xl w-full",
+    onClick: _cache[2] || (_cache[2] = function ($event) {
+      return $options.enterButton();
+    })
+  }, [$data.selectedItem === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_15, "Add")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_16, "Update"))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "button text-2xl w-full",
+    onClick: _cache[3] || (_cache[3] = function ($event) {
+      return $options.deleteItem();
+    })
+  }, [$data.selectedItem === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_17, "Cancel")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_18, "Delete"))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))]);
 }
 
 /***/ }),
@@ -21400,49 +21826,52 @@ var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_2 = {
-  "class": "flex flex-col sm:p-5 p-1 gap-y-2"
+  "class": "lg:px-24 md:px-12 sm:px-6 px-1"
 };
 var _hoisted_3 = {
+  "class": "flex flex-col sm:p-5 p-1 gap-y-2"
+};
+var _hoisted_4 = {
   key: 0,
   "class": "text-center text-gray-600 sm:text-2xl text-lg"
 };
-var _hoisted_4 = {
+var _hoisted_5 = {
   key: 1,
   "class": "text-center text-gray-600 sm:text-2xl text-lg"
 };
-var _hoisted_5 = ["onClick"];
-var _hoisted_6 = {
+var _hoisted_6 = ["onClick"];
+var _hoisted_7 = {
   "class": "text-xl mb-2 ml-1"
 };
-var _hoisted_7 = {
+var _hoisted_8 = {
   "class": "text-sm text-gray-600 mb-2 ml-1"
 };
-var _hoisted_8 = {
+var _hoisted_9 = {
   "class": "sm:p-5 p-1"
 };
-var _hoisted_9 = ["disabled"];
+var _hoisted_10 = ["disabled"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("TODO: Design List Card"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [!$data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_3, " Loading... ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.lists.length && $data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_4, " No lists yet? Create one by clicking the button below! ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.lists, function (list) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("TODO: Design List Card"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [!$data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_4, " Loading... ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.lists.length && $data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_5, " No lists yet? Create one by clicking the button below! ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.lists, function (list) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: list.l_id,
       "class": "list-card",
       onClick: function onClick($event) {
         return _this.getList(list.l_id);
       }
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_name), 1
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_name), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_description), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_description), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Created at: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_created), 1
     /* TEXT */
     )], 8
     /* PROPS */
-    , _hoisted_5);
+    , _hoisted_6);
   }), 128
   /* KEYED_FRAGMENT */
-  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "btn-create text-2xl w-full",
     onClick: _cache[0] || (_cache[0] = function ($event) {
@@ -21451,7 +21880,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     disabled: $data.createListButtonDisabled
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(this.createListButton), 9
   /* TEXT, PROPS */
-  , _hoisted_9)])]);
+  , _hoisted_10)])])]);
 }
 
 /***/ }),

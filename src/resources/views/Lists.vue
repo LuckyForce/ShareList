@@ -3,31 +3,44 @@
         <h1 class="mt-6 sm:text-4xl text-lg flex justify-center">
             Your current Lists
         </h1>
-        <!--TODO: Design List Card-->
-        <div class="flex flex-col sm:p-5 p-1 gap-y-2">
-            <span v-if="!loaded" class="text-center text-gray-600 sm:text-2xl text-lg">
-                Loading...
-            </span>
-            <p v-if="!lists.length&&loaded" class="text-center text-gray-600 sm:text-2xl text-lg">
-                No lists yet? Create one by clicking the button below!
-            </p>
-            <div
-                v-for="list in lists"
-                :key="list.l_id"
-                class="list-card"
-                @click="this.getList(list.l_id)"
-            >
-                <h2 class="text-xl mb-2 ml-1">{{ list.l_name }}</h2>
-                <p class="text-sm text-gray-600 mb-2 ml-1">
-                    {{ list.l_description }}
+        <div class="lg:px-24 md:px-12 sm:px-6 px-1">
+            <!--TODO: Design List Card-->
+            <div class="flex flex-col sm:p-5 p-1 gap-y-2">
+                <span
+                    v-if="!loaded"
+                    class="text-center text-gray-600 sm:text-2xl text-lg"
+                >
+                    Loading...
+                </span>
+                <p
+                    v-if="!lists.length && loaded"
+                    class="text-center text-gray-600 sm:text-2xl text-lg"
+                >
+                    No lists yet? Create one by clicking the button below!
                 </p>
-                <span>Created at: {{ list.l_created }}</span>
+                <div
+                    v-for="list in lists"
+                    :key="list.l_id"
+                    class="list-card"
+                    @click="this.getList(list.l_id)"
+                >
+                    <h2 class="text-xl mb-2 ml-1">{{ list.l_name }}</h2>
+                    <p class="text-sm text-gray-600 mb-2 ml-1">
+                        {{ list.l_description }}
+                    </p>
+                    <span>Created at: {{ list.l_created }}</span>
+                </div>
             </div>
-        </div>
-        <div class="sm:p-5 p-1">
-            <button type="submit" class="btn-create text-2xl w-full" @click="this.createList()" :disabled="createListButtonDisabled">
-                {{ this.createListButton }}
-            </button>
+            <div class="sm:p-5 p-1">
+                <button
+                    type="submit"
+                    class="btn-create text-2xl w-full"
+                    @click="this.createList()"
+                    :disabled="createListButtonDisabled"
+                >
+                    {{ this.createListButton }}
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -41,7 +54,7 @@ export default {
             lists: [],
             createListButton: "Create List",
             createListButtonDisabled: false,
-            loaded: false
+            loaded: false,
         };
     },
     mounted() {
@@ -106,7 +119,7 @@ export default {
                     console.log(error);
                     return error.response.data.error;
                 });
-            
+
             //If the list was created successfully redirect to the list
             if (success) {
                 this.$router.push(`/list/${response.list}`);

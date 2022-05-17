@@ -938,7 +938,7 @@ Route::post('/list/member/write', function (Request $request) {
 });
 
 //Remove Item. Needs to have access to the list
-Route::post('/list/item/remove', function (Request $request) {
+Route::post('/list/item/delete', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->item)) {
         return response()->json(['error' => 'Token, list or item is missing'], 400);
@@ -975,7 +975,7 @@ Route::post('/list/item/remove', function (Request $request) {
 });
 
 //Edit Item. Needs to have access to the list
-Route::post('/list/item/edit', function (Request $request) {
+Route::post('/list/item/update', function (Request $request) {
     //Validate data
     if (!isset($request->token) || !isset($request->list) || !isset($request->item) || !isset($request->content)) {
         return response()->json(['error' => 'Token, list, item or name is missing'], 400);

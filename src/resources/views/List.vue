@@ -6,128 +6,53 @@
         >
             List Loading...
         </div>
-        <div v-else>
-            <div v-if="admin">
-                I am Admin
-            </div>
+        <div v-else class="h-full flex flex-col">
+            <div v-if="admin">I am Admin</div>
             <h1 class="text-4xl text-center">{{ list.l_name }}</h1>
             <p class="text-lg text-gray-600 text-center">
                 {{ list.l_description }}
             </p>
-            <div
-                v-for="item in items"
-                :key="item.i_id"
-                class="flex flex-col sm:p-5 p-1 gap-y-2"
-            >
-                <h2 class="text-xl mb-2 ml-1">{{ item.i_content }}</h2>
-                <span>Last updated at: {{ item.i_lastupdated }}</span>
-            </div>
-            <div v-if="items.length === 0" class="text-sm text-gray-600 text-center">
-                There are no items in this list yet.
-            </div>
-            <div v-if="write" class="mt-auto">
-                <div class="flex justify-center">
-                    <input
-                        v-model="newItem"
-                        class="w-full sm:w-1/2 p-1"
-                        type="text"
-                        placeholder="New item"
-                    />
-                    <button
-                        @click="addItem"
-                        class="w-full sm:w-1/2 p-1"
-                        type="button"
-                    >
-                        Add
-                    </button>
+            <div class="flex flex-col justify-center gap-y-2 mb-4">
+                <div
+                    v-for="item in items"
+                    :key="item.i_id"
+                    @click="selectItem(item.i_id, item.i_content)"
+                    :class="[
+                        item.i_id === selectedItem ? 'itemSelected' : '',
+                        'item-card',
+                    ]"
+                >
+                    <h2 class="text-xl mb-2 ml-1">{{ item.i_content }}</h2>
+                    <span>Last updated at: {{ item.i_lastupdated }}</span>
                 </div>
             </div>
-        </div>
-
-        <div
-            class="w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden"
-        >
-            <div class="w-80 p-2 bg-white rounded-xl p-2">
-                <p class="text-sm text-gray-600 mb-2 ml-1">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam
-                </p>
-                <button type="submit" class="btn-delete1">Delete</button>
-                <button type="submit" class="btn-edit1">Show</button>
-            </div>
-            <input
-                class="form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-            />
-            <label
-                class="form-check-label inline-block text-gray-800"
-                for="flexCheckDefault"
+            <div
+                v-if="items.length === 0"
+                class="text-sm text-gray-600 text-center mb-4"
             >
-            </label>
-        </div>
-
-        <div
-            class="w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden"
-        >
-            <div class="w-80 p-2 bg-white rounded-xl p-2">
-                <p class="text-sm text-gray-600 mb-2 ml-1">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam
-                </p>
-                <button type="submit" class="btn-delete1">Delete</button>
-                <button type="submit" class="btn-edit1">Show</button>
+                There are no items in this list yet.
             </div>
-            <input
-                class="form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-            />
-            <label
-                class="form-check-label inline-block text-gray-800"
-                for="flexCheckDefault"
-            >
-            </label>
-        </div>
-        <div
-            class="w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden"
-        >
-            <div class="w-80 p-2 bg-white rounded-xl p-2">
-                <p class="text-sm text-gray-600 mb-2 ml-1">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam
-                </p>
-                <button type="submit" class="btn-delete1">Delete</button>
-                <button type="submit" class="btn-edit1">Show</button>
-            </div>
-            <input
-                class="form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-            />
-            <label
-                class="form-check-label inline-block text-gray-800"
-                for="flexCheckDefault"
-            >
-            </label>
-        </div>
-
-        <div
-            class="w-full my-8 gap-24 flex-wrap flex justify-center items-center hidden"
-        >
-            <div class="w-80 p-2 bg-white rounded-xl p-2">
-                <p class="text-sm text-gray-600 mb-2 ml-1">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam
-                </p>
-                <button type="submit" class="btn-delete1">Post</button>
+            <div v-if="write" class="mt-auto flex flex-col gap-y-2">
+                <div class="text-gray-500 text-lg">
+                    <span v-if="selectedItem === null">New Item</span>
+                    <span v-else>Changing: {{ selectedItem }}</span>
+                </div>
+                <input
+                    id="itemInput"
+                    v-model="itemInput"
+                    class="input"
+                    type="text"
+                    placeholder="Item"
+                    @keypress="keydownInput($event)"
+                />
+                <button class="button text-2xl w-full" @click="enterButton()">
+                    <span v-if="selectedItem === null">Add</span>
+                    <span v-else>Update</span>
+                </button>
+                <button class="button text-2xl w-full" @click="deleteItem()">
+                    <span v-if="selectedItem === null">Cancel</span>
+                    <span v-else>Delete</span>
+                </button>
             </div>
         </div>
     </div>
@@ -149,10 +74,16 @@ export default {
             items: [],
             admin: false,
             write: false,
+            selectedItem: null,
         };
     },
-    mounted() {
-        this.loadList();
+    props: {
+        itemInput: {
+            type: String,
+        },
+    },
+    async mounted() {
+        await this.loadList();
     },
     methods: {
         loadList: async function () {
@@ -163,7 +94,7 @@ export default {
             this.getList(listId);
             setInterval(async () => {
                 this.getList(listId);
-            }, 5000);
+            }, 10000);
         },
         getList: async function (listId) {
             //Get Token
@@ -188,6 +119,137 @@ export default {
                     return false;
                 });
             console.log(response);
+        },
+        selectItem: async function (i_id, i_content) {
+            //Check if selected Item is the same as the already selected. In this case deselect the Item.
+            if (i_id === this.selectedItem) {
+                //Remove Content of input and set selectedItem null
+                this.selectedItem = null;
+                await this.clearInput();
+            } else {
+                //Set selectedItem and fill input with content.
+                this.selectedItem = i_id;
+                //Get input
+                const input = document.getElementById("itemInput");
+                //Clear input
+                input.value = i_content;
+            }
+        },
+        keydownInput: async function (event) {
+            //Check if enter is pressed
+            if (event.keyCode === 13) {
+                await this.enterButton();
+            }
+        },
+        enterButton: async function () {
+            //Check if selectedItem is set
+            if (this.selectedItem !== null) {
+                //Update Item
+                await this.updateItem();
+            } else {
+                //Create Item
+                await this.addItem();
+            }
+        },
+        addItem: async function () {
+            //Check if input is empty
+            if (
+                this.itemInput === "" ||
+                this.itemInput === null ||
+                this.itemInput === undefined
+            ) {
+                return;
+            }
+
+            //Get Token
+            const token = await getToken();
+
+            const response = await axios
+                .post("/api/list/item/add", {
+                    token: token,
+                    list: this.list.l_id,
+                    content: this.itemInput,
+                })
+                .then(async (response) => {
+                    await this.clearInput();
+                    this.getList(this.list.l_id);
+                    console.log(response.data);
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return false;
+                });
+            console.log(response);
+        },
+        updateItem: async function () {
+            //Check if input is empty if so delete item
+            if (
+                this.itemInput === "" ||
+                this.itemInput === null ||
+                this.itemInput === undefined
+            ) {
+                this.deleteItem();
+                return;
+            }
+
+            //Get Token
+            const token = await getToken();
+
+            const response = await axios
+                .post("/api/list/item/update", {
+                    token: token,
+                    list: this.list.l_id,
+                    item: this.selectedItem,
+                    content: this.itemInput,
+                })
+                .then(async (response) => {
+                    await this.clearInput();
+                    this.selectedItem = null;
+                    this.getList(this.list.l_id);
+                    console.log(response.data);
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return false;
+                });
+            console.log(response);
+        },
+        deleteItem: async function () {
+            //Check if item is selected
+            if (this.selectedItem === null) {
+                await this.clearInput();
+            }
+
+            //Get Token
+            const token = await getToken();
+
+            const response = await axios
+                .post("/api/list/item/delete", {
+                    token: token,
+                    list: this.list.l_id,
+                    item: this.selectedItem,
+                })
+                .then(async (response) => {
+                    await this.clearInput();
+                    this.selectedItem = null;
+                    this.getList(this.list.l_id);
+                    console.log(response.data);
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return false;
+                });
+            console.log(response);
+        },
+        clearInput: async function () {
+            //Props are readonly so we cant use this.itemInput = ""
+            //Get input
+            const input = document.getElementById("itemInput");
+            //Clear input
+            input.value = "";
         },
     },
 };

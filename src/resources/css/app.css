@@ -43,7 +43,8 @@ body {
 }
 
 .login-form,
-.register-form, .profile-form {
+.register-form,
+.profile-form {
     @apply m-auto;
     @apply max-w-xs;
     @apply p-4;
@@ -78,7 +79,8 @@ body {
 }
 
 .btn-register,
-.btn-login, .btn-save {
+.btn-login,
+.btn-save {
     @apply p-2;
     @apply rounded-lg;
     @apply border-2;
@@ -95,7 +97,7 @@ body {
     @apply disabled:opacity-50;
 }
 
-.btn-deleteAccount{
+.btn-deleteAccount {
     @apply p-2;
     @apply rounded-lg;
     @apply border-2;
@@ -152,15 +154,16 @@ body {
     @apply rounded-lg;
     @apply border-2;
     @apply border-gray-200;
-    @apply focus:border-blue-700;
+    @apply focus:border-blue-600;
     @apply focus:outline-none;
     @apply text-center;
     @apply text-white;
-    @apply bg-blue-600;
-    @apply hover:bg-blue-700;
+    @apply bg-blue-500;
+    @apply hover:bg-blue-600;
     @apply transition;
     @apply mt-2;
     @apply disabled:opacity-50;
+    @apply p-2;
 }
 
 .status-message {
@@ -177,7 +180,8 @@ body {
     @apply italic;
 }
 
-.list-card{
+.list-card,
+.item-card {
     @apply w-full;
     @apply border-2;
     @apply border-gray-200;
@@ -189,4 +193,8 @@ body {
     @apply transition;
     @apply cursor-pointer;
     @apply bg-white;
+}
+
+.itemSelected {
+    @apply bg-blue-500 !important;
 }
