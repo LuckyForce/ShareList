@@ -19832,6 +19832,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      onPage: true,
       loading: true,
       list: {
         l_created: "Loading...",
@@ -19870,41 +19871,66 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
+  watch: {
+    $route: function $route(to, from) {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this2.onPage = false;
+
+              case 1:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    }
+  },
   methods: {
     loadList: function () {
-      var _loadList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var _this2 = this;
+      var _loadList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var _this3 = this;
 
-        var listId;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        var listId, interval;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 //Get id of list
                 listId = this.$route.params.id; // Get list every 5 seconds per post request but get the first one immediately
 
                 this.getList(listId);
-                setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                interval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
                     while (1) {
-                      switch (_context2.prev = _context2.next) {
+                      switch (_context3.prev = _context3.next) {
                         case 0:
-                          _this2.getList(listId);
+                          if (!_this3.onPage) {
+                            // Stop the interval if the user navigates away
+                            clearInterval(interval);
+                          }
 
-                        case 1:
+                          _this3.getList(listId);
+
+                        case 2:
                         case "end":
-                          return _context2.stop();
+                          return _context3.stop();
                       }
                     }
-                  }, _callee2);
+                  }, _callee3);
                 })), 10000);
 
               case 3:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee4, this);
       }));
 
       function loadList() {
@@ -19914,29 +19940,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return loadList;
     }(),
     getList: function () {
-      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(listId) {
-        var _this3 = this;
+      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(listId) {
+        var _this4 = this;
 
         var token, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
-                _context4.next = 2;
+                _context5.next = 2;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
 
               case 2:
-                token = _context4.sent;
-                _context4.next = 5;
+                token = _context5.sent;
+                _context5.next = 5;
                 return axios.post("/api/list", {
                   token: token,
                   list: listId
                 }).then(function (response) {
-                  _this3.list = response.data.list;
-                  _this3.items = response.data.items;
-                  _this3.admin = response.data.admin;
-                  _this3.write = response.data.write;
-                  _this3.loading = false;
+                  _this4.list = response.data.list;
+                  _this4.items = response.data.items;
+                  _this4.admin = response.data.admin;
+                  _this4.write = response.data.write;
+                  _this4.loading = false;
                   console.log(response.data);
                   return true;
                 })["catch"](function (error) {
@@ -19945,15 +19971,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 5:
-                response = _context4.sent;
+                response = _context5.sent;
                 console.log(response);
 
               case 7:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4);
+        }, _callee5);
       }));
 
       function getList(_x) {
@@ -19963,24 +19989,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return getList;
     }(),
     selectItem: function () {
-      var _selectItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(i_id, i_content) {
+      var _selectItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(i_id, i_content) {
         var input;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
                 if (!(i_id === this.selectedItem)) {
-                  _context5.next = 6;
+                  _context6.next = 6;
                   break;
                 }
 
                 //Remove Content of input and set selectedItem null
                 this.selectedItem = null;
-                _context5.next = 4;
+                _context6.next = 4;
                 return this.clearInput();
 
               case 4:
-                _context5.next = 9;
+                _context6.next = 9;
                 break;
 
               case 6:
@@ -19993,10 +20019,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 9:
               case "end":
-                return _context5.stop();
+                return _context6.stop();
             }
           }
-        }, _callee5, this);
+        }, _callee6, this);
       }));
 
       function selectItem(_x2, _x3) {
@@ -20006,25 +20032,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return selectItem;
     }(),
     keydownInput: function () {
-      var _keydownInput = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(event) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+      var _keydownInput = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7(event) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
                 if (!(event.keyCode === 13)) {
-                  _context6.next = 3;
+                  _context7.next = 3;
                   break;
                 }
 
-                _context6.next = 3;
+                _context7.next = 3;
                 return this.enterButton();
 
               case 3:
               case "end":
-                return _context6.stop();
+                return _context7.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee7, this);
       }));
 
       function keydownInput(_x4) {
@@ -20034,33 +20060,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return keydownInput;
     }(),
     enterButton: function () {
-      var _enterButton = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+      var _enterButton = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
                 if (!(this.selectedItem !== null)) {
-                  _context7.next = 5;
+                  _context8.next = 5;
                   break;
                 }
 
-                _context7.next = 3;
+                _context8.next = 3;
                 return this.updateItem();
 
               case 3:
-                _context7.next = 7;
+                _context8.next = 7;
                 break;
 
               case 5:
-                _context7.next = 7;
+                _context8.next = 7;
                 return this.addItem();
 
               case 7:
               case "end":
-                return _context7.stop();
+                return _context8.stop();
             }
           }
-        }, _callee7, this);
+        }, _callee8, this);
       }));
 
       function enterButton() {
@@ -20070,53 +20096,62 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return enterButton;
     }(),
     addItem: function () {
-      var _addItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9() {
-        var _this4 = this;
+      var _addItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10() {
+        var _this5 = this;
 
         var token, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
           while (1) {
-            switch (_context9.prev = _context9.next) {
+            switch (_context10.prev = _context10.next) {
               case 0:
                 if (!(this.itemInput === "" || this.itemInput === null || this.itemInput === undefined)) {
-                  _context9.next = 2;
+                  _context10.next = 2;
                   break;
                 }
 
-                return _context9.abrupt("return");
+                return _context10.abrupt("return");
 
               case 2:
-                _context9.next = 4;
+                //Push new item to items. THIS IS ONLY FOR LOADING REASONS
+                this.items.push({
+                  i_l_id: this.list.l_id,
+                  i_id: null,
+                  i_content: this.itemInput,
+                  i_lastupdated: "Loading...",
+                  i_checked: false
+                }); //Get Token
+
+                _context10.next = 5;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
 
-              case 4:
-                token = _context9.sent;
-                _context9.next = 7;
+              case 5:
+                token = _context10.sent;
+                _context10.next = 8;
                 return axios.post("/api/list/item/add", {
                   token: token,
                   list: this.list.l_id,
                   content: this.itemInput
                 }).then( /*#__PURE__*/function () {
-                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8(response) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
+                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9(response) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
                       while (1) {
-                        switch (_context8.prev = _context8.next) {
+                        switch (_context9.prev = _context9.next) {
                           case 0:
-                            _context8.next = 2;
-                            return _this4.clearInput();
+                            _context9.next = 2;
+                            return _this5.clearInput();
 
                           case 2:
-                            _this4.getList(_this4.list.l_id);
+                            _this5.getList(_this5.list.l_id);
 
                             console.log(response.data);
-                            return _context8.abrupt("return", true);
+                            return _context9.abrupt("return", true);
 
                           case 5:
                           case "end":
-                            return _context8.stop();
+                            return _context9.stop();
                         }
                       }
-                    }, _callee8);
+                    }, _callee9);
                   }));
 
                   return function (_x5) {
@@ -20127,16 +20162,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   return false;
                 });
 
-              case 7:
-                response = _context9.sent;
+              case 8:
+                response = _context10.sent;
                 console.log(response);
 
-              case 9:
+              case 10:
               case "end":
-                return _context9.stop();
+                return _context10.stop();
             }
           }
-        }, _callee9, this);
+        }, _callee10, this);
       }));
 
       function addItem() {
@@ -20146,57 +20181,64 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return addItem;
     }(),
     updateItem: function () {
-      var _updateItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11() {
-        var _this5 = this;
+      var _updateItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12() {
+        var _this6 = this;
 
         var token, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
           while (1) {
-            switch (_context11.prev = _context11.next) {
+            switch (_context12.prev = _context12.next) {
               case 0:
                 if (!(this.itemInput === "" || this.itemInput === null || this.itemInput === undefined)) {
-                  _context11.next = 3;
+                  _context12.next = 3;
                   break;
                 }
 
                 this.deleteItem();
-                return _context11.abrupt("return");
+                return _context12.abrupt("return");
 
               case 3:
-                _context11.next = 5;
+                //Update Item. THIS IS ONLY FOR LOADING REASONS
+                this.items.forEach(function (item) {
+                  if (item.i_id === _this6.selectedItem) {
+                    item.i_content = _this6.itemInput;
+                  }
+                }); //Get Token
+
+                _context12.next = 6;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
 
-              case 5:
-                token = _context11.sent;
-                _context11.next = 8;
+              case 6:
+                token = _context12.sent;
+                _context12.next = 9;
                 return axios.post("/api/list/item/update", {
                   token: token,
                   list: this.list.l_id,
                   item: this.selectedItem,
                   content: this.itemInput
                 }).then( /*#__PURE__*/function () {
-                  var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(response) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
+                  var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11(response) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
                       while (1) {
-                        switch (_context10.prev = _context10.next) {
+                        switch (_context11.prev = _context11.next) {
                           case 0:
-                            _context10.next = 2;
-                            return _this5.clearInput();
+                            _context11.next = 2;
+                            return _this6.clearInput();
 
                           case 2:
-                            _this5.selectedItem = null;
+                            _this6.selectedItem = null;
 
-                            _this5.getList(_this5.list.l_id);
+                            _this6.getList(_this6.list.l_id);
 
                             console.log(response.data);
-                            return _context10.abrupt("return", true);
+                            return _context11.abrupt("return", true);
 
                           case 6:
                           case "end":
-                            return _context10.stop();
+                            return _context11.stop();
                         }
                       }
-                    }, _callee10);
+                    }, _callee11);
                   }));
 
                   return function (_x6) {
@@ -20207,16 +20249,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   return false;
                 });
 
-              case 8:
-                response = _context11.sent;
+              case 9:
+                response = _context12.sent;
                 console.log(response);
 
-              case 10:
+              case 11:
               case "end":
-                return _context11.stop();
+                return _context12.stop();
             }
           }
-        }, _callee11, this);
+        }, _callee12, this);
       }));
 
       function updateItem() {
@@ -20226,56 +20268,63 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return updateItem;
     }(),
     deleteItem: function () {
-      var _deleteItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13() {
-        var _this6 = this;
+      var _deleteItem = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14() {
+        var _this7 = this;
 
         var token, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
           while (1) {
-            switch (_context13.prev = _context13.next) {
+            switch (_context14.prev = _context14.next) {
               case 0:
                 if (!(this.selectedItem === null)) {
-                  _context13.next = 3;
+                  _context14.next = 3;
                   break;
                 }
 
-                _context13.next = 3;
+                _context14.next = 3;
                 return this.clearInput();
 
               case 3:
-                _context13.next = 5;
+                //Delete Item. THIS IS ONLY FOR LOADING REASONS
+                this.items.forEach(function (item, index) {
+                  if (item.i_id === _this7.selectedItem) {
+                    _this7.items.splice(index, 1);
+                  }
+                }); //Get Token
+
+                _context14.next = 6;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
 
-              case 5:
-                token = _context13.sent;
-                _context13.next = 8;
+              case 6:
+                token = _context14.sent;
+                _context14.next = 9;
                 return axios.post("/api/list/item/delete", {
                   token: token,
                   list: this.list.l_id,
                   item: this.selectedItem
                 }).then( /*#__PURE__*/function () {
-                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12(response) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
+                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13(response) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
                       while (1) {
-                        switch (_context12.prev = _context12.next) {
+                        switch (_context13.prev = _context13.next) {
                           case 0:
-                            _context12.next = 2;
-                            return _this6.clearInput();
+                            _context13.next = 2;
+                            return _this7.clearInput();
 
                           case 2:
-                            _this6.selectedItem = null;
+                            _this7.selectedItem = null;
 
-                            _this6.getList(_this6.list.l_id);
+                            _this7.getList(_this7.list.l_id);
 
                             console.log(response.data);
-                            return _context12.abrupt("return", true);
+                            return _context13.abrupt("return", true);
 
                           case 6:
                           case "end":
-                            return _context12.stop();
+                            return _context13.stop();
                         }
                       }
-                    }, _callee12);
+                    }, _callee13);
                   }));
 
                   return function (_x7) {
@@ -20286,16 +20335,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   return false;
                 });
 
-              case 8:
-                response = _context13.sent;
+              case 9:
+                response = _context14.sent;
                 console.log(response);
 
-              case 10:
+              case 11:
               case "end":
-                return _context13.stop();
+                return _context14.stop();
             }
           }
-        }, _callee13, this);
+        }, _callee14, this);
       }));
 
       function deleteItem() {
@@ -20305,24 +20354,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return deleteItem;
     }(),
     clearInput: function () {
-      var _clearInput = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14() {
+      var _clearInput = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee15() {
         var input;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee15$(_context15) {
           while (1) {
-            switch (_context14.prev = _context14.next) {
+            switch (_context15.prev = _context15.next) {
               case 0:
                 //Props are readonly so we cant use this.itemInput = ""
                 //Get input
-                input = document.getElementById("itemInput"); //Clear input
+                input = document.getElementById("itemInput");
+                console.log(input); //Clear input
 
                 input.value = "";
 
-              case 2:
+              case 3:
               case "end":
-                return _context14.stop();
+                return _context15.stop();
             }
           }
-        }, _callee14);
+        }, _callee15);
       }));
 
       function clearInput() {

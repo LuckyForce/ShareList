@@ -63,6 +63,7 @@ import { getToken } from "../js/utilities";
 export default {
     data() {
         return {
+            onPage: true,
             loading: true,
             list: {
                 l_created: "Loading...",
@@ -85,6 +86,11 @@ export default {
     async mounted() {
         await this.loadList();
     },
+    watch: {
+        async $route(to, from) {
+            this.onPage = false;
+        },
+    },
     methods: {
         loadList: async function () {
             //Get id of list
@@ -92,7 +98,11 @@ export default {
 
             // Get list every 5 seconds per post request but get the first one immediately
             this.getList(listId);
-            setInterval(async () => {
+            const interval = setInterval(async () => {
+                if (!this.onPage) {
+                    // Stop the interval if the user navigates away
+                    clearInterval(interval);
+                }
                 this.getList(listId);
             }, 10000);
         },
@@ -161,6 +171,15 @@ export default {
                 return;
             }
 
+            //Push new item to items. THIS IS ONLY FOR LOADING REASONS
+            this.items.push({
+                i_l_id: this.list.l_id,
+                i_id: null,
+                i_content: this.itemInput,
+                i_lastupdated: "Loading...",
+                i_checked: false,
+            });
+
             //Get Token
             const token = await getToken();
 
@@ -193,6 +212,13 @@ export default {
                 return;
             }
 
+            //Update Item. THIS IS ONLY FOR LOADING REASONS
+            this.items.forEach((item) => {
+                if (item.i_id === this.selectedItem) {
+                    item.i_content = this.itemInput;
+                }
+            });
+
             //Get Token
             const token = await getToken();
 
@@ -222,6 +248,13 @@ export default {
                 await this.clearInput();
             }
 
+            //Delete Item. THIS IS ONLY FOR LOADING REASONS
+            this.items.forEach((item, index) => {
+                if (item.i_id === this.selectedItem) {
+                    this.items.splice(index, 1);
+                }
+            });
+
             //Get Token
             const token = await getToken();
 
@@ -248,6 +281,7 @@ export default {
             //Props are readonly so we cant use this.itemInput = ""
             //Get input
             const input = document.getElementById("itemInput");
+            console.log(input);
             //Clear input
             input.value = "";
         },
