@@ -4,14 +4,46 @@
             v-if="loading"
             class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
         >
-            List Loading...
+            <div class="spinner"></div>
         </div>
         <div v-else class="h-full flex flex-col">
-            <div v-if="admin">I am Admin</div>
             <h1 class="text-4xl text-center">{{ list.l_name }}</h1>
             <p class="text-lg text-gray-600 text-center">
                 {{ list.l_description }}
             </p>
+            <div v-if="admin">
+                <h2 class="text-2xl font-bold mb-1">Settings:</h2>
+                <div class="flex gap-x-5">
+                    <router-link
+                        :to="{
+                            name: 'ListEdit',
+                            params: { id: $route.params.id },
+                        }"
+                        class="button"
+                    >
+                        Edit List
+                    </router-link>
+                    <router-link
+                        :to="{
+                            name: 'ListMembers',
+                            params: { id: $route.params.id },
+                        }"
+                        class="button"
+                    >
+                        Members
+                    </router-link>
+                    <router-link
+                        :to="{
+                            name: 'ListInvites',
+                            params: { id: $route.params.id },
+                        }"
+                        class="button"
+                    >
+                        Invites
+                    </router-link>
+                </div>
+                <hr class="my-5" />
+            </div>
             <div class="flex flex-col justify-center gap-y-2 mb-4">
                 <div
                     v-for="item in items"
@@ -131,18 +163,21 @@ export default {
             console.log(response);
         },
         selectItem: async function (i_id, i_content) {
-            //Check if selected Item is the same as the already selected. In this case deselect the Item.
-            if (i_id === this.selectedItem) {
-                //Remove Content of input and set selectedItem null
-                this.selectedItem = null;
-                await this.clearInput();
-            } else {
-                //Set selectedItem and fill input with content.
-                this.selectedItem = i_id;
-                //Get input
-                const input = document.getElementById("itemInput");
-                //Clear input
-                input.value = i_content;
+            //Check if the user has write permissions if so allow them to edit the item
+            if (this.write) {
+                //Check if selected Item is the same as the already selected. In this case deselect the Item.
+                if (i_id === this.selectedItem) {
+                    //Remove Content of input and set selectedItem null
+                    this.selectedItem = null;
+                    await this.clearInput();
+                } else {
+                    //Set selectedItem and fill input with content.
+                    this.selectedItem = i_id;
+                    //Get input
+                    const input = document.getElementById("itemInput");
+                    //Clear input
+                    input.value = i_content;
+                }
             }
         },
         keydownInput: async function (event) {
