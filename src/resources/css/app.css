@@ -212,7 +212,6 @@ body {
     @apply hover:bg-blue-500;
     @apply transition;
     @apply mb-3;
-    @apply mt-1;
     @apply disabled:opacity-50;
     @apply justify-items-center;
     @apply ml-40;
