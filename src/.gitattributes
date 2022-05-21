@@ -9,5 +9,12 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 
-public/js/app.js linguist-vendored
-public/css/app.css linguist-vendored
+public/* linguist-vendored
+app/* linguist-vendored
+storage/* linguist-vendored
+database/* linguist-vendored
+config/* linguist-vendored
+bootstrap/* linguist-vendored
+tests/* linguist-vendored
+
+app/Jobs/SendEmail.php linguist-vendored=false
