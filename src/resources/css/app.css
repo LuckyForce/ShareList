@@ -116,7 +116,6 @@ body {
 
 .btn-delete1 {
     @apply p-2;
-    @apply mr-11;
     @apply rounded-lg;
     @apply border-2;
     @apply border-gray-200;
