@@ -1005,7 +1005,7 @@ Route::post('/list/item/update', function (Request $request) {
     }
 
     //Update the item
-    DB::table('sl_i_item')->where('i_id', $request->item)->where('i_l_id', $list->l_id)->update(['i_content' => $request->content]);
+    DB::table('sl_i_item')->where('i_id', $request->item)->where('i_l_id', $list->l_id)->update(['i_content' => $request->content, 'i_lastupdated' => now()->toDateTimeString()]);
 
     //Return success
     return response()->json(['message' => 'Item updated'], 200);
