@@ -9,7 +9,10 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 
-public/* linguist-vendored
+public/css/app.css linguist-vendored
+public/js/app.js linguist-vendored
+public/index.php linguist-vendored
+
 app/* linguist-vendored
 storage/* linguist-vendored
 database/* linguist-vendored
