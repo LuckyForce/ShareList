@@ -17,11 +17,16 @@
                         </div>
                         <br />
                             <div class="mb-3">
-                                <textarea class="form-control block w-60 px-3 py-1.5 ml-20 mr-10 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-200 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-400 focus:outline-none" id="exampleFormControlTextarea1" rows="3" placeholder="'ListenBeschreinung'"></textarea>
+                                <textarea class="form-control block w-60 px-3 py-1.5 ml-20 mr-10 text-base font-normal text-gray-700 bg-gray-200 bg-clip-padding border border-solid border-gray-200 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-400 focus:outline-none" id="exampleFormControlTextarea1" rows="3" placeholder="'ListenBeschreibung'"></textarea>
                         </div>
                         <br />
                          <div class="md:w-2/3 ml-20">
-                            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400" id="inline-full-name" type="text" value="'ListeTeilen'">
+                            <select name="user" id="userListEdit" class="text-gray-700 bg-gray-200 rounded py-1">
+                                <option value="KeinUser">/</option>
+                                <option value="user1">User1</option>
+                                <option value="user2">User2</option>
+                                <option value="user3">User3</option>
+                            </select>
                         </div>
                     </div>
                 </div>
