@@ -4,7 +4,20 @@
             v-if="loading"
             class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
         >
-            <div class="spinner"></div>
+            <div class="lds-spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
         <div v-else class="h-full flex flex-col">
             <h1 class="text-4xl text-center">{{ list.l_name }}</h1>
@@ -92,6 +105,7 @@
 
 <script>
 import { getToken } from "../js/utilities";
+
 export default {
     data() {
         return {
@@ -127,7 +141,6 @@ export default {
         loadList: async function () {
             //Get id of list
             const listId = this.$route.params.id;
-
             // Get list every 5 seconds per post request but get the first one immediately
             this.getList(listId);
             const interval = setInterval(async () => {
@@ -141,7 +154,6 @@ export default {
         getList: async function (listId) {
             //Get Token
             const token = await getToken();
-
             const response = await axios
                 .post("/api/list", {
                     token: token,
@@ -205,7 +217,6 @@ export default {
             ) {
                 return;
             }
-
             //Push new item to items. THIS IS ONLY FOR LOADING REASONS
             this.items.push({
                 i_l_id: this.list.l_id,
@@ -214,10 +225,8 @@ export default {
                 i_lastupdated: "Loading...",
                 i_checked: false,
             });
-
             //Get Token
             const token = await getToken();
-
             const response = await axios
                 .post("/api/list/item/add", {
                     token: token,
@@ -246,17 +255,14 @@ export default {
                 this.deleteItem();
                 return;
             }
-
             //Update Item. THIS IS ONLY FOR LOADING REASONS
             this.items.forEach((item) => {
                 if (item.i_id === this.selectedItem) {
                     item.i_content = this.itemInput;
                 }
             });
-
             //Get Token
             const token = await getToken();
-
             const response = await axios
                 .post("/api/list/item/update", {
                     token: token,
@@ -282,17 +288,14 @@ export default {
             if (this.selectedItem === null) {
                 await this.clearInput();
             }
-
             //Delete Item. THIS IS ONLY FOR LOADING REASONS
             this.items.forEach((item, index) => {
                 if (item.i_id === this.selectedItem) {
                     this.items.splice(index, 1);
                 }
             });
-
             //Get Token
             const token = await getToken();
-
             const response = await axios
                 .post("/api/list/item/delete", {
                     token: token,

@@ -1,12 +1,33 @@
 // resources/views/Invite.vue
 <template>
     <div class="flex flex-col justify-center align-middle h-full">
-        <p class="text-xl sm:text-5xl text-gray-700 text-center">
-            {{ message }}
-        </p>
-        <p v-if="loaded" class="text-lg sm:text-2xl text-gray-700 text-center">
-            You can close this Window now.
-        </p>
+        <div
+            v-if="!loaded"
+            class="text-xl sm:text-5xl text-gray-700 text-center"
+        >
+            <div class="lds-spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div v-if="loaded">
+            <p class="text-xl sm:text-5xl text-gray-700 text-center">
+                {{ message }}
+            </p>
+            <p class="text-lg sm:text-2xl text-gray-700 text-center">
+                You can close this Window now.
+            </p>
+        </div>
     </div>
 </template>
 
@@ -14,13 +35,14 @@
 export default {
     data() {
         return {
-            message: "Loading...",
+            message: "",
             loaded: false,
         };
     },
     async mounted() {
         const result = await this.checkInvite(this.$route.params.id);
         this.message = result;
+        this.loaded = true;
     },
     methods: {
         checkInvite: async function (id) {
@@ -32,7 +54,6 @@ export default {
                     invite: id,
                 })
                 .then(function (response) {
-                    this.loaded = true;
                     return response.data.message;
                 })
                 .catch(function (error) {

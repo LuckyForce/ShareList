@@ -10,7 +10,20 @@
                     v-if="!loaded"
                     class="text-center text-gray-600 sm:text-2xl text-lg"
                 >
-                    Loading...
+                    <div class="lds-spinner">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </span>
                 <p
                     v-if="!lists.length && loaded"
