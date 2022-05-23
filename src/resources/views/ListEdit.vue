@@ -28,7 +28,7 @@
                     />
                     <label class="">List Description</label>
                     <textarea
-                        class="form-control block text-base font-normal text-gray-700 bg-gray-200 bg-clip-padding border border-solid border-gray-200 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-400 focus:outline-none"
+                        class="block text-base font-normal text-gray-700 bg-gray-200 bg-clip-padding border border-solid border-gray-200 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-400 focus:outline-none"
                         id="exampleFormControlTextarea1"
                         rows="3"
                         placeholder="List Description"

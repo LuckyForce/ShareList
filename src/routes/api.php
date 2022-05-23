@@ -825,7 +825,7 @@ Route::post('/list/members', function (Request $request) {
         ], 404);
     }
 
-    //Get the members
+    //Get the members TODO: ISNT CORRECT
     $members = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->get();
 
     //Return success
