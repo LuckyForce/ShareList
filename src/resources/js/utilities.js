@@ -75,3 +75,14 @@ export const mainLogout = async function () {
     window.sessionStorage.removeItem("expires");
 }
 
+export const mainCheckLoggedIn = async function () {
+    const email = window.localStorage.getItem("email"); 
+    const pwd = window.localStorage.getItem("pwd");
+    const verified = window.localStorage.getItem("verified");
+    //If email and password are not null
+    if (email !== null && pwd !== null && verified !== null && email !== undefined && pwd !== undefined && verified !== undefined)
+        return true;
+    else
+        return false;
+}
+

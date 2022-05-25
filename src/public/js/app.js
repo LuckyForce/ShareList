@@ -20551,19 +20551,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       lists: [],
       createListButton: "Create List",
       createListButtonDisabled: false,
-      loaded: false
+      loaded: false,
+      loggedIn: false
     };
   },
   mounted: function mounted() {
-    this.getLists();
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              console.log("Lists Init");
+              _context.next = 3;
+              return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainCheckLoggedIn)();
+
+            case 3:
+              _this.loggedIn = _context.sent;
+
+              _this.getLists();
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   methods: {
     getList: function () {
-      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(id) {
+      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(id) {
         var link;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 link = "/list/".concat(id); //Redirect to list
 
@@ -20571,10 +20594,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
 
       function getList(_x) {
@@ -20584,19 +20607,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return getList;
     }(),
     getLists: function () {
-      var _getLists = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var _this = this;
+      var _getLists = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var _this2 = this;
 
         var token;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.next = 2;
+                _context3.next = 2;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
 
               case 2:
-                token = _context2.sent;
+                token = _context3.sent;
 
                 //If token is false
                 if (token === false) {
@@ -20604,23 +20627,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 } //Get the lists from the api per post request
 
 
-                _context2.next = 6;
+                _context3.next = 6;
                 return axios.post("/api/lists", {
                   token: token
                 }).then(function (response) {
                   console.log(response.data);
-                  _this.loaded = true;
-                  _this.lists = response.data.lists;
+                  _this2.loaded = true;
+                  _this2.lists = response.data.lists;
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
               case 6:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
       function getLists() {
@@ -20630,22 +20653,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return getLists;
     }(),
     createList: function () {
-      var _createList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      var _createList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         var token, success, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 //Set the button to loading
                 this.createListButton = "Loading..."; //Disable the button
 
                 this.createListButtonDisabled = true; //Get Token
 
-                _context3.next = 4;
+                _context4.next = 4;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
 
               case 4:
-                token = _context3.sent;
+                token = _context4.sent;
 
                 //If token is false
                 if (token === false) {
@@ -20654,7 +20677,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 success = false; //Get the lists from the api per post request
 
-                _context3.next = 9;
+                _context4.next = 9;
                 return axios.post("/api/list/create", {
                   token: token
                 }).then(function (response) {
@@ -20667,7 +20690,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 9:
-                response = _context3.sent;
+                response = _context4.sent;
 
                 //If the list was created successfully redirect to the list
                 if (success) {
@@ -20678,10 +20701,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 11:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee4, this);
       }));
 
       function createList() {
@@ -20721,7 +20744,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       valid: true,
       loginText: "Login",
-      loginDisabled: false
+      loginDisabled: false,
+      loggedIn: false
     };
   },
   props: {
@@ -20732,13 +20756,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       type: String
     }
   },
+  mounted: function mounted() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              console.log("Login Init");
+              console.log(_this.loggedIn);
+              _context.next = 4;
+              return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainCheckLoggedIn)();
+
+            case 4:
+              _this.loggedIn = _context.sent;
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  },
   methods: {
     login: function () {
-      var _login = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var _login = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 //Disable Button
                 this.loginText = "Logging in...";
@@ -20746,11 +20794,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 this.valid = true; //Check if credentials are valid
 
-                _context.next = 5;
+                _context2.next = 5;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainLogin)(this.email, this.password);
 
               case 5:
-                result = _context.sent;
+                result = _context2.sent;
 
                 //If credentials are valid, redirect to home
                 if (result === true) {
@@ -20770,10 +20818,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 9:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
 
       function login() {
@@ -20848,7 +20896,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       pwdTooLong: false,
       pwdConfirmWrong: false,
       deleteAccountButton: "Delete Account",
-      deleteWrong: false
+      deleteWrong: false,
+      loggedIn: false
     };
   },
   props: {
@@ -20866,16 +20915,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   mounted: function mounted() {
-    this.email = window.localStorage.getItem("email");
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              console.log("Profile Init");
+              _context.next = 3;
+              return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainCheckLoggedIn)();
+
+            case 3:
+              _this.loggedIn = _context.sent;
+              _this.email = window.localStorage.getItem("email");
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   methods: {
     logout: function () {
-      var _logout = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+      var _logout = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                _context.next = 2;
+                _context2.next = 2;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainLogout)();
 
               case 2:
@@ -20883,10 +20953,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
 
       function logout() {
@@ -20896,13 +20966,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return logout;
     }(),
     changePassword: function () {
-      var _changePassword = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var _this = this;
+      var _changePassword = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var _this2 = this;
 
         var token;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 //Disable Button
                 this.changePasswordButton = "Changing...";
@@ -20912,83 +20982,83 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.pwdConfirmWrong = false; //Check if password is correct
 
                 if (!(this.profilePasswordOld === undefined || this.profilePasswordOld === "")) {
-                  _context2.next = 9;
+                  _context3.next = 9;
                   break;
                 }
 
                 this.pwdWrong = true;
                 this.changePasswordButton = "Change Password";
-                return _context2.abrupt("return");
+                return _context3.abrupt("return");
 
               case 9:
                 if (!(this.profilePasswordNew === undefined || this.profilePasswordNew.length < 6)) {
-                  _context2.next = 15;
+                  _context3.next = 15;
                   break;
                 }
 
                 this.pwdTooShort = true;
                 this.changePasswordButton = "Change Password";
-                return _context2.abrupt("return");
+                return _context3.abrupt("return");
 
               case 15:
                 if (!(this.profilePasswordNew.length > 20)) {
-                  _context2.next = 19;
+                  _context3.next = 19;
                   break;
                 }
 
                 this.pwdTooLong = true;
                 this.changePasswordButton = "Change Password";
-                return _context2.abrupt("return");
+                return _context3.abrupt("return");
 
               case 19:
                 if (!(this.profilePasswordNew !== this.profilePasswordConfirm)) {
-                  _context2.next = 23;
+                  _context3.next = 23;
                   break;
                 }
 
                 this.pwdConfirmWrong = true;
                 this.changePasswordButton = "Change Password";
-                return _context2.abrupt("return");
+                return _context3.abrupt("return");
 
               case 23:
-                _context2.next = 25;
+                _context3.next = 25;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)(this.$router);
 
               case 25:
-                token = _context2.sent;
+                token = _context3.sent;
                 console.log(token); //If no errors, change password
                 //Change password
                 //Send request
 
-                _context2.next = 29;
+                _context3.next = 29;
                 return axios.post("/api/user/changepwd", {
                   token: token,
                   oldPassword: this.profilePasswordOld,
                   newPassword: this.profilePasswordNew
                 }).then(function (response) {
-                  _this.changePasswordButton = response.data.message; //Set new password in local storage
+                  _this2.changePasswordButton = response.data.message; //Set new password in local storage
 
                   //Set new password in local storage
-                  window.localStorage.setItem("pwd", _this.profilePasswordNew);
+                  window.localStorage.setItem("pwd", _this2.profilePasswordNew);
                 })["catch"](function (error) {
                   console.log(error.response.data); //If error
 
                   //If error
                   if (error.response.status === 401) {
                     //If wrong password
-                    _this.pwdWrong = true;
-                    _this.changePasswordButton = "Change Password";
+                    _this2.pwdWrong = true;
+                    _this2.changePasswordButton = "Change Password";
                   } else {
-                    _this.changePasswordButton = error.response.data.error;
+                    _this2.changePasswordButton = error.response.data.error;
                   }
                 });
 
               case 29:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
       function changePassword() {
@@ -20998,63 +21068,63 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return changePassword;
     }(),
     deleteAccount: function () {
-      var _deleteAccount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        var _this2 = this;
+      var _deleteAccount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        var _this3 = this;
 
         var token;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 //Disable Button
                 this.deleteAccountButton = "Deleting...";
                 this.deleteWrong = false; //Check if password is correct
 
                 if (!(this.deletePassword === undefined || this.deletePassword === "")) {
-                  _context4.next = 6;
+                  _context5.next = 6;
                   break;
                 }
 
                 this.deleteWrong = true;
                 this.deleteAccountButton = "Delete Account";
-                return _context4.abrupt("return");
+                return _context5.abrupt("return");
 
               case 6:
                 //Test
                 console.log(this.deletePassword); //Get Token
 
-                _context4.next = 9;
+                _context5.next = 9;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)(this.$router);
 
               case 9:
-                token = _context4.sent;
+                token = _context5.sent;
                 console.log(token); //If no errors, delete account
                 //Delete account
                 //Send request
 
-                _context4.next = 13;
+                _context5.next = 13;
                 return axios.post("/api/user/delete", {
                   token: token,
                   password: this.deletePassword
                 }).then( /*#__PURE__*/function () {
-                  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(response) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+                  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(response) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
                       while (1) {
-                        switch (_context3.prev = _context3.next) {
+                        switch (_context4.prev = _context4.next) {
                           case 0:
-                            _context3.next = 2;
+                            _context4.next = 2;
                             return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainLogout)();
 
                           case 2:
                             //Redirect to homepage
-                            _this2.$router.push("/");
+                            _this3.$router.push("/");
 
                           case 3:
                           case "end":
-                            return _context3.stop();
+                            return _context4.stop();
                         }
                       }
-                    }, _callee3);
+                    }, _callee4);
                   }));
 
                   return function (_x) {
@@ -21066,19 +21136,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   //If error
                   if (error.response.status === 401) {
                     //If wrong password
-                    _this2.deleteWrong = true;
-                    _this2.deleteAccountButton = "Delete Account";
+                    _this3.deleteWrong = true;
+                    _this3.deleteAccountButton = "Delete Account";
                   } else {
-                    _this2.deleteAccountButton = "Something went wrong! Please try again.";
+                    _this3.deleteAccountButton = "Something went wrong! Please try again.";
                   }
                 });
 
               case 13:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee5, this);
       }));
 
       function deleteAccount() {
@@ -21105,11 +21175,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _js_utilities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../js/utilities */ "./resources/js/utilities.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -21121,7 +21193,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       pwdConfirmWrong: false,
       aboutAccepted: true,
       registerText: "Register",
-      registerDisabled: false
+      registerDisabled: false,
+      loggedIn: false
     };
   },
   props: {
@@ -21138,13 +21211,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       type: Boolean
     }
   },
+  mounted: function mounted() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              console.log("Register Init");
+              _context.next = 3;
+              return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.mainCheckLoggedIn)();
+
+            case 3:
+              _this.loggedIn = _context.sent;
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  },
   methods: {
     register: function () {
-      var _register = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var _register = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         var reg, success;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 //Disable Button
                 this.registerText = "Registering...";
@@ -21159,16 +21255,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 reg = /.+\@.+\..+/;
 
                 if (reg.test(this.email)) {
-                  _context.next = 12;
+                  _context2.next = 12;
                   break;
                 }
 
                 this.emailValid = false;
-                _context.next = 15;
+                _context2.next = 15;
                 break;
 
               case 12:
-                _context.next = 14;
+                _context2.next = 14;
                 return axios.post("/api/user/checkemail", {
                   email: this.email
                 }).then(function (response) {
@@ -21180,7 +21276,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 14:
-                this.emailTaken = _context.sent;
+                this.emailTaken = _context2.sent;
 
               case 15:
                 //Check if password is at least 6 characters long
@@ -21203,11 +21299,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
                 if (!(this.emailValid && !this.emailTaken && !this.pwdTooShort && !this.pwdTooLong && !this.pwdConfirmWrong && this.agreementConfirm && this.aboutAccepted)) {
-                  _context.next = 25;
+                  _context2.next = 25;
                   break;
                 }
 
-                _context.next = 21;
+                _context2.next = 21;
                 return axios.post("/api/user/register", {
                   email: this.email,
                   password: this.password
@@ -21220,7 +21316,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 21:
-                success = _context.sent;
+                success = _context2.sent;
 
                 if (success) {
                   //Save Cookies
@@ -21233,7 +21329,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.registerText = "Something went wrong! Please try again.";
                 }
 
-                _context.next = 26;
+                _context2.next = 26;
                 break;
 
               case 25:
@@ -21246,10 +21342,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 27:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
 
       function register() {
@@ -22093,68 +22189,88 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+var _hoisted_1 = {
+  "class": "h-full"
+};
+var _hoisted_2 = {
+  key: 0
+};
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
   "class": "mt-6 sm:text-4xl text-lg flex justify-center"
 }, " Your current Lists ", -1
 /* HOISTED */
 );
 
-var _hoisted_2 = {
+var _hoisted_4 = {
   "class": "lg:px-24 md:px-12 sm:px-6 px-1"
 };
-var _hoisted_3 = {
+var _hoisted_5 = {
   "class": "flex flex-col sm:p-5 p-1 gap-y-2"
 };
-var _hoisted_4 = {
+var _hoisted_6 = {
   key: 0,
   "class": "text-center text-gray-600 sm:text-2xl text-lg"
 };
 
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "lds-spinner"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div")], -1
 /* HOISTED */
 );
 
-var _hoisted_6 = [_hoisted_5];
-var _hoisted_7 = {
+var _hoisted_8 = [_hoisted_7];
+var _hoisted_9 = {
   key: 1,
   "class": "text-center text-gray-600 sm:text-2xl text-lg"
 };
-var _hoisted_8 = ["onClick"];
-var _hoisted_9 = {
+var _hoisted_10 = ["onClick"];
+var _hoisted_11 = {
   "class": "text-xl mb-2 ml-1"
 };
-var _hoisted_10 = {
+var _hoisted_12 = {
   "class": "text-sm text-gray-600 mb-2 ml-1"
 };
-var _hoisted_11 = {
+var _hoisted_13 = {
   "class": "sm:p-5 p-1"
 };
-var _hoisted_12 = ["disabled"];
+var _hoisted_14 = ["disabled"];
+var _hoisted_15 = {
+  key: 1,
+  "class": "flex flex-col justify-center align-middle h-full"
+};
+var _hoisted_16 = {
+  "class": "text-lg sm:text-5xl text-gray-700 text-center"
+};
+
+var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" You need to be logged in to view your lists! To login or register, click ");
+
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("here");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("TODO: Design List Card"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [!$data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_4, _hoisted_6)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.lists.length && $data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_7, " No lists yet? Create one by clicking the button below! ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.lists, function (list) {
+  var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
+
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$data.loggedIn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("TODO: Design List Card"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [!$data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_6, _hoisted_8)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.lists.length && $data.loaded ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_9, " No lists yet? Create one by clicking the button below! ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.lists, function (list) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: list.l_id,
       "class": "list-card",
       onClick: function onClick($event) {
         return _this.getList(list.l_id);
       }
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_name), 1
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_name), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_description), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_description), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Created at: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.l_created), 1
     /* TEXT */
     )], 8
     /* PROPS */
-    , _hoisted_8);
+    , _hoisted_10);
   }), 128
   /* KEYED_FRAGMENT */
-  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "btn-create text-2xl w-full",
     onClick: _cache[0] || (_cache[0] = function ($event) {
@@ -22163,7 +22279,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     disabled: $data.createListButtonDisabled
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(this.createListButton), 9
   /* TEXT, PROPS */
-  , _hoisted_12)])])]);
+  , _hoisted_14)])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "/register",
+    "class": "underline"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_18];
+    }),
+    _: 1
+    /* STABLE */
+
+  })])]))]);
 }
 
 /***/ }),
@@ -22185,6 +22311,7 @@ var _hoisted_1 = {
   "class": "h-full flex justify-center p-5"
 };
 var _hoisted_2 = {
+  key: 0,
   id: "login",
   "class": "login-form"
 };
@@ -22218,10 +22345,22 @@ var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNod
 
 var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Register");
 
+var _hoisted_10 = {
+  key: 1,
+  "class": "flex flex-col justify-center align-middle h-full"
+};
+var _hoisted_11 = {
+  "class": "text-lg sm:text-5xl text-gray-700 text-center"
+};
+
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Looks like you are already logged in! To check out your lists click ");
+
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("here");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [!$data.loggedIn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [_hoisted_3, _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "email",
     name: "login-email",
     id: "login-email",
@@ -22267,7 +22406,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })])])]);
+  })])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_11, [_hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "/lists",
+    "class": "underline"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_13];
+    }),
+    _: 1
+    /* STABLE */
+
+  })])]))]);
 }
 
 /***/ }),
@@ -22349,6 +22498,7 @@ var _hoisted_1 = {
   "class": "h-full flex justify-center p-5"
 };
 var _hoisted_2 = {
+  key: 0,
   "class": "my-auto flex flex-col gap-y-5"
 };
 
@@ -22438,8 +22588,22 @@ var _hoisted_20 = {
   key: 0,
   "class": "invalid-input"
 };
+var _hoisted_21 = {
+  key: 1,
+  "class": "flex flex-col justify-center align-middle h-full"
+};
+var _hoisted_22 = {
+  "class": "text-lg sm:text-5xl text-gray-700 text-center"
+};
+
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" You need to be logged in to view your lists! To login or register, click ");
+
+var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("here");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.email), 1
+  var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
+
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$data.loggedIn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.email), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "button",
@@ -22504,7 +22668,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.deleteAccountButton), 1
   /* TEXT */
-  )])])]);
+  )])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_22, [_hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "/register",
+    "class": "underline"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_24];
+    }),
+    _: 1
+    /* STABLE */
+
+  })])]))]);
 }
 
 /***/ }),
@@ -22526,6 +22700,7 @@ var _hoisted_1 = {
   "class": "h-full flex justify-center p-5"
 };
 var _hoisted_2 = {
+  key: 0,
   id: "register",
   "class": "register-form"
 };
@@ -22601,10 +22776,22 @@ var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNo
 
 var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Login");
 
+var _hoisted_20 = {
+  key: 1,
+  "class": "flex flex-col justify-center align-middle h-full"
+};
+var _hoisted_21 = {
+  "class": "text-lg sm:text-5xl text-gray-700 text-center"
+};
+
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Looks like you are already logged in! To check out your lists click ");
+
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("here");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [!$data.loggedIn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [_hoisted_3, _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     name: "register-email",
     id: "register-email",
@@ -22665,7 +22852,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })])])]);
+  })])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_21, [_hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "/lists",
+    "class": "underline"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_23];
+    }),
+    _: 1
+    /* STABLE */
+
+  })])]))]);
 }
 
 /***/ }),
@@ -22961,6 +23158,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "getToken": () => (/* binding */ getToken),
+/* harmony export */   "mainCheckLoggedIn": () => (/* binding */ mainCheckLoggedIn),
 /* harmony export */   "mainLogin": () => (/* binding */ mainLogin),
 /* harmony export */   "mainLogout": () => (/* binding */ mainLogout)
 /* harmony export */ });
@@ -23141,6 +23339,39 @@ var mainLogout = /*#__PURE__*/function () {
 
   return function mainLogout() {
     return _ref4.apply(this, arguments);
+  };
+}();
+var mainCheckLoggedIn = /*#__PURE__*/function () {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+    var email, pwd, verified;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            email = window.localStorage.getItem("email");
+            pwd = window.localStorage.getItem("pwd");
+            verified = window.localStorage.getItem("verified"); //If email and password are not null
+
+            if (!(email !== null && pwd !== null && verified !== null && email !== undefined && pwd !== undefined && verified !== undefined)) {
+              _context5.next = 7;
+              break;
+            }
+
+            return _context5.abrupt("return", true);
+
+          case 7:
+            return _context5.abrupt("return", false);
+
+          case 8:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+
+  return function mainCheckLoggedIn() {
+    return _ref5.apply(this, arguments);
   };
 }();
 

@@ -1,6 +1,6 @@
 <template>
     <div class="h-full flex justify-center p-5">
-        <div class="my-auto flex flex-col gap-y-5">
+        <div v-if="loggedIn" class="my-auto flex flex-col gap-y-5">
             <h1 class="text-4xl mx-auto font-bold text-center">
                 Edit Account Details
             </h1>
@@ -83,11 +83,18 @@
                 </button>
             </div>
         </div>
+        <div v-else class="flex flex-col justify-center align-middle h-full">
+            <p class="text-lg sm:text-5xl text-gray-700 text-center">
+                You need to be logged in to view your lists! To login or
+                register, click
+                <router-link to="/register" class="underline">here</router-link>
+            </p>
+        </div>
     </div>
 </template>
 
 <script>
-import { getToken, mainLogout } from "../js/utilities";
+import { getToken, mainLogout, mainCheckLoggedIn } from "../js/utilities";
 export default {
     data() {
         return {
@@ -99,6 +106,7 @@ export default {
             pwdConfirmWrong: false,
             deleteAccountButton: "Delete Account",
             deleteWrong: false,
+            loggedIn: false,
         };
     },
     props: {
@@ -115,7 +123,9 @@ export default {
             type: String,
         },
     },
-    mounted() {
+    async mounted() {
+        console.log("Profile Init");
+        this.loggedIn = await mainCheckLoggedIn();
         this.email = window.localStorage.getItem("email");
     },
     methods: {

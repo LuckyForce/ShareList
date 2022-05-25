@@ -1,65 +1,74 @@
 <template>
-    <div>
-        <h1 class="mt-6 sm:text-4xl text-lg flex justify-center">
-            Your current Lists
-        </h1>
-        <div class="lg:px-24 md:px-12 sm:px-6 px-1">
-            <!--TODO: Design List Card-->
-            <div class="flex flex-col sm:p-5 p-1 gap-y-2">
-                <span
-                    v-if="!loaded"
-                    class="text-center text-gray-600 sm:text-2xl text-lg"
-                >
-                    <div class="lds-spinner">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                </span>
-                <p
-                    v-if="!lists.length && loaded"
-                    class="text-center text-gray-600 sm:text-2xl text-lg"
-                >
-                    No lists yet? Create one by clicking the button below!
-                </p>
-                <div
-                    v-for="list in lists"
-                    :key="list.l_id"
-                    class="list-card"
-                    @click="this.getList(list.l_id)"
-                >
-                    <h2 class="text-xl mb-2 ml-1">{{ list.l_name }}</h2>
-                    <p class="text-sm text-gray-600 mb-2 ml-1">
-                        {{ list.l_description }}
+    <div class="h-full">
+        <div v-if="loggedIn">
+            <h1 class="mt-6 sm:text-4xl text-lg flex justify-center">
+                Your current Lists
+            </h1>
+            <div class="lg:px-24 md:px-12 sm:px-6 px-1">
+                <!--TODO: Design List Card-->
+                <div class="flex flex-col sm:p-5 p-1 gap-y-2">
+                    <span
+                        v-if="!loaded"
+                        class="text-center text-gray-600 sm:text-2xl text-lg"
+                    >
+                        <div class="lds-spinner">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </span>
+                    <p
+                        v-if="!lists.length && loaded"
+                        class="text-center text-gray-600 sm:text-2xl text-lg"
+                    >
+                        No lists yet? Create one by clicking the button below!
                     </p>
-                    <span>Created at: {{ list.l_created }}</span>
+                    <div
+                        v-for="list in lists"
+                        :key="list.l_id"
+                        class="list-card"
+                        @click="this.getList(list.l_id)"
+                    >
+                        <h2 class="text-xl mb-2 ml-1">{{ list.l_name }}</h2>
+                        <p class="text-sm text-gray-600 mb-2 ml-1">
+                            {{ list.l_description }}
+                        </p>
+                        <span>Created at: {{ list.l_created }}</span>
+                    </div>
+                </div>
+                <div class="sm:p-5 p-1">
+                    <button
+                        type="submit"
+                        class="btn-create text-2xl w-full"
+                        @click="this.createList()"
+                        :disabled="createListButtonDisabled"
+                    >
+                        {{ this.createListButton }}
+                    </button>
                 </div>
             </div>
-            <div class="sm:p-5 p-1">
-                <button
-                    type="submit"
-                    class="btn-create text-2xl w-full"
-                    @click="this.createList()"
-                    :disabled="createListButtonDisabled"
-                >
-                    {{ this.createListButton }}
-                </button>
-            </div>
+        </div>
+        <div v-else class="flex flex-col justify-center align-middle h-full">
+            <p class="text-lg sm:text-5xl text-gray-700 text-center">
+                You need to be logged in to view your lists! To login or
+                register, click
+                <router-link to="/register" class="underline">here</router-link>
+            </p>
         </div>
     </div>
 </template>
 
 <script>
-import { getToken } from "../js/utilities";
+import { getToken, mainCheckLoggedIn } from "../js/utilities";
 
 export default {
     data() {
@@ -68,9 +77,12 @@ export default {
             createListButton: "Create List",
             createListButtonDisabled: false,
             loaded: false,
+            loggedIn: false,
         };
     },
-    mounted() {
+    async mounted() {
+        console.log("Lists Init");
+        this.loggedIn = await mainCheckLoggedIn();
         this.getLists();
     },
     methods: {

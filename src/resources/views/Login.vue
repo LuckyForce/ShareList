@@ -1,7 +1,7 @@
 // resources/views/Login.vue
 <template>
     <div class="h-full flex justify-center p-5">
-        <div id="login" class="login-form">
+        <div v-if="!loggedIn" id="login" class="login-form">
             <h2 class="text-2xl text-blue-400 mx-auto mb-5">Login</h2>
             <label for="login-email">E-Mail</label>
             <input
@@ -36,11 +36,16 @@
                 >
             </p>
         </div>
+        <div v-else class="flex flex-col justify-center align-middle h-full">
+            <p class="text-lg sm:text-5xl text-gray-700 text-center">
+                Looks like you are already logged in! To check out your lists click <router-link to="/lists" class="underline">here</router-link>
+            </p>
+        </div>
     </div>
 </template>
 
 <script>
-import { mainLogin } from "../js/utilities";
+import { mainLogin, mainCheckLoggedIn } from "../js/utilities";
 
 export default {
     data() {
@@ -48,6 +53,7 @@ export default {
             valid: true,
             loginText: "Login",
             loginDisabled: false,
+            loggedIn: false,
         };
     },
     props: {
@@ -57,6 +63,11 @@ export default {
         password: {
             type: String,
         },
+    },
+    async mounted() {
+        console.log("Login Init");
+        console.log(this.loggedIn);
+        this.loggedIn = await mainCheckLoggedIn();
     },
     methods: {
         login: async function () {

@@ -1,6 +1,6 @@
 <template>
     <div class="h-full flex justify-center p-5">
-        <div id="register" class="register-form">
+        <div v-if="!loggedIn" id="register" class="register-form">
             <h2 class="text-2xl text-blue-400 mx-auto mb-5">Register</h2>
             <label for="register-email">E-Mail</label>
             <input
@@ -78,10 +78,16 @@
                 <router-link to="/login" class="underline">Login</router-link>
             </p>
         </div>
+        <div v-else class="flex flex-col justify-center align-middle h-full">
+            <p class="text-lg sm:text-5xl text-gray-700 text-center">
+                Looks like you are already logged in! To check out your lists click <router-link to="/lists" class="underline">here</router-link>
+            </p>
+        </div>
     </div>
 </template>
 
 <script>
+import { mainCheckLoggedIn } from "../js/utilities";
 export default {
     data() {
         return {
@@ -93,6 +99,7 @@ export default {
             aboutAccepted: true,
             registerText: "Register",
             registerDisabled: false,
+            loggedIn: false,
         };
     },
     props: {
@@ -108,6 +115,10 @@ export default {
         agreementConfirm: {
             type: Boolean,
         },
+    },
+    async mounted() {
+        console.log("Register Init");
+        this.loggedIn = await mainCheckLoggedIn();
     },
     methods: {
         register: async function () {
