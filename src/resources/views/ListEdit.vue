@@ -1,19 +1,18 @@
 <template>
     <div class="flex flex-col">
         <div class="flex m-4">
-
             <router-link
-            class="button"
-            :to="{
-                name: 'List',
-                params: {
-                    id: $route.params.id,
-                },
-            }"
-        >
-            Back to list
-        </router-link>
-                    </div>
+                class="button"
+                :to="{
+                    name: 'List',
+                    params: {
+                        id: $route.params.id,
+                    },
+                }"
+            >
+                Back to list
+            </router-link>
+        </div>
         <h1 class="mt-6 text-4xl flex justify-center">List Edit</h1>
         <div class="flex w-full flex-wrap justify-center my-8">
             <div class="bg-white rounded-xl p-2 my-0">
@@ -70,5 +69,29 @@
 </template>
 
 <script>
-export default {};
+import {getToken} from '../js/utilities';
+
+export default {
+    data() {
+        return {
+        };
+    },
+    mounted() {
+        this.getList();
+    },
+    methods: {
+        getList: async function () {
+
+        },
+        updateList: async function () {
+
+        },
+        deleteList: async function () {
+
+        },
+        transferList: async function () {
+
+        },
+    },
+};
 </script>

@@ -502,11 +502,11 @@ Route::post('/list/delete', function (Request $request) {
     return response()->json(['message' => 'List deleted'], 200);
 });
 
-//Change List Name
-Route::post('/list/rename', function (Request $request) {
+//Update List Name and Description. Needs to be owner of the list
+Route::post('/list/update', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->name)) {
-        return response()->json(['error' => 'Token, list or name is missing'], 400);
+    if (!isset($request->token) || !isset($request->list) || !isset($request->name) || !isset($request->description)) {
+        return response()->json(['error' => 'Token, list, name or description is missing'], 400);
     }
 
     //Get the user
@@ -522,15 +522,22 @@ Route::post('/list/rename', function (Request $request) {
         ], 404);
     }
 
-    //Validate the name
-    if ($request->name == null || strlen($request->name) < 1 || !is_string($request->name)) {
+    //Validate the name. Max 20 characters
+    if ($request->name == null || strlen($request->name) < 1 || !is_string($request->name) || strlen($request->name) > 20) {
         return response()->json([
             'error' => 'Name is invalid',
         ], 400);
     }
 
+    //Validate the description. Max 255 characters
+    if ($request->description == null || strlen($request->description) < 1 || !is_string($request->description) || strlen($request->description) > 255) {
+        return response()->json([
+            'error' => 'Description is invalid',
+        ], 400);
+    }
+
     //Update the list
-    DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->update(['l_name' => $request->name]);
+    DB::table('sl_l_list')->where('l_id', $request->list)->where('l_u_id', $user->u_id)->update(['l_name' => $request->name, 'l_description' => $request->description]);
 
     //Return success
     return response()->json(['message' => 'List name changed'], 200);
@@ -825,8 +832,15 @@ Route::post('/list/members', function (Request $request) {
         ], 404);
     }
 
-    //Get the members TODO: ISNT CORRECT
-    $members = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->get();
+    //Get the members id except the owner
+    $membersId = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', '!=', $user->u_id)->get();
+
+    //get the members email address and id with id
+    $members = [];
+    foreach ($membersId as $member) {
+        $member = DB::table('sl_u_user')->where('u_id', $member->a_u_id)->first();
+        array_push($members, ['id' => $member->u_id, 'email' => $member->u_email]);
+    }
 
     //Return success
     return response()->json(['members' => $members], 200);

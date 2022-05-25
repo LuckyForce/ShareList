@@ -544,6 +544,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .-mt-px {
   margin-top: -1px;
 }
+.ml-3 {
+  margin-left: 0.75rem;
+}
 .block {
   display: block;
 }
@@ -612,6 +615,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-auto {
   width: auto;
+}
+.w-5\/6 {
+  width: 83.333333%;
+}
+.w-4\/6 {
+  width: 66.666667%;
 }
 .max-w-6xl {
   max-width: 72rem;
@@ -1693,6 +1702,14 @@ body {
 
   .md\:w-2\/3 {
     width: 66.666667%;
+  }
+
+  .md\:w-1\/6 {
+    width: 16.666667%;
+  }
+
+  .md\:w-3\/6 {
+    width: 50%;
   }
 
   .md\:grid-cols-2 {

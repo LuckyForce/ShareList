@@ -20,7 +20,7 @@ create table sl_a_access(
 create table sl_l_list(
      l_id varchar(255) not null,
      l_created datetime not null,
-     l_name varchar(100) not null,
+     l_name varchar(20) not null,
      l_description varchar(255) not null default '',
      l_u_id int not null,
      primary key(l_id)
