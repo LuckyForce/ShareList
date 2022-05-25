@@ -6,7 +6,7 @@
         <div class="flex flex-col w-full justify-center my-8">
             <div class="md:w-1/6 w-5/6 mx-auto flex flex-col">
                 <input
-                    class="bg-gray-200 border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
+                    class="border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
                     id="inline-full-name"
                     type="text"
                     placeholder="Email"
@@ -17,13 +17,22 @@
             </div>
         </div>
 
-        <div class="flex flex-col w-full justify-center my-8 bg-white">
-            <div class="md:w-3/6 w-4/6 mx-auto flex flex-col">
-                <div v-for="invite in invites" :key="invite.in_id" class="list-card mb-1">
-                    <h2 class="text-xl mb-2 ml-1">{{ invite.in_id }}</h2>
-                    <p class="text-sm text-gray-600 mb-2 ml-1">
-                        {{ invite.in_email }}
-                    </p>
+        <div class="flex flex-col w-full justify-center my-8">
+            <div class="md:w-2/6 w-4/6 mx-auto flex flex-col">
+                <div>
+                    <div
+                        v-for="invite in invites"
+                        :key="invite.in_id"
+                        class="list-card mb-1 flex mt-1"
+                        @click="this.getList(list.l_id)"
+                    >
+                        <p class="ml-1 md:w-3/6 mr-auto text-lg mt-3">
+                            {{ invite.in_email }}
+                        </p>
+                        <button class="btn-delete1 flex justify-center ml-auto">
+                          Delete User
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
