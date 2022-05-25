@@ -19,14 +19,14 @@
                 <div></div>
             </div>
         </div>
-        <div v-else class="h-full flex flex-col">
+        <div v-else class="h-full flex flex-col lg:w-1/2 lg:mx-auto">
             <h1 class="text-4xl text-center">{{ list.l_name }}</h1>
             <p class="text-lg text-gray-600 text-center">
                 {{ list.l_description }}
             </p>
             <div v-if="admin">
                 <h2 class="text-2xl font-bold mb-1">Settings:</h2>
-                <div class="flex gap-x-5">
+                <div class="grid xs:grid-cols-3 grid-cols-1 gap-5">
                     <router-link
                         :to="{
                             name: 'ListEdit',
@@ -64,11 +64,46 @@
                     @click="selectItem(item.i_id, item.i_content)"
                     :class="[
                         item.i_id === selectedItem ? 'itemSelected' : '',
-                        'item-card',
+                        'item-card flex',
                     ]"
                 >
-                    <h2 class="text-xl mb-2 ml-1">{{ item.i_content }}</h2>
-                    <span>Last updated at: {{ item.i_lastupdated }}</span>
+                    <div class="mr-auto">
+                        <h2 class="text-xl mb-2 ml-1">{{ item.i_content }}</h2>
+                        <span>Last updated at: {{ item.i_lastupdated }}</span>
+                    </div>
+                    <div class="xs:w-1/12 w-2/12 h-full flex justify-center items-center" @click="checkItem(item.i_id)">
+                        <!--Checked Button-->
+                        <div
+                            v-if="item.i_checked"
+                            class="flex items-center justify-center"
+                        >
+                            <svg
+                                class="w-full h-full text-green-500"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"
+                                ></path>
+                            </svg>
+                        </div>
+                        <!--Unchecked Button-->
+                        <div v-else class="flex items-center justify-center">
+                            <svg
+                                class="w-full h-full text-gray-500"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"
+                                ></path>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div
@@ -84,11 +119,12 @@
                 </div>
                 <input
                     id="itemInput"
-                    v-model="itemInput"
                     class="input"
                     type="text"
                     placeholder="Item"
                     @keypress="keydownInput($event)"
+                    @input="itemInput = $event.target.value"
+                    :value="itemInput"
                 />
                 <button class="button text-2xl w-full" @click="enterButton()">
                     <span v-if="selectedItem === null">Add</span>
@@ -122,12 +158,11 @@ export default {
             admin: false,
             write: false,
             selectedItem: null,
+            itemInput: "",
         };
     },
     props: {
-        itemInput: {
-            type: String,
-        },
+
     },
     async mounted() {
         await this.loadList();
@@ -186,9 +221,11 @@ export default {
                     //Set selectedItem and fill input with content.
                     this.selectedItem = i_id;
                     //Get input
-                    const input = document.getElementById("itemInput");
+                    //const input = document.getElementById("itemInput");
                     //Clear input
-                    input.value = i_content;
+                    //input.value = i_content;
+                    //console.log(input.value);
+                    this.itemInput = i_content;
                 }
             }
         },
@@ -318,10 +355,37 @@ export default {
         clearInput: async function () {
             //Props are readonly so we cant use this.itemInput = ""
             //Get input
-            const input = document.getElementById("itemInput");
-            console.log(input);
+            //const input = document.getElementById("itemInput");
+            //console.log(input);
             //Clear input
-            input.value = "";
+            //input.value = "";
+            this.itemInput = "";
+        },
+        checkItem: async function (i_id) {
+            console.log(i_id);
+            //Set Item to checked
+            this.items.forEach((item) => {
+                if (item.i_id === i_id) {
+                    item.i_checked = !item.i_checked;
+                }
+            });
+            //Get Token
+            const token = await getToken();
+            const response = await axios
+                .post("/api/list/item/check", {
+                    token: token,
+                    list: this.list.l_id,
+                    item: i_id,
+                })
+                .then(async (response) => {
+                    this.getList(this.list.l_id);
+                    console.log(response.data);
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return false;
+                });
         },
     },
 };
