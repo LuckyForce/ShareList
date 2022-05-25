@@ -31,19 +31,23 @@
 
         <div class="flex flex-col w-full justify-center my-8">
             <div class="md:w-2/6 w-4/6 mx-auto flex flex-col">
-                <div>
-                    <div
-                        v-for="invite in invites"
-                        :key="invite.in_id"
-                        class="list-card mb-1 flex mt-1"
-                        @click="this.getList(list.l_id)"
-                    >
-                        <p class="ml-1 md:w-3/6 mr-auto text-lg mt-3">
-                            {{ invite.in_email }}
-                        </p>
-                        <button class="btn-delete1 flex justify-center ml-auto">
-                          Delete User
-                        </button>
+                <div
+                    v-for="invite in invites"
+                    :key="invite.in_id"
+                    class="list-card mb-1 flex mt-1"
+                    @click="this.getList(list.l_id)"
+                >
+                  <div class="mr-auto">
+                    <p class="ml-1 md:w-3/6 mr-auto text-lg mt-3">
+                        {{ invite.in_email }}
+                    </p>
+                    
+                    <span class="ml-1 md:w-3/6 text-gray-500 text-sm mt-3">
+                        {{ invite.in_created }}
+                    </span>
+                  </div>
+                    <div class="flex justify-end">
+                    <button class="btn-delete1">Delete Invite</button>
                     </div>
                 </div>
             </div>
@@ -59,14 +63,17 @@ export default {
                 {
                     in_id: 1,
                     in_email: "hgjdsk@gmail.com",
+                    in_created: "2020-05-05",
                 },
                 {
                     in_id: 2,
                     in_email: "kkej@gmail.com",
+                    in_created: "2020-05-05",
                 },
                 {
                     in_id: 3,
                     in_email: "iohn@gmailc.com",
+                    in_created: "2020-05-05",
                 },
             ],
         };
