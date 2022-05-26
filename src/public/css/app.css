@@ -591,6 +591,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .gap-5 {
   gap: 1.25rem;
 }
+.gap-20 {
+  gap: 5rem;
+}
+.gap-10 {
+  gap: 2.5rem;
+}
 .gap-y-2 {
   row-gap: 0.5rem;
 }

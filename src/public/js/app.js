@@ -22091,13 +22091,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var _images_register_jpg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../images/register.jpg */ "./resources/images/register.jpg");
-/* harmony import */ var _images_login_jpg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../images/login.jpg */ "./resources/images/login.jpg");
+/* harmony import */ var _images_UnlimitedLists_jpg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../images/UnlimitedLists.jpg */ "./resources/images/UnlimitedLists.jpg");
+/* harmony import */ var _images_UnlimitedListElements_jpg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../images/UnlimitedListElements.jpg */ "./resources/images/UnlimitedListElements.jpg");
+/* harmony import */ var _images_ListEdit_jpg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../images/ListEdit.jpg */ "./resources/images/ListEdit.jpg");
+/* harmony import */ var _images_ListOfUsers_jpg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../images/ListOfUsers.jpg */ "./resources/images/ListOfUsers.jpg");
+/* harmony import */ var _images_AddUsers_jpg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../images/AddUsers.jpg */ "./resources/images/AddUsers.jpg");
+/* harmony import */ var _images_pexels_andrea_piacquadio_3765030_jpg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../images/pexels-andrea-piacquadio-3765030.jpg */ "./resources/images/pexels-andrea-piacquadio-3765030.jpg");
+/* harmony import */ var _images_pexels_thisisengineering_3862599_jpg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../images/pexels-thisisengineering-3862599.jpg */ "./resources/images/pexels-thisisengineering-3862599.jpg");
+/* harmony import */ var _images_pexels_porapak_apichodilok_346696_jpg__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../images/pexels-porapak-apichodilok-346696.jpg */ "./resources/images/pexels-porapak-apichodilok-346696.jpg");
+/* harmony import */ var _images_register_jpg__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../images/register.jpg */ "./resources/images/register.jpg");
+/* harmony import */ var _images_login_jpg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../images/login.jpg */ "./resources/images/login.jpg");
+/* harmony import */ var _images_List_jpg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../images/List.jpg */ "./resources/images/List.jpg");
+/* harmony import */ var _images_ListCreated_jpg__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../images/ListCreated.jpg */ "./resources/images/ListCreated.jpg");
 
 
 
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">Features</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div></div><h1 class=\"mt-6 text-4xl flex justify-center\">Benefits</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div></div><h1 class=\"mt-6 text-4xl flex justify-center\">How to start</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"" + _images_register_jpg__WEBPACK_IMPORTED_MODULE_1__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">First you should navigate to Register in the top right corner and press it. Afterwards you will need to create an Account on our Website.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"" + _images_login_jpg__WEBPACK_IMPORTED_MODULE_2__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">After you have created your Account and verified your E-Mail you should login again before you can really start with creating your own lists.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p></div></div></div>", 6);
+
+
+
+
+
+
+
+
+
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">Features</h1><div class=\"w-full my-8 gap-10 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"" + _images_UnlimitedLists_jpg__WEBPACK_IMPORTED_MODULE_1__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can create as many lists as you need for every part of your life with a simple click on a button.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"" + _images_UnlimitedListElements_jpg__WEBPACK_IMPORTED_MODULE_2__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can create as many entries into the list as you want mark those green which you have already done.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"" + _images_ListEdit_jpg__WEBPACK_IMPORTED_MODULE_3__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can also edit the name and description of the List but also give the ownership to another user or delete it.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"" + _images_ListOfUsers_jpg__WEBPACK_IMPORTED_MODULE_4__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can change the permission of the users aswell like giving another user permission to add entries or you can delete a user.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"" + _images_AddUsers_jpg__WEBPACK_IMPORTED_MODULE_5__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can invite as many users as you want to your list and if you mistakenly invited someone you can delete the invite permission.</p></div></div></div><h1 class=\"mt-6 text-4xl flex justify-center\">Benefits</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"" + _images_pexels_andrea_piacquadio_3765030_jpg__WEBPACK_IMPORTED_MODULE_6__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">One benefit of using our webpage and not others for creating lists would be the ease of creating lists on our webpage.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"" + _images_pexels_thisisengineering_3862599_jpg__WEBPACK_IMPORTED_MODULE_7__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">The many options to customize and manage your lists are also a great benefit, combined with the ease of using all the tools.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"" + _images_pexels_porapak_apichodilok_346696_jpg__WEBPACK_IMPORTED_MODULE_8__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">The ability to share your list with multiple people and be able to make edits from anywhere in the world is also incredible.</p></div></div></div><h1 class=\"mt-6 text-4xl flex justify-center\">How to start</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"" + _images_register_jpg__WEBPACK_IMPORTED_MODULE_9__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">First you should navigate to Register in the top right corner and press it. Afterwards you will need to create an Account on our Website.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"" + _images_login_jpg__WEBPACK_IMPORTED_MODULE_10__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">After you have created your Account and verified your E-Mail you are now logged in and can start with creating your own lists for the future.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"" + _images_List_jpg__WEBPACK_IMPORTED_MODULE_11__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">First you have to press on Lists in the top left corner. Afterwards you can press the button Create List through which the fun part will now start!</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"" + _images_ListCreated_jpg__WEBPACK_IMPORTED_MODULE_12__["default"] + "\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Once you created your own List you can now add things to do but also change the name of the List or add people who are allowed to view it.</p></div></div></div>", 6);
 
 var _hoisted_7 = [_hoisted_1];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -23856,6 +23876,111 @@ var mainCheckLoggedIn = /*#__PURE__*/function () {
 
 /***/ }),
 
+/***/ "./resources/images/AddUsers.jpg":
+/*!***************************************!*\
+  !*** ./resources/images/AddUsers.jpg ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/AddUsers.jpg?955ba8dd9d94da1e049d51ca1548cce6");
+
+/***/ }),
+
+/***/ "./resources/images/List.jpg":
+/*!***********************************!*\
+  !*** ./resources/images/List.jpg ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/List.jpg?cf2a70de508459791127dbc3378a6027");
+
+/***/ }),
+
+/***/ "./resources/images/ListCreated.jpg":
+/*!******************************************!*\
+  !*** ./resources/images/ListCreated.jpg ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/ListCreated.jpg?4325b9c16442d0d44fbd9c9ef3e83127");
+
+/***/ }),
+
+/***/ "./resources/images/ListEdit.jpg":
+/*!***************************************!*\
+  !*** ./resources/images/ListEdit.jpg ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/ListEdit.jpg?5d6cc407a1794f59907799f3054f1092");
+
+/***/ }),
+
+/***/ "./resources/images/ListOfUsers.jpg":
+/*!******************************************!*\
+  !*** ./resources/images/ListOfUsers.jpg ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/ListOfUsers.jpg?f6e2c1daa241bbabf21f5116e80cd23a");
+
+/***/ }),
+
+/***/ "./resources/images/UnlimitedListElements.jpg":
+/*!****************************************************!*\
+  !*** ./resources/images/UnlimitedListElements.jpg ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/UnlimitedListElements.jpg?245ac6f4cbf0dc322a0aea1e2ff9de1f");
+
+/***/ }),
+
+/***/ "./resources/images/UnlimitedLists.jpg":
+/*!*********************************************!*\
+  !*** ./resources/images/UnlimitedLists.jpg ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/UnlimitedLists.jpg?aa9d07749390eb226976342b891a7d7a");
+
+/***/ }),
+
 /***/ "./resources/images/login.jpg":
 /*!************************************!*\
   !*** ./resources/images/login.jpg ***!
@@ -23868,6 +23993,51 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/login.jpg?a9341f1d36364f8c0f6c72553ae68351");
+
+/***/ }),
+
+/***/ "./resources/images/pexels-andrea-piacquadio-3765030.jpg":
+/*!***************************************************************!*\
+  !*** ./resources/images/pexels-andrea-piacquadio-3765030.jpg ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/pexels-andrea-piacquadio-3765030.jpg?0b967c68c54e4d7fb7733d1fb2f8d1b6");
+
+/***/ }),
+
+/***/ "./resources/images/pexels-porapak-apichodilok-346696.jpg":
+/*!****************************************************************!*\
+  !*** ./resources/images/pexels-porapak-apichodilok-346696.jpg ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/pexels-porapak-apichodilok-346696.jpg?fd72dce671f70612a3538f86f939261b");
+
+/***/ }),
+
+/***/ "./resources/images/pexels-thisisengineering-3862599.jpg":
+/*!***************************************************************!*\
+  !*** ./resources/images/pexels-thisisengineering-3862599.jpg ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/pexels-thisisengineering-3862599.jpg?6b67fbeb4fc831a069e829f27f920179");
 
 /***/ }),
 
