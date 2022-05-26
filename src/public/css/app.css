@@ -430,6 +430,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .m-0 {
   margin: 0px;
 }
+.m-auto {
+  margin: auto;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -478,6 +481,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mb-1 {
   margin-bottom: 0.25rem;
 }
+.mr-auto {
+  margin-right: auto;
+}
 .mb-3 {
   margin-bottom: 0.75rem;
 }
@@ -487,41 +493,17 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mt-3 {
   margin-top: 0.75rem;
 }
-.ml-3 {
-  margin-left: 0.75rem;
+.mt-1 {
+  margin-top: 0.25rem;
 }
-.mr-5 {
-  margin-right: 1.25rem;
-}
-.ml-2 {
-  margin-left: 0.5rem;
-}
-.ml-5 {
-  margin-left: 1.25rem;
-}
-.mr-2 {
-  margin-right: 0.5rem;
-}
-.mt-20 {
-  margin-top: 5rem;
-}
-.ml-10 {
-  margin-left: 2.5rem;
+.mb-auto {
+  margin-bottom: auto;
 }
 .mb-5 {
   margin-bottom: 1.25rem;
 }
 .mr-1 {
   margin-right: 0.25rem;
-}
-.mr-auto {
-  margin-right: auto;
-}
-.mt-1 {
-  margin-top: 0.25rem;
-}
-.ml-auto {
-  margin-left: auto;
 }
 .block {
   display: block;
@@ -541,21 +523,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-full {
   height: 100%;
 }
+.h-4 {
+  height: 1rem;
+}
 .h-screen {
   height: 100vh;
-}
-.h-6 {
-  height: 1.5rem;
-}
-.h-fit {
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-}
-.h-max {
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
 }
 .w-full {
   width: 100%;
@@ -563,38 +535,23 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-60 {
   width: 15rem;
 }
+.w-2\/12 {
+  width: 16.666667%;
+}
 .w-5\/6 {
   width: 83.333333%;
 }
 .w-4\/6 {
   width: 66.666667%;
 }
-.w-6 {
-  width: 1.5rem;
+.w-4 {
+  width: 1rem;
 }
-.w-4\/12 {
-  width: 33.333333%;
+.w-96 {
+  width: 24rem;
 }
-.w-fit {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-}
-.w-max {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-}
-.w-min {
-  width: -webkit-min-content;
-  width: -moz-min-content;
-  width: min-content;
-}
-.w-1\/12 {
-  width: 8.333333%;
-}
-.w-2\/12 {
-  width: 16.666667%;
+.w-40 {
+  width: 10rem;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -619,6 +576,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .items-center {
   align-items: center;
 }
+.justify-end {
+  justify-content: flex-end;
+}
 .justify-center {
   justify-content: center;
 }
@@ -639,6 +599,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .gap-y-5 {
   row-gap: 1.25rem;
+}
+.space-x-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(1rem * var(--tw-space-x-reverse));
+  margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .rounded-lg {
   border-radius: 0.5rem;
@@ -672,6 +637,13 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .bg-clip-padding {
   background-clip: padding-box;
+}
+.fill-current {
+  fill: currentColor;
+}
+.object-fill {
+  -o-object-fit: fill;
+     object-fit: fill;
 }
 .p-5 {
   padding: 1.25rem;
@@ -763,6 +735,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
 }
+.text-green-500 {
+  --tw-text-opacity: 1;
+  color: rgb(34 197 94 / var(--tw-text-opacity));
+}
 .text-gray-500 {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
@@ -774,10 +750,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
-}
-.text-green-500 {
-  --tw-text-opacity: 1;
-  color: rgb(34 197 94 / var(--tw-text-opacity));
 }
 .underline {
   -webkit-text-decoration-line: underline;
@@ -1408,10 +1380,6 @@ body {
     height: 3rem;
   }
 
-  .sm\:w-1\/12 {
-    width: 8.333333%;
-  }
-
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1464,12 +1432,12 @@ body {
     width: 16.666667%;
   }
 
-  .md\:w-3\/6 {
-    width: 50%;
-  }
-
   .md\:w-2\/6 {
     width: 33.333333%;
+  }
+
+  .md\:w-3\/6 {
+    width: 50%;
   }
 
   .md\:grid-cols-2 {
@@ -1482,16 +1450,6 @@ body {
   }
 }
   @media (min-width: 1024px) {
-
-  .lg\:mx-16 {
-    margin-left: 4rem;
-    margin-right: 4rem;
-  }
-
-  .lg\:mx-32 {
-    margin-left: 8rem;
-    margin-right: 8rem;
-  }
 
   .lg\:mx-auto {
     margin-left: auto;

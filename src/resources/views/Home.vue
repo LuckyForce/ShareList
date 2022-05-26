@@ -1,7 +1,6 @@
 // resources/views/Home.vue
 <template>
     <div>
-        Die Bilder müssten noch richtig implementiert werden und der richtige Text
         <h1 class="mt-6 text-4xl flex justify-center ">Features</h1>
         <div class="w-full my-8 gap-24 flex-wrap flex justify-center items-center"> 
             <div class="w-60 p-2 bg-white rounded-xl">
@@ -59,15 +58,15 @@
         <h1 class="mt-6 text-4xl flex justify-center ">How to start</h1>
         <div class="w-full my-8 gap-24 flex-wrap flex justify-center items-center"> 
             <div class="w-60 p-2 bg-white rounded-xl">
-                <img class="h-40 rounded-xl" src="https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg" alt="">
+                <img class="h-40 rounded-xl w-60" src="../images/register.jpg" alt="">
             <div class="p-2">
-                <p class="text-sm text-gray-600">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>
+                <p class="text-sm text-gray-600">First you should navigate to Register in the top right corner and press it. Afterwards you will need to create an Account on our Website.</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
-                <img class="h-40 rounded-xl" src="https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg" alt="">
+                <img class="h-40 rounded-xl w-60" src="../images/login.jpg" alt="">
             <div class="p-2">
-                <p class="text-sm text-gray-600">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>
+                <p class="text-sm text-gray-600">After you have created your Account and verified your E-Mail you should login again before you can really start with creating your own lists.</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">

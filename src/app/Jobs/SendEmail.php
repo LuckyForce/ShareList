@@ -55,7 +55,7 @@ class SendEmail implements ShouldQueue
         // https://stackoverflow.com/questions/1918383/dont-echo-out-curl
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://www.adrian-schauer.at/projects/emailapi/src/index.php');
+        curl_setopt($ch, CURLOPT_URL, 'https://www.adrian-schauer.at/projects/emailapi/src/index.php');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTREDIR, 3);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -80,8 +80,9 @@ class SendEmail implements ShouldQueue
         curl_setopt($ch, CURLOPT_DNS_CACHE_TIMEOUT, 10);
 
         curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-
+        
         curl_exec($ch);
         curl_close($ch);
+        //print_r(curl_getinfo($ch));
     }
 }
