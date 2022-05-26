@@ -547,12 +547,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-4 {
   width: 1rem;
 }
-.w-96 {
-  width: 24rem;
-}
-.w-40 {
-  width: 10rem;
-}
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -590,9 +584,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .gap-5 {
   gap: 1.25rem;
-}
-.gap-20 {
-  gap: 5rem;
 }
 .gap-10 {
   gap: 2.5rem;
@@ -646,10 +637,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .fill-current {
   fill: currentColor;
-}
-.object-fill {
-  -o-object-fit: fill;
-     object-fit: fill;
 }
 .p-5 {
   padding: 1.25rem;
