@@ -180,7 +180,8 @@ body {
 }
 
 .list-card,
-.item-card {
+.item-card,
+.invite-card {
     @apply w-full;
     @apply border-2;
     @apply border-gray-200;

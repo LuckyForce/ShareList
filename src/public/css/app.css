@@ -579,14 +579,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .justify-between {
   justify-content: space-between;
 }
+.gap-10 {
+  gap: 2.5rem;
+}
 .gap-24 {
   gap: 6rem;
 }
 .gap-5 {
   gap: 1.25rem;
-}
-.gap-10 {
-  gap: 2.5rem;
 }
 .gap-y-2 {
   row-gap: 0.5rem;
@@ -1146,7 +1146,7 @@ body {
   font-style: italic;
 }
 
-.list-card, .item-card {
+.list-card, .item-card, .invite-card {
   width: 100%;
   border-width: 2px;
   --tw-border-opacity: 1;
@@ -1155,19 +1155,19 @@ body {
   padding: 0.5rem;
 }
 
-.list-card:hover, .item-card:hover {
+.list-card:hover, .item-card:hover, .invite-card:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
 }
 
-.list-card:focus, .item-card:focus {
+.list-card:focus, .item-card:focus, .invite-card:focus {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
 
-.list-card, .item-card {
+.list-card, .item-card, .invite-card {
   transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;

@@ -19936,7 +19936,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       itemInput: ""
     };
   },
-  props: {},
   mounted: function mounted() {
     var _this = this;
 
@@ -20481,20 +20480,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context17.prev = _context17.next) {
               case 0:
-                console.log(i_id); //Set Item to checked
+                console.log(i_id); //Check if user has write permissions
 
+                if (this.write) {
+                  _context17.next = 3;
+                  break;
+                }
+
+                return _context17.abrupt("return");
+
+              case 3:
+                //Set Item to checked
                 this.items.forEach(function (item) {
                   if (item.i_id === i_id) {
                     item.i_checked = !item.i_checked;
                   }
                 }); //Get Token
 
-                _context17.next = 4;
+                _context17.next = 6;
                 return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
 
-              case 4:
+              case 6:
                 token = _context17.sent;
-                _context17.next = 7;
+                _context17.next = 9;
                 return axios.post("/api/list/item/check", {
                   token: token,
                   list: this.list.l_id,
@@ -20526,10 +20534,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   return false;
                 });
 
-              case 7:
+              case 9:
                 response = _context17.sent;
 
-              case 8:
+              case 10:
               case "end":
                 return _context17.stop();
             }
@@ -20669,26 +20677,196 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _js_utilities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../js/utilities */ "./resources/js/utilities.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      invites: [{
-        in_id: 1,
-        in_email: "hgjdsk@gmail.com",
-        in_created: "2020-05-05"
-      }, {
-        in_id: 2,
-        in_email: "kkej@gmail.com",
-        in_created: "2020-05-05"
-      }, {
-        in_id: 3,
-        in_email: "iohn@gmailc.com",
-        in_created: "2020-05-05"
-      }]
+      invites: [],
+      inviteInput: "",
+      inviteButton: "Invite User",
+      loading: true
     };
   },
   mounted: function mounted() {
-    console.log(this.invites);
+    console.log("ListInvites mounted");
+    this.getInvites();
+  },
+  methods: {
+    getInvites: function () {
+      var _getInvites = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var _this = this;
+
+        var token;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                //Clear invites
+                this.loading = true;
+                this.invites = []; //Get invites
+
+                _context.next = 4;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 4:
+                token = _context.sent;
+                _context.next = 7;
+                return axios.post("/api/list/invites", {
+                  token: token,
+                  list: this.$route.params.id
+                }).then(function (response) {
+                  _this.invites = response.data.invites;
+                })["catch"](function (error) {
+                  console.log(error);
+                });
+
+              case 7:
+                this.loading = false;
+
+              case 8:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function getInvites() {
+        return _getInvites.apply(this, arguments);
+      }
+
+      return getInvites;
+    }(),
+    createInvite: function () {
+      var _createInvite = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2($event) {
+        var _this2 = this;
+
+        var reg, email, token;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                console.log("createInvite"); //Check if event is undefined or enter key
+
+                if (!($event === undefined || $event.keyCode === 13)) {
+                  _context2.next = 19;
+                  break;
+                }
+
+                if (!(this.inviteInput === "")) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                console.log(this.inviteInput);
+                this.inviteButton = "Invite Field cannot be empty";
+                return _context2.abrupt("return");
+
+              case 6:
+                //Check if input is a valid email
+                reg = /.+\@.+\..+/;
+
+                if (reg.test(this.inviteInput)) {
+                  _context2.next = 10;
+                  break;
+                }
+
+                this.inviteButton = "Invalid E-Mail";
+                return _context2.abrupt("return");
+
+              case 10:
+                this.inviteButton = "Inviting " + this.inviteInput;
+                email = this.inviteInput;
+                _context2.next = 14;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 14:
+                token = _context2.sent;
+                _context2.next = 17;
+                return axios.post("/api/list/invite", {
+                  token: token,
+                  list: this.$route.params.id,
+                  email: email
+                }).then(function (response) {
+                  _this2.inviteButton = response.data.message;
+                  _this2.inviteInput = "";
+
+                  _this2.getInvites();
+                })["catch"](function (error) {
+                  _this2.inviteButton = error.response.data.error;
+                });
+
+              case 17:
+                _context2.next = 20;
+                break;
+
+              case 19:
+                this.inviteButton = "Invite User";
+
+              case 20:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function createInvite(_x) {
+        return _createInvite.apply(this, arguments);
+      }
+
+      return createInvite;
+    }(),
+    deleteInvite: function () {
+      var _deleteInvite = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(id) {
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 2:
+                token = _context3.sent;
+                _context3.next = 5;
+                return axios.post("/api/list/invite/delete", {
+                  token: token,
+                  invite: id
+                }).then(function (response) {
+                  return response.data.message;
+                })["catch"](function (error) {
+                  return error.response.data.error;
+                });
+
+              case 5:
+                response = _context3.sent;
+                console.log(response);
+                this.getInvites();
+
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function deleteInvite(_x2) {
+        return _deleteInvite.apply(this, arguments);
+      }
+
+      return deleteInvite;
+    }()
   }
 });
 
@@ -22473,35 +22651,55 @@ var _hoisted_1 = {
 
 var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Back to list ");
 
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">List Invite</h1><div class=\"flex flex-col w-full justify-center my-8\"><div class=\"md:w-1/6 w-5/6 mx-auto flex flex-col\"><input class=\"border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400\" id=\"inline-full-name\" type=\"text\" placeholder=\"Email\"><button class=\"btn-create flex justify-center\"> Invite User </button></div></div>", 2);
-
-var _hoisted_5 = {
-  "class": "flex flex-col w-full justify-center my-8"
-};
-var _hoisted_6 = {
-  "class": "md:w-2/6 w-4/6 mx-auto flex flex-col"
-};
-var _hoisted_7 = {
-  "class": "mr-auto"
-};
-var _hoisted_8 = {
-  "class": "ml-1 md:w-3/6 mr-auto text-lg mt-3"
-};
-var _hoisted_9 = {
-  "class": "ml-1 md:w-3/6 text-gray-500 text-sm mt-3"
-};
-
-var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "flex justify-end"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "btn-delete1"
-}, "Delete Invite")], -1
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+  "class": "mt-6 text-4xl flex justify-center"
+}, "List Invite", -1
 /* HOISTED */
 );
 
-function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _this = this;
+var _hoisted_4 = {
+  "class": "flex flex-col w-full justify-center my-8"
+};
+var _hoisted_5 = {
+  "class": "md:w-1/6 w-5/6 mx-auto flex flex-col"
+};
+var _hoisted_6 = ["value"];
+var _hoisted_7 = {
+  "class": "flex flex-col w-full justify-center my-8"
+};
+var _hoisted_8 = {
+  "class": "md:w-2/6 w-4/6 mx-auto flex flex-col"
+};
+var _hoisted_9 = {
+  "class": "mr-auto"
+};
+var _hoisted_10 = {
+  "class": "ml-1 md:w-3/6 mr-auto text-lg mt-3"
+};
+var _hoisted_11 = {
+  "class": "ml-1 md:w-3/6 text-gray-500 text-sm mt-3"
+};
+var _hoisted_12 = {
+  "class": "flex justify-end"
+};
+var _hoisted_13 = ["onClick"];
+var _hoisted_14 = {
+  key: 0,
+  "class": "text-center text-gray-500 text-4xl"
+};
+var _hoisted_15 = {
+  key: 1,
+  "class": "h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+};
 
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "lds-spinner"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div")], -1
+/* HOISTED */
+);
+
+var _hoisted_17 = [_hoisted_16];
+function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
@@ -22521,21 +22719,46 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["to"])]), _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.invites, function (invite) {
+  , ["to"])]), _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "class": "border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400",
+    id: "inviteInput",
+    type: "text",
+    placeholder: "E-Mail",
+    onKeypress: _cache[0] || (_cache[0] = function ($event) {
+      return $options.createInvite($event);
+    }),
+    onInput: _cache[1] || (_cache[1] = function ($event) {
+      return $data.inviteInput = $event.target.value;
+    }),
+    value: $data.inviteInput
+  }, null, 40
+  /* PROPS, HYDRATE_EVENTS */
+  , _hoisted_6), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn-create flex justify-center",
+    onClick: _cache[2] || (_cache[2] = function ($event) {
+      return $options.createInvite();
+    })
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.inviteButton), 1
+  /* TEXT */
+  )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.invites, function (invite) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: invite.in_id,
-      "class": "list-card mb-1 flex mt-1",
-      onClick: _cache[0] || (_cache[0] = function ($event) {
-        return _this.getList(_ctx.list.l_id);
-      })
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(invite.in_email), 1
+      "class": "invite-card mb-1 flex mt-1"
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(invite.u_email), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(invite.in_created), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(invite.in_created), 1
     /* TEXT */
-    )]), _hoisted_10]);
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      "class": "btn-delete1",
+      onClick: function onClick($event) {
+        return $options.deleteInvite(invite.in_id);
+      }
+    }, " Delete Invite ", 8
+    /* PROPS */
+    , _hoisted_13)])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))])])]);
+  )), $data.invites.length === 0 && !$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_14, " No invites yet ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, _hoisted_17)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
 }
 
 /***/ }),

@@ -71,7 +71,10 @@
                         <h2 class="text-xl mb-2 ml-1">{{ item.i_content }}</h2>
                         <span>Last updated at: {{ item.i_lastupdated }}</span>
                     </div>
-                    <div class="xs:w-1/12 w-2/12 h-full flex justify-center items-center" @click="checkItem(item.i_id)">
+                    <div
+                        class="xs:w-1/12 w-2/12 h-full flex justify-center items-center"
+                        @click="checkItem(item.i_id)"
+                    >
                         <!--Checked Button-->
                         <div
                             v-if="item.i_checked"
@@ -160,9 +163,6 @@ export default {
             selectedItem: null,
             itemInput: "",
         };
-    },
-    props: {
-
     },
     async mounted() {
         await this.loadList();
@@ -363,6 +363,9 @@ export default {
         },
         checkItem: async function (i_id) {
             console.log(i_id);
+            //Check if user has write permissions
+            if (!this.write) return;
+
             //Set Item to checked
             this.items.forEach((item) => {
                 if (item.i_id === i_id) {

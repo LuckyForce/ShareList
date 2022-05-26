@@ -707,8 +707,15 @@ Route::post('/list/invites', function (Request $request) {
         ], 404);
     }
 
-    //Get the invites
-    $invites = DB::table('sl_in_invite')->where('in_l_id', $list->l_id)->where('in_accepted', 0)->where('in_deleted', 0)->get();
+    //Get the
+    $invitesId = DB::table('sl_in_invite')->where('in_l_id', $list->l_id)->where('in_accepted', 0)->where('in_deleted', 0)->get();
+    $invites = [];
+
+    foreach ($invitesId as $invite) {
+        $inviteUser = DB::table('sl_u_user')->where('u_id', $invite->in_u_id)->first();
+        $invite->u_email = $inviteUser->u_email;
+        $invites[] = $invite;
+    }
 
     //Return success
     return response()->json(['invites' => $invites], 200);
