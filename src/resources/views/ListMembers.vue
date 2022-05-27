@@ -224,7 +224,7 @@ export default {
                 this.selectedMembers = [];
                 this.deleteButton = "Delete User";
                 this.deleteButtonPushedOnce = false;
-                this.getMembers();
+                await this.getMembers();
             } else {
                 this.deleteButton = "Are you sure?";
                 this.deleteButtonPushedOnce = true;
@@ -253,8 +253,8 @@ export default {
             });
 
             this.selectedMembers = [];
-            this.getMembers();
             this.removeWriteButton = "Remove Write";
+            await this.getMembers();
         },
         addWriteAccesses: async function () {
             this.addWriteButton = "Adding...";
@@ -279,7 +279,7 @@ export default {
             });
             this.selectedMembers = [];
             this.addWriteButton = "Add Write";
-            this.getMembers();
+            await this.getMembers();
         },
     },
 };

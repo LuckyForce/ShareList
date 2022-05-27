@@ -21328,7 +21328,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 if (!this.deleteButtonPushedOnce) {
-                  _context5.next = 13;
+                  _context5.next = 14;
                   break;
                 }
 
@@ -21377,15 +21377,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.selectedMembers = [];
                 this.deleteButton = "Delete User";
                 this.deleteButtonPushedOnce = false;
-                this.getMembers();
-                _context5.next = 15;
+                _context5.next = 12;
+                return this.getMembers();
+
+              case 12:
+                _context5.next = 16;
                 break;
 
-              case 13:
+              case 14:
                 this.deleteButton = "Are you sure?";
                 this.deleteButtonPushedOnce = true;
 
-              case 15:
+              case 16:
               case "end":
                 return _context5.stop();
             }
@@ -21452,10 +21455,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 this.selectedMembers = [];
-                this.getMembers();
                 this.removeWriteButton = "Remove Write";
+                _context7.next = 10;
+                return this.getMembers();
 
-              case 9:
+              case 10:
               case "end":
                 return _context7.stop();
             }
@@ -21501,9 +21505,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 6:
                 this.selectedMembers = [];
                 this.addWriteButton = "Add Write";
-                this.getMembers();
+                _context8.next = 10;
+                return this.getMembers();
 
-              case 9:
+              case 10:
               case "end":
                 return _context8.stop();
             }
