@@ -37,19 +37,19 @@
         <h1 class="mt-6 text-4xl flex justify-center ">Benefits</h1>
         <div class="w-full my-8 gap-24 flex-wrap flex justify-center items-center"> 
             <div class="w-60 p-2 bg-white rounded-xl">
-                <img class="h-40 rounded-xl" src="/images/pexels-andrea-piacquadio-3765030.jpg" alt="">
+                <img class="h-40 rounded-xl" src="/images/List.jpg" alt="">
             <div class="p-2">
                 <p class="text-sm text-gray-600">One benefit of using our webpage and not others for creating lists would be the ease of creating lists on our webpage.</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
-                <img class="h-40 rounded-xl" src="/images/pexels-thisisengineering-3862599.jpg" alt="">
-            <div class="p-2">
+                <img class="h-40 rounded-xl w-60" src="/images/UnlimitedListElements.jpg" alt="">
+            <div class="p-2">s
                 <p class="text-sm text-gray-600">The many options to customize and manage your lists are also a great benefit, combined with the ease of using all the tools.</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
-                <img class="h-40 rounded-xl" src="/images/pexels-porapak-apichodilok-346696.jpg" alt="">
+                <img class="h-40 rounded-xl" src="/images/ListOfUsers.jpg" alt="">
             <div class="p-2">
                 <p class="text-sm text-gray-600">The ability to share your list with multiple people and be able to make edits from anywhere in the world is also incredible.</p>
             </div>
