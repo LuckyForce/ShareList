@@ -552,8 +552,8 @@ Route::post('/list/update', function (Request $request) {
 */
 Route::post('/list/transfer', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->user) || !isset($request->password)) {
-        return response()->json(['error' => 'Token, list, user or password is missing'], 400);
+    if (!isset($request->token) || !isset($request->list) || !isset($request->member) || !isset($request->password)) {
+        return response()->json(['error' => 'Token, list, member or password is missing'], 400);
     }
 
     //Get the user
@@ -577,28 +577,27 @@ Route::post('/list/transfer', function (Request $request) {
     }
 
     //Get the user to transfer to
-    $userToTransfer = DB::table('sl_u_user')->where('u_id', $request->user)->first();
+    $memberToTransfer = DB::table('sl_u_user')->where('u_id', $request->member)->first();
 
     //Check if the user exists
-    if (!$userToTransfer) {
+    if (!$memberToTransfer) {
         return response()->json([
-            'error' => 'User not found',
+            'error' => 'Member not found',
         ], 404);
     }
 
     //Check if the user has access to the list
-    if (!DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $userToTransfer->u_id)->first()) {
+    if (!DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $memberToTransfer->u_id)->first()) {
         return response()->json([
-            'error' => 'User has no access to this list',
+            'error' => 'Member has no access to this list',
         ], 401);
     }
 
     //Transfer the list
-    DB::table('sl_l_list')->where('l_id', $list->l_id)->update(['l_u_id' => $userToTransfer->u_id]);
+    DB::table('sl_l_list')->where('l_id', $list->l_id)->update(['l_u_id' => $memberToTransfer->u_id]);
 
-    //Remove Access From new Owner and add Access to old Owner
-    DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $userToTransfer->u_id)->delete();
-    DB::table('sl_a_access')->insert(['a_l_id' => $list->l_id, 'a_u_id' => $user->u_id, 'a_write' => 1]);
+    //Update access for owner to have write access
+    DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $memberToTransfer->u_id)->update(['a_write' => 1]);
 
     //Return success
     return response()->json(['message' => 'List transferred'], 200);

@@ -24,7 +24,7 @@
             class="h-full flex flex-col lg:w-1/2 lg:mx-auto"
         >
             <h1 class="text-4xl text-center">{{ list.l_name }}</h1>
-            <p class="text-lg text-gray-600 text-center">
+            <p class="text-lg text-gray-600 text-center mb-4">
                 {{ list.l_description }}
             </p>
             <div v-if="admin">

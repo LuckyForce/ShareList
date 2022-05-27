@@ -20592,23 +20592,104 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
-    return {};
+    return {
+      loading: true,
+      authorized: false,
+      found: false,
+      list: {
+        l_id: "",
+        l_name: "",
+        l_description: "",
+        l_created: "",
+        l_updated: "",
+        l_user_id: ""
+      },
+      members: [],
+      l_name_invalid: false,
+      l_description_invalid: false,
+      transferPasswordInvalid: false,
+      no_member_selected: false,
+      changesButton: "Save Changes",
+      transferButton: "Transfer List",
+      deletePasswordInvalid: false
+    };
+  },
+  props: {
+    transferPassword: {
+      type: String
+    },
+    member: {
+      type: String
+    },
+    deletePassword: {
+      type: String
+    }
   },
   mounted: function mounted() {
-    this.getList();
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _this.getList();
+
+            case 2:
+              _context.next = 4;
+              return _this.getMembers();
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   methods: {
     getList: function () {
-      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+      var _getList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var _this2 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
+                _context2.next = 2;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 2:
+                token = _context2.sent;
+                _context2.next = 5;
+                return axios.post("/api/list", {
+                  token: token,
+                  list: this.$route.params.id
+                }).then(function (response) {
+                  _this2.list = response.data.list;
+                  _this2.found = true;
+                  _this2.authorized = response.data.admin;
+                })["catch"](function (error) {
+                  console.log(error);
+
+                  if (error.response.status === 404) {
+                    _this2.found = false;
+                    _this2.authorized = true;
+                  }
+                });
+
+              case 5:
+                response = _context2.sent;
+                this.loading = false;
+
+              case 7:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee);
+        }, _callee2, this);
       }));
 
       function getList() {
@@ -20617,17 +20698,104 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return getList;
     }(),
-    updateList: function () {
-      var _updateList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+    getMembers: function () {
+      var _getMembers = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var _this3 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
+                _context3.next = 2;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 2:
+                token = _context3.sent;
+                _context3.next = 5;
+                return axios.post("/api/list/members", {
+                  token: token,
+                  list: this.$route.params.id
+                }).then(function (response) {
+                  _this3.members = response.data.members;
+                })["catch"](function (error) {
+                  console.log(error);
+                });
+
+              case 5:
+                response = _context3.sent;
+
+              case 6:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2);
+        }, _callee3, this);
+      }));
+
+      function getMembers() {
+        return _getMembers.apply(this, arguments);
+      }
+
+      return getMembers;
+    }(),
+    updateList: function () {
+      var _updateList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var _this4 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                // Check if list name is valid
+                if (this.list.l_name.length < 1 || this.list.l_name.length > 20) {
+                  this.l_name_invalid = true;
+                } else {
+                  this.l_name_invalid = false;
+                } // Check if list description is valid
+
+
+                if (this.list.l_description.length < 1 || this.list.l_description.length > 255) {
+                  this.l_description_invalid = true;
+                } else {
+                  this.l_description_invalid = false;
+                } // If list name and description are valid, update list
+
+
+                if (!(!this.l_name_invalid && !this.l_description_invalid)) {
+                  _context4.next = 10;
+                  break;
+                }
+
+                this.changesButton = "Saving Changes...";
+                _context4.next = 6;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 6:
+                token = _context4.sent;
+                _context4.next = 9;
+                return axios.post("/api/list/update", {
+                  token: token,
+                  list: this.list.l_id,
+                  name: this.list.l_name,
+                  description: this.list.l_description
+                }).then(function (response) {
+                  _this4.changesButton = "Changes Saved";
+                })["catch"](function (error) {
+                  console.log(error);
+                  _this4.changesButton = error.response.data.error;
+                });
+
+              case 9:
+                response = _context4.sent;
+
+              case 10:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
       }));
 
       function updateList() {
@@ -20636,36 +20804,70 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return updateList;
     }(),
-    deleteList: function () {
-      var _deleteList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }));
-
-      function deleteList() {
-        return _deleteList.apply(this, arguments);
-      }
-
-      return deleteList;
-    }(),
     transferList: function () {
-      var _transferList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+      var _transferList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        var _this5 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
+                // Check if password is valid
+                if (this.transferPassword === undefined || this.transferPassword.length < 6) {
+                  this.transferPasswordInvalid = true;
+                } else {
+                  this.transferPasswordInvalid = false;
+                } //Check if a member is selected
+
+
+                if (this.member === undefined || this.member === "/") {
+                  this.no_member_selected = true;
+                } else {
+                  this.no_member_selected = false;
+                }
+
+                console.log("Transferring list to " + this.member); // If password is valid, transfer list
+
+                if (this.transferPasswordInvalid) {
+                  _context5.next = 11;
+                  break;
+                }
+
+                this.transferButton = "Transferring List...";
+                _context5.next = 7;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 7:
+                token = _context5.sent;
+                _context5.next = 10;
+                return axios.post("/api/list/transfer", {
+                  token: token,
+                  list: this.list.l_id,
+                  password: this.transferPassword,
+                  member: this.member
+                }).then(function (response) {
+                  //Redirect to list page
+                  _this5.$router.push("/list/" + _this5.list.l_id);
+                })["catch"](function (error) {
+                  console.log(error);
+
+                  if (error.response.data.error === "Invalid password") {
+                    _this5.transferPasswordInvalid = true;
+                  } else {
+                    _this5.transferButton = error.response.data.error;
+                  }
+                });
+
+              case 10:
+                response = _context5.sent;
+
+              case 11:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4);
+        }, _callee5, this);
       }));
 
       function transferList() {
@@ -20673,6 +20875,69 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return transferList;
+    }(),
+    deleteList: function () {
+      var _deleteList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        var _this6 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                // Check if password is valid
+                if (this.deletePassword === undefined || this.deletePassword.length < 6) {
+                  this.deletePasswordInvalid = true;
+                } else {
+                  this.deletePasswordInvalid = false;
+                } // If password is valid, delete list
+
+
+                if (this.deletePasswordInvalid) {
+                  _context6.next = 9;
+                  break;
+                }
+
+                this.transferButton = "Deleting List...";
+                _context6.next = 5;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 5:
+                token = _context6.sent;
+                _context6.next = 8;
+                return axios.post("/api/list/delete", {
+                  token: token,
+                  list: this.list.l_id,
+                  password: this.deletePassword
+                }).then(function (response) {
+                  //Redirect to lists
+                  _this6.$router.push("/lists");
+                })["catch"](function (error) {
+                  console.log(error);
+
+                  if (error.response.data.error === "Invalid password") {
+                    _this6.deletePasswordInvalid = true;
+                  } else {
+                    _this6.transferButton = error.response.data.error;
+                  }
+                });
+
+              case 8:
+                response = _context6.sent;
+
+              case 9:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      function deleteList() {
+        return _deleteList.apply(this, arguments);
+      }
+
+      return deleteList;
     }()
   }
 });
@@ -22516,7 +22781,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">Features</h1><div class=\"w-full my-8 gap-10 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/UnlimitedLists.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can create as many lists as you need for every part of your life with a simple click on a button.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/UnlimitedListElements.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can create as many entries into the list as you want mark those green which you have already done.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/ListEdit.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can also edit the name and description of the List but also give the ownership to another user or delete it.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/ListOfUsers.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can change the permission of the users aswell like giving another user permission to add entries or you can delete a user.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/AddUsers.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can invite as many users as you want to your list and if you mistakenly invited someone you can delete the invite permission.</p></div></div></div><h1 class=\"mt-6 text-4xl flex justify-center\">Benefits</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/pexels-andrea-piacquadio-3765030.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">One benefit of using our webpage and not others for creating lists would be the ease of creating lists on our webpage.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/pexels-thisisengineering-3862599.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">The many options to customize and manage your lists are also a great benefit, combined with the ease of using all the tools.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/pexels-porapak-apichodilok-346696.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">The ability to share your list with multiple people and be able to make edits from anywhere in the world is also incredible.</p></div></div></div><h1 class=\"mt-6 text-4xl flex justify-center\">How to start</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/register.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">First you should navigate to Register in the top right corner and press it. Afterwards you will need to create an Account on our Website.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/login.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">After you have created your Account and verified your E-Mail you are now logged in and can start with creating your own lists for the future.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/List.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">First you have to press on Lists in the top left corner. Afterwards you can press the button Create List through which the fun part will now start!</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/ListCreated.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Once you created your own List you can now add things to do but also change the name of the List or add people who are allowed to view it.</p></div></div></div>", 6);
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">Features</h1><div class=\"w-full my-8 gap-10 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/unlimitedlists.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can create as many lists as you need for every part of your life with a simple click on a button.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/unlimitedlistelements.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can create as many entries into the list as you want mark those green which you have already done.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/listedit.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can also edit the name and description of the List but also give the ownership to another user or delete it.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/listofusers.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can change the permission of the users aswell like giving another user permission to add entries or you can delete a user.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/addusers.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">You can invite as many users as you want to your list and if you mistakenly invited someone you can delete the invite permission.</p></div></div></div><h1 class=\"mt-6 text-4xl flex justify-center\">Benefits</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/list.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">One benefit of using our webpage and not others for creating lists would be the ease of creating lists on our webpage.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/unlimitedlistelements.jpg\" alt=\"\"><div class=\"p-2\">s <p class=\"text-sm text-gray-600\">The many options to customize and manage your lists are also a great benefit, combined with the ease of using all the tools.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/listofusers.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">The ability to share your list with multiple people and be able to make edits from anywhere in the world is also incredible.</p></div></div></div><h1 class=\"mt-6 text-4xl flex justify-center\">How to start</h1><div class=\"w-full my-8 gap-24 flex-wrap flex justify-center items-center\"><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/register.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">First you should navigate to Register in the top right corner and press it. Afterwards you will need to create an Account on our Website.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl w-60\" src=\"/images/login.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">After you have created your Account and verified your E-Mail you are now logged in and can start with creating your own lists for the future.</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/list.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">First you have to press on Lists in the top left corner. Afterwards you can press the button Create List through which the fun part will now start!</p></div></div><div class=\"w-60 p-2 bg-white rounded-xl\"><img class=\"h-40 rounded-xl\" src=\"/images/listcreated.jpg\" alt=\"\"><div class=\"p-2\"><p class=\"text-sm text-gray-600\">Once you created your own List you can now add things to do but also change the name of the List or add people who are allowed to view it.</p></div></div></div>", 6);
 
 var _hoisted_7 = [_hoisted_1];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -22610,7 +22875,7 @@ var _hoisted_6 = {
   "class": "text-4xl text-center"
 };
 var _hoisted_7 = {
-  "class": "text-lg text-gray-600 text-center"
+  "class": "text-lg text-gray-600 text-center mb-4"
 };
 var _hoisted_8 = {
   key: 0
@@ -22850,7 +23115,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "flex flex-col"
+  "class": "h-full flex flex-col"
 };
 var _hoisted_2 = {
   "class": "flex m-4"
@@ -22858,8 +23123,138 @@ var _hoisted_2 = {
 
 var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Back to list ");
 
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h1 class=\"mt-6 text-4xl flex justify-center\">List Edit</h1><div class=\"flex w-full flex-wrap justify-center my-8\"><div class=\"bg-white rounded-xl p-2 my-0\"><p class=\"mb-3 text-2xl\">Edit:</p><div class=\"grid md:grid-cols-2 grid-cols-1 gap-y-4\"><label class=\"\">List Name</label><input class=\"bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400\" id=\"inline-full-name\" type=\"text\" value=\"List Name\"><label class=\"\">List Description</label><textarea class=\"block text-base font-normal text-gray-700 bg-gray-200 bg-clip-padding border border-solid border-gray-200 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-400 focus:outline-none\" id=\"exampleFormControlTextarea1\" rows=\"3\" placeholder=\"List Description\"></textarea><label class=\"\">Transfer List</label><select name=\"user\" id=\"userListEdit\" class=\"text-gray-700 bg-gray-200 rounded py-1\"><option value=\"KeinUser\">/</option><option value=\"user1\">User1</option><option value=\"user2\">User2</option><option value=\"user3\">User3</option></select></div><p class=\"flex justify-center\"> Do you really want to delete this list? </p><div class=\"md:w-2/3 ml-20 mt-3\"><input class=\"bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-red-400\" id=\"inline-full-name\" type=\"text\" value=\"&#39;Password&#39;\"></div><div class=\"flex justify-center\"><button type=\"submit\" class=\"btn-delete1 flex justify-center\"> Delete </button></div></div></div>", 2);
+var _hoisted_4 = {
+  key: 0
+};
 
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+  "class": "mt-6 text-4xl flex justify-center"
+}, "Edit", -1
+/* HOISTED */
+);
+
+var _hoisted_6 = {
+  "class": "flex w-full flex-wrap justify-center my-8"
+};
+var _hoisted_7 = {
+  "class": "bg-white rounded-xl p-2 my-0 mx-2"
+};
+
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "mb-3 text-2xl text-center"
+}, " Edit Name or Description ", -1
+/* HOISTED */
+);
+
+var _hoisted_9 = {
+  "class": "grid md:grid-cols-2 grid-cols-1 gap-y-4"
+};
+
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": ""
+}, "List Name", -1
+/* HOISTED */
+);
+
+var _hoisted_11 = ["value"];
+var _hoisted_12 = {
+  key: 0,
+  "class": "w-full invalid-input"
+};
+
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": ""
+}, "List Description", -1
+/* HOISTED */
+);
+
+var _hoisted_14 = ["value"];
+var _hoisted_15 = {
+  key: 0,
+  "class": "w-full invalid-input"
+};
+var _hoisted_16 = {
+  "class": "my-2"
+};
+
+var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "mb-3 text-2xl text-center"
+}, "Transfer List", -1
+/* HOISTED */
+);
+
+var _hoisted_18 = {
+  "class": "grid md:grid-cols-2 grid-cols-1 gap-y-4"
+};
+
+var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "member"
+}, "Select Member:", -1
+/* HOISTED */
+);
+
+var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+  selected: ""
+}, "/", -1
+/* HOISTED */
+);
+
+var _hoisted_21 = ["value"];
+var _hoisted_22 = {
+  key: 0,
+  "class": "w-full invalid-input"
+};
+
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "transfer-password"
+}, " Account Password: ", -1
+/* HOISTED */
+);
+
+var _hoisted_24 = {
+  key: 0,
+  "class": "w-full invalid-input"
+};
+
+var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "mb-3 text-2xl text-center"
+}, "Delete List", -1
+/* HOISTED */
+);
+
+var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "flex justify-center invalid-input text-center"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Do you really want to delete this list?"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("This action is irreversible."), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Items, accesses and invites to this list will be permanently deleted. ")], -1
+/* HOISTED */
+);
+
+var _hoisted_27 = {
+  "class": "md:w-2/3 ml-20 mt-3"
+};
+var _hoisted_28 = {
+  key: 0,
+  "class": "invalid-input"
+};
+var _hoisted_29 = {
+  key: 1,
+  "class": "h-full flex justify-center items-center text-center sm:text-4xl text-lg text-gray-500"
+};
+var _hoisted_30 = {
+  key: 2,
+  "class": "h-full flex justify-center items-center text-center sm:text-4xl text-lg text-gray-500"
+};
+var _hoisted_31 = {
+  key: 3,
+  "class": "h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+};
+
+var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "lds-spinner"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div")], -1
+/* HOISTED */
+);
+
+var _hoisted_33 = [_hoisted_32];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
@@ -22880,7 +23275,92 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["to"])]), _hoisted_4]);
+  , ["to"])]), $data.authorized && $data.found ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "class": "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full p-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400",
+    type: "text",
+    placeholder: "List Name",
+    value: $data.list.l_name,
+    onInput: _cache[0] || (_cache[0] = function ($event) {
+      return $data.list.l_name = $event.target.value;
+    })
+  }, null, 40
+  /* PROPS, HYDRATE_EVENTS */
+  , _hoisted_11), $data.l_name_invalid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_12, " Invalid List Name ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+    "class": "w-full block text-base font-normal text-gray-700 bg-gray-200 bg-clip-padding border border-solid border-gray-200 rounded transition ease-in-out focus:text-gray-700 focus:bg-white focus:border-blue-400 focus:outline-none",
+    rows: "3",
+    placeholder: "List Description",
+    value: $data.list.l_description,
+    onInput: _cache[1] || (_cache[1] = function ($event) {
+      return $data.list.l_description = $event.target.value;
+    })
+  }, null, 40
+  /* PROPS, HYDRATE_EVENTS */
+  , _hoisted_14), $data.l_description_invalid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_15, " Invalid List Description ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "button my-2",
+    onClick: _cache[2] || (_cache[2] = function ($event) {
+      return $options.updateList();
+    })
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.changesButton), 1
+  /* TEXT */
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    name: "member",
+    "class": "w-full text-gray-700 bg-gray-200 rounded py-1",
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $props.member = $event;
+    })
+  }, [_hoisted_20, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.members, function (member) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
+      value: member.id,
+      key: member.id
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(member.email), 9
+    /* TEXT, PROPS */
+    , _hoisted_21);
+  }), 128
+  /* KEYED_FRAGMENT */
+  ))], 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $props.member]]), $data.no_member_selected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_22, " No Member Selected ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    name: "transfer-password",
+    "class": "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full p-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400",
+    id: "transfer-password",
+    type: "password",
+    placeholder: "Password",
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+      return $props.transferPassword = $event;
+    }),
+    onInput: _cache[5] || (_cache[5] = function ($event) {
+      $data.transferPasswordInvalid = false;
+      $data.transferButton = "Transfer List";
+    })
+  }, null, 544
+  /* HYDRATE_EVENTS, NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $props.transferPassword]]), $data.transferPasswordInvalid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_24, " Invalid Password ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "button my-2",
+    onClick: _cache[6] || (_cache[6] = function ($event) {
+      return $options.transferList();
+    })
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.transferButton), 1
+  /* TEXT */
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_25, _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "class": "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-red-400",
+    type: "password",
+    placeholder: "Password",
+    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+      return $props.deletePassword = $event;
+    }),
+    onInput: _cache[8] || (_cache[8] = function ($event) {
+      $data.deletePasswordInvalid = false;
+      _ctx.deleteButton = "Delete List";
+    })
+  }, null, 544
+  /* HYDRATE_EVENTS, NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $props.deletePassword]]), $data.deletePasswordInvalid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_28, " Invalid Password ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "submit",
+    "class": "btn-delete1 w-full flex justify-center",
+    onClick: _cache[9] || (_cache[9] = function ($event) {
+      return $options.deleteList();
+    })
+  }, " Delete Permanently ")])])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.loading && !$data.authorized ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_29, " You are not authorized to view this part of the list. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.loading && !$data.found ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_30, " The list you are looking for does not exist. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.loading && !$data.authorized && !$data.found ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_31, _hoisted_33)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
