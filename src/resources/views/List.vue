@@ -144,13 +144,13 @@
         </div>
         <div
             v-if="!loading && !authorized"
-            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg text-gray-500"
         >
             You are not authorized to view this list.
         </div>
         <div
             v-if="!loading && !found"
-            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg text-gray-500"
         >
             The list you are looking for does not exist.
         </div>
@@ -218,7 +218,6 @@ export default {
                     this.write = response.data.write;
                     this.authorized = true;
                     this.found = true;
-                    this.loading = false;
                     console.log(response.data);
                     return true;
                 })
@@ -231,9 +230,9 @@ export default {
                         this.found = false;
                         this.authorized = true;
                     }
-                    this.loading = false;
                     return false;
                 });
+            this.loading = false;
             console.log(response);
         },
         selectItem: async function (i_id, i_content) {

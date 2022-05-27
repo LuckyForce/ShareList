@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="h-full">
         <div class="flex m-4">
             <router-link
                 class="button"
@@ -13,77 +13,112 @@
                 Back to list
             </router-link>
         </div>
-        <h1 class="mt-6 text-4xl flex justify-center">Invites</h1>
+        <div v-if="authorized && found">
+            <h1 class="mt-6 text-4xl flex justify-center">Invites</h1>
 
-        <div class="flex flex-col w-full justify-center my-8">
-            <div class="md:w-1/6 w-5/6 mx-auto flex flex-col">
-                <input
-                    class="border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
-                    id="inviteInput"
-                    type="text"
-                    placeholder="E-Mail"
-                    @keypress="createInvite($event)"
-                    @input="inviteInput = $event.target.value"
-                    :value="inviteInput"
-                />
-                <button
-                    class="btn-create flex justify-center"
-                    @click="createInvite()"
-                >
-                    {{ inviteButton }}
-                </button>
+            <div class="flex flex-col w-full justify-center my-8">
+                <div class="md:w-1/6 w-5/6 mx-auto flex flex-col">
+                    <input
+                        class="border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
+                        id="inviteInput"
+                        type="text"
+                        placeholder="E-Mail"
+                        @keypress="createInvite($event)"
+                        @input="inviteInput = $event.target.value"
+                        :value="inviteInput"
+                    />
+                    <button
+                        class="btn-create flex justify-center"
+                        @click="createInvite()"
+                    >
+                        {{ inviteButton }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col w-full justify-center my-8">
+                <div class="md:w-2/6 w-4/6 mx-auto flex flex-col">
+                    <div
+                        v-for="invite in invites"
+                        :key="invite.in_id"
+                        class="invite-card mb-1 flex mt-1"
+                    >
+                        <div class="mr-auto">
+                            <p class="ml-1 md:w-3/6 mr-auto text-lg mt-3">
+                                {{ invite.u_email }}
+                            </p>
+                            <span
+                                class="ml-1 md:w-3/6 text-gray-500 text-sm mt-3"
+                            >
+                                Invited: {{ invite.in_created }}
+                            </span>
+                        </div>
+                        <div class="flex justify-end">
+                            <button
+                                class="btn-delete1"
+                                @click="deleteInvite(invite.in_id)"
+                            >
+                                Delete Invite
+                            </button>
+                        </div>
+                    </div>
+                    <span
+                        v-if="invites.length === 0 && !loading"
+                        class="text-center text-gray-500 text-4xl"
+                    >
+                        No invites yet
+                    </span>
+                    <div
+                        v-if="loading"
+                        class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+                    >
+                        <div class="lds-spinner">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="flex flex-col w-full justify-center my-8">
-            <div class="md:w-2/6 w-4/6 mx-auto flex flex-col">
-                <div
-                    v-for="invite in invites"
-                    :key="invite.in_id"
-                    class="invite-card mb-1 flex mt-1"
-                >
-                    <div class="mr-auto">
-                        <p class="ml-1 md:w-3/6 mr-auto text-lg mt-3">
-                            {{ invite.u_email }}
-                        </p>
-                        <span class="ml-1 md:w-3/6 text-gray-500 text-sm mt-3">
-                            Invited: {{ invite.in_created }}
-                        </span>
-                    </div>
-                    <div class="flex justify-end">
-                        <button
-                            class="btn-delete1"
-                            @click="deleteInvite(invite.in_id)"
-                        >
-                            Delete Invite
-                        </button>
-                    </div>
-                </div>
-                <span
-                    v-if="invites.length === 0 && !loading"
-                    class="text-center text-gray-500 text-4xl"
-                >
-                    No invites yet
-                </span>
-                <div
-                    v-if="loading"
-                    class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
-                >
-                    <div class="lds-spinner">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                </div>
+        <div
+            v-if="!loading && !authorized"
+            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg text-gray-500"
+        >
+            You are not authorized to view this part of the list.
+        </div>
+        <div
+            v-if="!loading && !found"
+            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg text-gray-500"
+        >
+            The list you are looking for does not exist.
+        </div>
+        <div
+            v-if="loading && !authorized && !found"
+            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+        >
+            <div class="lds-spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
     </div>
@@ -99,6 +134,8 @@ export default {
             inviteInput: "",
             inviteButton: "Invite User",
             loading: true,
+            authorized: false,
+            found: false,
         };
     },
     mounted() {
@@ -120,9 +157,18 @@ export default {
                 })
                 .then((response) => {
                     this.invites = response.data.invites;
+                    this.authorized = true;
+                    this.found = true;
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response.status === 401) {
+                        this.authorized = false;
+                        this.found = true;
+                    } else if (error.response.status === 404) {
+                        this.found = false;
+                        this.authorized = true;
+                    }
                 });
 
             this.loading = false;
