@@ -19,7 +19,10 @@
                 <div></div>
             </div>
         </div>
-        <div v-else class="h-full flex flex-col lg:w-1/2 lg:mx-auto">
+        <div
+            v-if="!loading && authorized && found"
+            class="h-full flex flex-col lg:w-1/2 lg:mx-auto"
+        >
             <h1 class="text-4xl text-center">{{ list.l_name }}</h1>
             <p class="text-lg text-gray-600 text-center">
                 {{ list.l_description }}
@@ -139,6 +142,18 @@
                 </button>
             </div>
         </div>
+        <div
+            v-if="!loading && !authorized"
+            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+        >
+            You are not authorized to view this list.
+        </div>
+        <div
+            v-if="!loading && !found"
+            class="h-full flex justify-center items-center text-center sm:text-4xl text-lg"
+        >
+            The list you are looking for does not exist.
+        </div>
     </div>
 </template>
 
@@ -150,6 +165,8 @@ export default {
         return {
             onPage: true,
             loading: true,
+            authorized: false,
+            found: false,
             list: {
                 l_created: "Loading...",
                 l_description: "Loading...",
@@ -199,12 +216,22 @@ export default {
                     this.items = response.data.items;
                     this.admin = response.data.admin;
                     this.write = response.data.write;
+                    this.authorized = true;
+                    this.found = true;
                     this.loading = false;
                     console.log(response.data);
                     return true;
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response.status === 401) {
+                        this.authorized = false;
+                        this.found = true;
+                    } else if (error.response.status === 404) {
+                        this.found = false;
+                        this.authorized = true;
+                    }
+                    this.loading = false;
                     return false;
                 });
             console.log(response);

@@ -13,7 +13,7 @@
                 Back to list
             </router-link>
         </div>
-        <h1 class="mt-6 text-4xl flex justify-center">List Invite</h1>
+        <h1 class="mt-6 text-4xl flex justify-center">Invites</h1>
 
         <div class="flex flex-col w-full justify-center my-8">
             <div class="md:w-1/6 w-5/6 mx-auto flex flex-col">
@@ -47,7 +47,7 @@
                             {{ invite.u_email }}
                         </p>
                         <span class="ml-1 md:w-3/6 text-gray-500 text-sm mt-3">
-                            {{ invite.in_created }}
+                            Invited: {{ invite.in_created }}
                         </span>
                     </div>
                     <div class="flex justify-end">

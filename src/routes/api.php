@@ -840,13 +840,13 @@ Route::post('/list/members', function (Request $request) {
     }
 
     //Get the members id except the owner
-    $membersId = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', '!=', $user->u_id)->get();
+    $accesses = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', '!=', $user->u_id)->get();
 
     //get the members email address and id with id
     $members = [];
-    foreach ($membersId as $member) {
-        $member = DB::table('sl_u_user')->where('u_id', $member->a_u_id)->first();
-        array_push($members, ['id' => $member->u_id, 'email' => $member->u_email]);
+    foreach ($accesses as $access) {
+        $member = DB::table('sl_u_user')->where('u_id', $access->a_u_id)->first();
+        array_push($members, ['id' => $member->u_id, 'email' => $member->u_email, 'write' => $access->a_write]);
     }
 
     //Return success
@@ -861,7 +861,7 @@ Route::post('/list/members', function (Request $request) {
 */
 Route::post('/list/member/remove', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->user)) {
+    if (!isset($request->token) || !isset($request->list) || !isset($request->member)) {
         return response()->json(['error' => 'Token, list or user is missing'], 400);
     }
 
@@ -879,26 +879,26 @@ Route::post('/list/member/remove', function (Request $request) {
     }
 
     //Get the user
-    $user = DB::table('sl_u_user')->where('u_id', $request->user)->first();
+    $member = DB::table('sl_u_user')->where('u_id', $request->member)->first();
 
     //Check if the user exists
-    if (!$user) {
+    if (!$member) {
         return response()->json([
             'error' => 'User not found',
         ], 404);
     }
 
     //Check if the user is already in the list
-    $userInList = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->first();
+    $memberInList = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $member->u_id)->first();
 
-    if (!$userInList) {
+    if (!$memberInList) {
         return response()->json([
             'error' => 'User is not in the list',
         ], 400);
     }
 
     //Remove the user from the list
-    DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->delete();
+    DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $member->u_id)->delete();
 
     //Return success
     return response()->json(['message' => 'User removed from list'], 200);
@@ -914,8 +914,8 @@ Route::post('/list/member/remove', function (Request $request) {
 */
 Route::post('/list/member/write', function (Request $request) {
     //Validate data
-    if (!isset($request->token) || !isset($request->list) || !isset($request->user) || !isset($request->write)) {
-        return response()->json(['error' => 'Token, list, user or rights is missing'], 400);
+    if (!isset($request->token) || !isset($request->list) || !isset($request->member) || !isset($request->write)) {
+        return response()->json(['error' => 'Token, list, member or rights is missing'], 400);
     }
 
     //Get the owner
@@ -932,17 +932,17 @@ Route::post('/list/member/write', function (Request $request) {
     }
 
     //Get the user
-    $user = DB::table('sl_u_user')->where('u_id', $request->user)->first();
+    $member = DB::table('sl_u_user')->where('u_id', $request->member)->first();
 
     //Check if the user exists
-    if (!$user) {
+    if (!$member) {
         return response()->json([
             'error' => 'User not found',
         ], 404);
     }
 
     //Check if the user is already in the list
-    $userInList = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->first();
+    $userInList = DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $member->u_id)->first();
 
     if (!$userInList) {
         return response()->json([
@@ -952,10 +952,13 @@ Route::post('/list/member/write', function (Request $request) {
 
     //Change the write rights true change true else false
     if ($request->write == 'true') {
-        DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->update(['a_write' => 1]);
+        DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $member->u_id)->update(['a_write' => 1]);
     } else {
-        DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->update(['a_write' => 0]);
+        DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $member->u_id)->update(['a_write' => 0]);
     }
+
+    //Return success
+    return response()->json(['message' => 'Rights changed'], 200);
 });
 
 //Remove Item. Needs to have access to the list
