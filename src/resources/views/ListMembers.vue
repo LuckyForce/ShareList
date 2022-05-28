@@ -14,7 +14,7 @@
             </router-link>
         </div>
         <div v-if="authorized && found">
-            <h1 class="mt-6 text-4xl flex justify-center">List Of Users</h1>
+            <h1 class="mt-6 text-4xl flex justify-center">Members</h1>
 
             <div class="flex flex-col w-full justify-center my-8">
                 <div
