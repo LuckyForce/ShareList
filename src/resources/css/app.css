@@ -218,6 +218,10 @@ body {
     @apply ml-40;
 }
 
+.header:hover {
+    @apply text-blue-900;
+}
+
 /*Spinner animation*/
 .lds-spinner {
     color: official;
