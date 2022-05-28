@@ -26,7 +26,7 @@
             <div v-if="!admin" class="flex justify-end">
                 <button
                     @click="leaveList()"
-                    class="button"
+                    class="btn-delete1"
                 >
                     {{ leaveListButton }}
                 </button>
