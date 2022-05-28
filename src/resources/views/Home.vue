@@ -12,19 +12,19 @@
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl w-60" src="/images/unlimitedlistelements.jpg" alt="">
             <div class="p-2">
-                <p class="text-sm text-gray-600">You can create as many entries into the list as you want mark those green which you have already done.</p>
+                <p class="text-sm text-gray-600">You can create as many entries into the list as you want, mark those green which you have already done.</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl w-60" src="/images/listedit.jpg" alt="">
             <div class="p-2">
-                <p class="text-sm text-gray-600">You can also edit the name and description of the List but also give the ownership to another user or delete it.</p>
+                <p class="text-sm text-gray-600">Furthermore, you can also edit the name and description of the List, but also give the ownership to another user or delete it.</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl" src="/images/listofusers.jpg" alt="">
             <div class="p-2">
-                <p class="text-sm text-gray-600">You can change the permission of the users aswell like giving another user permission to add entries or you can delete a user.</p>
+                <p class="text-sm text-gray-600">You can change the permission of the users as well, like giving another user permission to add entries, or you can delete a user.</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
@@ -44,7 +44,7 @@
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl w-60" src="/images/unlimitedlistelements.jpg" alt="">
-            <div class="p-2">s
+            <div class="p-2">
                 <p class="text-sm text-gray-600">The many options to customize and manage your lists are also a great benefit, combined with the ease of using all the tools.</p>
             </div>
             </div>
@@ -60,19 +60,19 @@
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl w-60" src="/images/register.jpg" alt="">
             <div class="p-2">
-                <p class="text-sm text-gray-600">First you should navigate to Register in the top right corner and press it. Afterwards you will need to create an Account on our Website.</p>
+                <p class="text-sm text-gray-600">First, you should navigate to register in the top right corner and press it. Afterwards, you will need to create an Account on our Website.</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl w-60" src="/images/login.jpg" alt="">
             <div class="p-2">
-                <p class="text-sm text-gray-600">After you have created your Account and verified your E-Mail you are now logged in and can start with creating your own lists for the future.</p>
+                <p class="text-sm text-gray-600">After you have created your Account and verified your E-Mail, you are now logged in and can start with creating your own lists for the future.</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl" src="/images/list.jpg" alt="">
             <div class="p-2">
-                <p class="text-sm text-gray-600">First you have to press on Lists in the top left corner. Afterwards you can press the button Create List through which the fun part will now start!</p>
+                <p class="text-sm text-gray-600">First, you have to press on Lists in the top left corner. Afterwards, you can press the button Create List, through which the fun part will now start!</p>
             </div>
             </div>
             <div class="w-60 p-2 bg-white rounded-xl">
