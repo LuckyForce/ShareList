@@ -603,6 +603,52 @@ Route::post('/list/transfer', function (Request $request) {
     return response()->json(['message' => 'List transferred'], 200);
 });
 
+//List Leave. Needs to be member of the list and can not be the owner.
+/*
+@param string token
+@param string list
+@return json success
+*/
+Route::post('/list/leave', function (Request $request) {
+    //Validate data
+    if (!isset($request->token) || !isset($request->list)) {
+        return response()->json(['error' => 'Token or list is missing'], 400);
+    }
+
+    //Get the user
+    $user = getUser($request->token);
+
+    //Get the list from the database
+    $list = DB::table('sl_l_list')->where('l_id', $request->list)->first();
+
+    //Check if the list exists.
+    if (!$list) {
+        return response()->json([
+            'error' => 'List not found',
+        ], 404);
+    }
+
+    //Check if the user is not the owner
+    if ($list->l_u_id == $user->u_id) {
+        return response()->json([
+            'error' => 'You are the owner of this list',
+        ], 401);
+    }
+
+    //Check if the user is a member of the list
+    if (!DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->exists()) {
+        return response()->json([
+            'error' => 'You are not a member of this list',
+        ], 401);
+    }
+
+    //Remove the user from the list
+    DB::table('sl_a_access')->where('a_l_id', $list->l_id)->where('a_u_id', $user->u_id)->delete();
+
+    //Return success
+    return response()->json(['message' => 'You left the list'], 200);
+});
+
 //Add User to List
 Route::post('/list/invite', function (Request $request) {
     //Validate data

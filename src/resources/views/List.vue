@@ -23,6 +23,14 @@
             v-if="!loading && authorized && found"
             class="h-full flex flex-col lg:w-1/2 lg:mx-auto"
         >
+            <div v-if="!admin" class="flex justify-end">
+                <button
+                    @click="leaveList()"
+                    class="button"
+                >
+                    {{ leaveListButton }}
+                </button>
+            </div>
             <h1 class="text-4xl text-center">{{ list.l_name }}</h1>
             <p class="text-lg text-gray-600 text-center mb-4">
                 {{ list.l_description }}
@@ -179,6 +187,8 @@ export default {
             write: false,
             selectedItem: null,
             itemInput: "",
+            leaveListButton: "Leave List",
+            leaveListButtonPressedOnce: false,
         };
     },
     async mounted() {
@@ -414,6 +424,32 @@ export default {
                 .catch((error) => {
                     console.log(error);
                     return false;
+                });
+        },
+        leaveList: async function () {
+            //Check if button got pushed once before
+            if (!this.leaveListButtonPressedOnce){
+                this.leaveListButtonPressedOnce = true;
+                this.leaveListButton = "Are you sure you want to leave this list?";
+                return;
+            }
+
+            this.leaveListButton = "Leaving...";
+
+            //Get Token
+            const token = await getToken();
+            const response = await axios
+                .post("/api/list/leave", {
+                    token: token,
+                    list: this.list.l_id,
+                })
+                .then(async (response) => {
+                    //Redirect to lists
+                    this.$router.push("/lists");
+                })
+                .catch((error) => {
+                    this.leaveListButtonPressedOnce = false;
+                    this.leaveListButton = error.response.data.error;
                 });
         },
     },

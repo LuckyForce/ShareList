@@ -19935,7 +19935,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       admin: false,
       write: false,
       selectedItem: null,
-      itemInput: ""
+      itemInput: "",
+      leaveListButton: "Leave List",
+      leaveListButtonPressedOnce: false
     };
   },
   mounted: function mounted() {
@@ -20563,6 +20565,78 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return checkItem;
+    }(),
+    leaveList: function () {
+      var _leaveList = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee19() {
+        var _this9 = this;
+
+        var token, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee19$(_context19) {
+          while (1) {
+            switch (_context19.prev = _context19.next) {
+              case 0:
+                if (this.leaveListButtonPressedOnce) {
+                  _context19.next = 4;
+                  break;
+                }
+
+                this.leaveListButtonPressedOnce = true;
+                this.leaveListButton = "Are you sure you want to leave this list?";
+                return _context19.abrupt("return");
+
+              case 4:
+                this.leaveListButton = "Leaving..."; //Get Token
+
+                _context19.next = 7;
+                return (0,_js_utilities__WEBPACK_IMPORTED_MODULE_1__.getToken)();
+
+              case 7:
+                token = _context19.sent;
+                _context19.next = 10;
+                return axios.post("/api/list/leave", {
+                  token: token,
+                  list: this.list.l_id
+                }).then( /*#__PURE__*/function () {
+                  var _ref6 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee18(response) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee18$(_context18) {
+                      while (1) {
+                        switch (_context18.prev = _context18.next) {
+                          case 0:
+                            //Redirect to lists
+                            _this9.$router.push("/lists");
+
+                          case 1:
+                          case "end":
+                            return _context18.stop();
+                        }
+                      }
+                    }, _callee18);
+                  }));
+
+                  return function (_x10) {
+                    return _ref6.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  _this9.leaveListButtonPressedOnce = false;
+                  _this9.leaveListButton = error.response.data.error;
+                });
+
+              case 10:
+                response = _context19.sent;
+
+              case 11:
+              case "end":
+                return _context19.stop();
+            }
+          }
+        }, _callee19, this);
+      }));
+
+      function leaveList() {
+        return _leaveList.apply(this, arguments);
+      }
+
+      return leaveList;
     }()
   }
 });
@@ -21328,7 +21402,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 if (!this.deleteButtonPushedOnce) {
-                  _context5.next = 14;
+                  _context5.next = 13;
                   break;
                 }
 
@@ -21376,19 +21450,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 7:
                 this.selectedMembers = [];
                 this.deleteButton = "Delete User";
-                this.deleteButtonPushedOnce = false;
-                _context5.next = 12;
-                return this.getMembers();
+                this.deleteButtonPushedOnce = false; //Wait for the members to be updated for about 1 second
+                //Timeout
 
-              case 12:
-                _context5.next = 16;
+                setTimeout(function () {
+                  _this3.getMembers();
+                }, 1000);
+                _context5.next = 15;
                 break;
 
-              case 14:
+              case 13:
                 this.deleteButton = "Are you sure?";
                 this.deleteButtonPushedOnce = true;
 
-              case 16:
+              case 15:
               case "end":
                 return _context5.stop();
             }
@@ -21455,11 +21530,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 this.selectedMembers = [];
-                this.removeWriteButton = "Remove Write";
-                _context7.next = 10;
-                return this.getMembers();
+                this.removeWriteButton = "Remove Write"; //Wait for the members to be updated for about 1 second
+                //Timeout
 
-              case 10:
+                setTimeout(function () {
+                  _this4.getMembers();
+                }, 1000);
+
+              case 9:
               case "end":
                 return _context7.stop();
             }
@@ -21504,11 +21582,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 this.selectedMembers = [];
-                this.addWriteButton = "Add Write";
-                _context8.next = 10;
-                return this.getMembers();
+                this.addWriteButton = "Add Write"; //Wait for the members to be updated for about 1 second
+                //Timeout
 
-              case 10:
+                setTimeout(function () {
+                  _this5.getMembers();
+                }, 1000);
+
+              case 9:
               case "end":
                 return _context8.stop();
             }
@@ -22877,54 +22958,58 @@ var _hoisted_5 = {
   "class": "h-full flex flex-col lg:w-1/2 lg:mx-auto"
 };
 var _hoisted_6 = {
-  "class": "text-4xl text-center"
+  key: 0,
+  "class": "flex justify-end"
 };
 var _hoisted_7 = {
-  "class": "text-lg text-gray-600 text-center mb-4"
+  "class": "text-4xl text-center"
 };
 var _hoisted_8 = {
-  key: 0
+  "class": "text-lg text-gray-600 text-center mb-4"
+};
+var _hoisted_9 = {
+  key: 1
 };
 
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
   "class": "text-2xl font-bold mb-1"
 }, "Settings:", -1
 /* HOISTED */
 );
 
-var _hoisted_10 = {
+var _hoisted_11 = {
   "class": "grid xs:grid-cols-3 grid-cols-1 gap-5"
 };
 
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Edit List ");
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Edit List ");
 
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Members ");
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Members ");
 
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Invites ");
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Invites ");
 
-var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
   "class": "my-5"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_15 = {
+var _hoisted_16 = {
   "class": "flex flex-col justify-center gap-y-2 mb-4"
 };
-var _hoisted_16 = ["onClick"];
-var _hoisted_17 = {
+var _hoisted_17 = ["onClick"];
+var _hoisted_18 = {
   "class": "mr-auto"
 };
-var _hoisted_18 = {
+var _hoisted_19 = {
   "class": "text-xl mb-2 ml-1"
 };
-var _hoisted_19 = ["onClick"];
-var _hoisted_20 = {
+var _hoisted_20 = ["onClick"];
+var _hoisted_21 = {
   key: 0,
   "class": "flex items-center justify-center"
 };
 
-var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   "class": "w-full h-full text-green-500",
   fill: "currentColor",
   viewBox: "0 0 20 20"
@@ -22936,9 +23021,9 @@ var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_22 = [_hoisted_21];
+var _hoisted_23 = [_hoisted_22];
 
-var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "flex items-center justify-center"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   "class": "w-full h-full text-gray-500",
@@ -22952,71 +23037,61 @@ var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_24 = {
-  key: 1,
-  "class": "text-sm text-gray-600 text-center mb-4"
-};
 var _hoisted_25 = {
   key: 2,
-  "class": "mt-auto flex flex-col gap-y-2"
+  "class": "text-sm text-gray-600 text-center mb-4"
 };
 var _hoisted_26 = {
-  "class": "text-gray-500 text-lg"
+  key: 3,
+  "class": "mt-auto flex flex-col gap-y-2"
 };
 var _hoisted_27 = {
-  key: 0
+  "class": "text-gray-500 text-lg"
 };
 var _hoisted_28 = {
-  key: 1
-};
-var _hoisted_29 = ["value"];
-var _hoisted_30 = {
   key: 0
 };
-var _hoisted_31 = {
+var _hoisted_29 = {
   key: 1
+};
+var _hoisted_30 = ["value"];
+var _hoisted_31 = {
+  key: 0
 };
 var _hoisted_32 = {
-  key: 0
-};
-var _hoisted_33 = {
   key: 1
 };
+var _hoisted_33 = {
+  key: 0
+};
 var _hoisted_34 = {
+  key: 1
+};
+var _hoisted_35 = {
   key: 2,
   "class": "h-full flex justify-center items-center text-center sm:text-4xl text-lg text-gray-500"
 };
-var _hoisted_35 = {
+var _hoisted_36 = {
   key: 3,
   "class": "h-full flex justify-center items-center text-center sm:text-4xl text-lg text-gray-500"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, _hoisted_4)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.loading && $data.authorized && $data.found ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.list.l_name), 1
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, _hoisted_4)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.loading && $data.authorized && $data.found ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, [!$data.admin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    onClick: _cache[0] || (_cache[0] = function ($event) {
+      return $options.leaveList();
+    }),
+    "class": "button"
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.leaveListButton), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.list.l_description), 1
+  )])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.list.l_name), 1
   /* TEXT */
-  ), $data.admin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, [_hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.list.l_description), 1
+  /* TEXT */
+  ), $data.admin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: {
       name: 'ListEdit',
-      params: {
-        id: _ctx.$route.params.id
-      }
-    },
-    "class": "button"
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_11];
-    }),
-    _: 1
-    /* STABLE */
-
-  }, 8
-  /* PROPS */
-  , ["to"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-    to: {
-      name: 'ListMembers',
       params: {
         id: _ctx.$route.params.id
       }
@@ -23033,7 +23108,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["to"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: {
-      name: 'ListInvites',
+      name: 'ListMembers',
       params: {
         id: _ctx.$route.params.id
       }
@@ -23048,14 +23123,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["to"])]), _hoisted_14])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.items, function (item) {
+  , ["to"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: {
+      name: 'ListInvites',
+      params: {
+        id: _ctx.$route.params.id
+      }
+    },
+    "class": "button"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_14];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
+  , ["to"])]), _hoisted_15])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.items, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: item.i_id,
       onClick: function onClick($event) {
         return $options.selectItem(item.i_id, item.i_content);
       },
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([item.i_id === $data.selectedItem ? 'itemSelected' : '', 'item-card flex'])
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.i_content), 1
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.i_content), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Last updated at: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.i_lastupdated), 1
     /* TEXT */
@@ -23064,44 +23156,44 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onClick: function onClick($event) {
         return $options.checkItem(item.i_id);
       }
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("Checked Button"), item.i_checked ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, _hoisted_22)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("Checked Button"), item.i_checked ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, _hoisted_23)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
       key: 1
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("Unchecked Button"), _hoisted_23], 2112
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("Unchecked Button"), _hoisted_24], 2112
     /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
     ))], 8
     /* PROPS */
-    , _hoisted_19)], 10
+    , _hoisted_20)], 10
     /* CLASS, PROPS */
-    , _hoisted_16);
+    , _hoisted_17);
   }), 128
   /* KEYED_FRAGMENT */
-  ))]), $data.items.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, " There are no items in this list yet. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.write ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [$data.selectedItem === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_27, "New Item")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_28, "Changing: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.selectedItem), 1
+  ))]), $data.items.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, " There are no items in this list yet. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.write ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [$data.selectedItem === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_28, "New Item")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_29, "Changing: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.selectedItem), 1
   /* TEXT */
   ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     id: "itemInput",
     "class": "input",
     type: "text",
     placeholder: "Item",
-    onKeypress: _cache[0] || (_cache[0] = function ($event) {
+    onKeypress: _cache[1] || (_cache[1] = function ($event) {
       return $options.keydownInput($event);
     }),
-    onInput: _cache[1] || (_cache[1] = function ($event) {
+    onInput: _cache[2] || (_cache[2] = function ($event) {
       return $data.itemInput = $event.target.value;
     }),
     value: $data.itemInput
   }, null, 40
   /* PROPS, HYDRATE_EVENTS */
-  , _hoisted_29), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    "class": "button text-2xl w-full",
-    onClick: _cache[2] || (_cache[2] = function ($event) {
-      return $options.enterButton();
-    })
-  }, [$data.selectedItem === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_30, "Add")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_31, "Update"))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  , _hoisted_30), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "button text-2xl w-full",
     onClick: _cache[3] || (_cache[3] = function ($event) {
+      return $options.enterButton();
+    })
+  }, [$data.selectedItem === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_31, "Add")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_32, "Update"))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "button text-2xl w-full",
+    onClick: _cache[4] || (_cache[4] = function ($event) {
       return $options.deleteItem();
     })
-  }, [$data.selectedItem === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_32, "Cancel")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_33, "Delete"))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.loading && !$data.authorized ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_34, " You are not authorized to view this list. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.loading && !$data.found ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_35, " The list you are looking for does not exist. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  }, [$data.selectedItem === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_33, "Cancel")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_34, "Delete"))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.loading && !$data.authorized ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_35, " You are not authorized to view this list. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.loading && !$data.found ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_36, " The list you are looking for does not exist. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
@@ -23556,7 +23648,7 @@ var _hoisted_4 = {
 
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
   "class": "mt-6 text-4xl flex justify-center"
-}, "List Of Users", -1
+}, "Members", -1
 /* HOISTED */
 );
 

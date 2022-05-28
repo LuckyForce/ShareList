@@ -134,7 +134,6 @@
         </div>
     </div>
 </template>
-
 <script>
 import { getToken } from "../js/utilities";
 export default {
@@ -224,7 +223,12 @@ export default {
                 this.selectedMembers = [];
                 this.deleteButton = "Delete User";
                 this.deleteButtonPushedOnce = false;
-                await this.getMembers();
+
+                //Wait for the members to be updated for about 1 second
+                //Timeout
+                setTimeout(() => {
+                    this.getMembers();
+                }, 1000);
             } else {
                 this.deleteButton = "Are you sure?";
                 this.deleteButtonPushedOnce = true;
@@ -254,7 +258,11 @@ export default {
 
             this.selectedMembers = [];
             this.removeWriteButton = "Remove Write";
-            await this.getMembers();
+            //Wait for the members to be updated for about 1 second
+            //Timeout
+            setTimeout(() => {
+                this.getMembers();
+            }, 1000);
         },
         addWriteAccesses: async function () {
             this.addWriteButton = "Adding...";
@@ -279,7 +287,11 @@ export default {
             });
             this.selectedMembers = [];
             this.addWriteButton = "Add Write";
-            await this.getMembers();
+            //Wait for the members to be updated for about 1 second
+            //Timeout
+            setTimeout(() => {
+                this.getMembers();
+            }, 1000);
         },
     },
 };
