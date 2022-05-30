@@ -1256,6 +1256,11 @@ body {
   margin-left: 10rem;
 }
 
+.header:hover {
+  --tw-text-opacity: 1;
+  color: rgb(30 58 138 / var(--tw-text-opacity));
+}
+
 /*Spinner animation*/
 .lds-spinner {
     color: official;
