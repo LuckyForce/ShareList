@@ -15,8 +15,8 @@
             <router-link to="/privacypolicy" class="text-2xl text-white mx-auto">Privacy Policy</router-link>
         </div>
         <div>
-            <p class="text-center text-white my-auto">
-                &copy; 2020 Adrian Schauer
+            <p class="text-center text-white my-auto content-center">
+                &copy; 2022 Adrian Schauer
             </p>
         </div>
     </footer>
