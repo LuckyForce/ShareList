@@ -2,27 +2,27 @@
 <template>
     <nav class="flex items-center justify-between flex-wrap color-2">
         <div class="flex justify-center align-center">
-            <router-link to="/" class="flex items-center nav-link ml-1 header">
+            <router-link to="/" class="flex items-center nav-link ml-1 link">
                 <img :src="imgPath" alt="Logo" class="sm:h-12 h-8" />
                 Home
             </router-link>
             <router-link
                 
                 to="/lists"
-                class="flex items-center nav-link header"
+                class="flex items-center nav-link link"
             >
                 Lists
             </router-link>
         </div>
         <div class="flex items-center flex-shrink-0 text-white">
-            <router-link to="/about" class="nav-link header">About Us</router-link>
+            <router-link to="/about" class="nav-link link">About Us</router-link>
             <router-link
                 v-if="isLoggedIn === false"
                 to="/register"
-                class="nav-link header"
+                class="nav-link link"
                 >Register</router-link
             >
-            <router-link v-if="isLoggedIn" to="/profile" class="nav-link header"
+            <router-link v-if="isLoggedIn" to="/profile" class="nav-link link"
                 >Profile</router-link
             >
         </div>

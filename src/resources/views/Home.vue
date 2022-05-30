@@ -3,7 +3,7 @@
     
     <div>
         <h1 class="text-black text-center text-6xl mt-5">ShareList</h1>
-        <h1 class="mt-6 text-4xl flex justify-center ">Features</h1>
+        <h2 class="mt-6 text-4xl flex justify-center ">Features</h2>
         <div class="w-full my-8 gap-10 flex-wrap flex justify-center items-center"> 
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl" src="/images/unlimitedlists.jpg" alt="">
@@ -36,7 +36,7 @@
             </div>
             </div>
         </div>
-        <h1 class="mt-6 text-4xl flex justify-center ">Benefits</h1>
+        <h2 class="mt-6 text-4xl flex justify-center ">Benefits</h2>
         <div class="w-full my-8 gap-24 flex-wrap flex justify-center items-center"> 
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl" src="/images/list.jpg" alt="">
@@ -57,7 +57,7 @@
             </div>
             </div>
         </div>
-        <h1 class="mt-6 text-4xl flex justify-center ">How to start</h1>
+        <h2 class="mt-6 text-4xl flex justify-center ">How to start</h2>
         <div class="w-full my-8 gap-24 flex-wrap flex justify-center items-center"> 
             <div class="w-60 p-2 bg-white rounded-xl">
                 <img class="h-40 rounded-xl w-60" src="/images/register.jpg" alt="">

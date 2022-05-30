@@ -218,7 +218,7 @@ body {
     @apply ml-40;
 }
 
-.header:hover {
+.link:hover {
     @apply text-blue-900;
 }
 
