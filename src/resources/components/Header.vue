@@ -7,7 +7,7 @@
                 Home
             </router-link>
             <router-link
-                v-if="isLoggedIn"
+                
                 to="/lists"
                 class="flex items-center nav-link header"
             >

@@ -1,6 +1,8 @@
 // resources/views/Home.vue
-<template>
+<template> 
+    
     <div>
+        <h1 class="text-black text-center text-6xl mt-5">ShareList</h1>
         <h1 class="mt-6 text-4xl flex justify-center ">Features</h1>
         <div class="w-full my-8 gap-10 flex-wrap flex justify-center items-center"> 
             <div class="w-60 p-2 bg-white rounded-xl">

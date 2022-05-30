@@ -92,7 +92,7 @@
                             class="flex items-center justify-center"
                         >
                             <svg
-                                class="w-full h-full text-green-500"
+                                class="w-20 h-20 text-green-500"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                             >
@@ -106,7 +106,7 @@
                         <!--Unchecked Button-->
                         <div v-else class="flex items-center justify-center">
                             <svg
-                                class="w-full h-full text-gray-500"
+                                class="w-20 h-20 text-gray-500"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                             >
