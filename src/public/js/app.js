@@ -23352,7 +23352,7 @@ var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 );
 
 var _hoisted_27 = {
-  "class": "md:w-2/3 ml-20 mt-3"
+  "class": "md:w-2/3 w-full mx-auto mt-3"
 };
 var _hoisted_28 = {
   key: 0,
