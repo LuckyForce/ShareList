@@ -24465,7 +24465,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "checkbox",
     name: "register-agreement-confirm",
     id: "register-agreement-confirm",
-    "class": "my-auto mr-1",
+    "class": "my-auto mr-1 min-w-10",
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
       return $props.agreementConfirm = $event;
     })
