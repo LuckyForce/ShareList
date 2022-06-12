@@ -5,7 +5,11 @@ module.exports = {
     "./resources/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      minWidth: {
+        "10": "10px",
+      },
+    },
     screens: {
       'xs': '480px',
       // => @media (min-width: 480px) { ... }

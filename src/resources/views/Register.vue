@@ -53,7 +53,7 @@
                     type="checkbox"
                     name="register-agreement-confirm"
                     id="register-agreement-confirm"
-                    class="my-auto mr-1"
+                    class="my-auto mr-1 min-w-10"
                     v-model="agreementConfirm"
                 />
                 <label for="register-agreement-confirm"
